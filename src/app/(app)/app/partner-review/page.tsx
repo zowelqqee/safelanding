@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, FileText, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PartnerReviewForm } from "@/components/partner-review/partner-review-form";
 import { getCurrentUserWithMoveProfile } from "@/lib/profile/profileServer";
-import { getPartnerReviewRequestServer } from "@/lib/partner-review/partner-review";
+import { getPartnerReviewRequestServer } from "@/lib/partner-review/partner-review-server";
 import { buildMoveBrief } from "@/lib/move-brief/build-move-brief";
 
 export const metadata = {
@@ -24,11 +24,11 @@ export default async function PartnerReviewPage() {
             Build your Move Brief first
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Choose your destination, legal path, and roadmap details first, then you can save a partner review request here.
+            Choose your destination, legal path, and roadmap details first, then you can request partner review here.
           </p>
           <Link href="/app/roadmap" className="mt-6 inline-flex">
             <Button size="lg" className="gap-2">
-              Open roadmap
+              View roadmap
               <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
@@ -43,7 +43,7 @@ export default async function PartnerReviewPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-6 md:py-8">
       <div className="space-y-5">
-        <section className="overflow-hidden rounded-[30px] border bg-card shadow-sm">
+        <section className="surface-card-strong overflow-hidden rounded-[30px]">
           <div className="border-b bg-[linear-gradient(135deg,rgba(15,23,42,0.98),rgba(30,41,59,0.96))] px-5 py-6 text-white md:px-7">
             <Link
               href="/app/move-brief"
@@ -69,7 +69,7 @@ export default async function PartnerReviewPage() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-right backdrop-blur">
+              <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-right">
                 <p className="text-[11px] uppercase tracking-[0.14em] text-white/65">
                   Move brief
                 </p>
@@ -96,7 +96,7 @@ export default async function PartnerReviewPage() {
           existingRequest={existingRequest}
         />
 
-        <div className="rounded-2xl border border-dashed px-4 py-4 text-sm text-muted-foreground">
+        <div className="rounded-2xl border border-dashed bg-background/75 px-4 py-4 text-sm text-muted-foreground">
           This request saves contact context only. No document checklist, file upload, payment, or real partner integration is active yet.
         </div>
       </div>
@@ -112,8 +112,8 @@ function SummaryCard({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border bg-background px-4 py-4">
-      <p className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+    <div className="rounded-2xl border border-border/80 bg-background/88 px-4 py-4">
+      <p className="editorial-kicker text-muted-foreground">
         {label}
       </p>
       <p className="mt-2 text-sm font-medium leading-relaxed text-foreground">{value}</p>

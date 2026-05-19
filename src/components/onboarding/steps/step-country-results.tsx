@@ -126,14 +126,14 @@ function CountryCard({
         </div>
       )}
 
-      <div className="flex gap-2 pt-0.5">
-        <Button size="sm" className="flex-1 h-10 gap-1.5" onClick={onSelect}>
-          Explore {country.name}
+      <div className="flex flex-col gap-2 pt-0.5 sm:flex-row">
+        <Button size="sm" className="h-10 flex-1 gap-1.5" onClick={onSelect}>
+          Choose this destination
           <ArrowRight className="h-3.5 w-3.5" />
         </Button>
         <Link href={`/explore/${country.slug}`} target="_blank">
-          <Button variant="outline" size="sm" className="h-10 px-3">
-            View
+          <Button variant="outline" size="sm" className="h-10 w-full px-3">
+            Compare
           </Button>
         </Link>
       </div>
@@ -165,7 +165,7 @@ export function StepCountryResults({ state, onSelect, onShortlistToggle, onBack 
         </div>
         <h2 className="text-2xl font-bold tracking-tight mb-1">Your landing shortlist</h2>
         <p className="text-sm text-muted-foreground">
-          Ranked by fit with your preferences. Save favorites, then choose one to go deeper.
+          Ranked by fit with your preferences. Save, compare, then choose the destination you want to pressure-test next.
         </p>
       </div>
 

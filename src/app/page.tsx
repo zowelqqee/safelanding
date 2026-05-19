@@ -39,30 +39,66 @@ function LandingHeader() {
 
 function HeroSection() {
   return (
-    <section className="px-4 pt-16 pb-10 max-w-5xl mx-auto text-center">
-      <div className="inline-flex items-center gap-2 text-xs font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-full mb-6">
-        <Globe className="h-3.5 w-3.5" />
-        Global relocation OS
+    <section className="max-w-5xl mx-auto px-4 pt-10 pb-10">
+      <div className="surface-card-strong relative overflow-hidden rounded-[32px] px-5 py-7 text-center sm:px-8 sm:py-10">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60"
+          aria-hidden="true"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 18% 20%, rgba(77,102,156,0.08), transparent 22%), linear-gradient(to right, rgba(148,163,184,0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.1) 1px, transparent 1px)",
+            backgroundSize: "auto, 34px 34px, 34px 34px",
+          }}
+        />
+        <div className="relative">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-3 py-1.5 text-xs font-medium text-primary mb-4">
+            <Globe className="h-3.5 w-3.5" />
+            Global relocation OS
+          </div>
+          <div className="mx-auto mb-6 flex max-w-3xl flex-wrap items-center justify-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+            <span className="rounded-full border bg-background/85 px-3 py-1">Country shortlist</span>
+            <span className="text-border">•</span>
+            <span className="rounded-full border bg-background/85 px-3 py-1">City decision</span>
+            <span className="text-border">•</span>
+            <span className="rounded-full border bg-background/85 px-3 py-1">Legal path fit</span>
+            <span className="text-border">•</span>
+            <span className="rounded-full border bg-background/85 px-3 py-1">Move brief</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground leading-tight mb-5">
+            Move countries without
+            <br />
+            getting lost.
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
+            Where to go, how to enter legally, what to compare, what may block you,
+            and what to do next, in one calm planning flow.
+          </p>
+          <div className="mx-auto mb-8 grid max-w-3xl gap-3 text-left sm:grid-cols-3">
+            <RouteChip label="Remote worker" value="Portugal → Lisbon" />
+            <RouteChip label="Legal path" value="D8 Digital Nomad Visa" />
+            <RouteChip label="Next step" value="Move Brief → Partner review" />
+          </div>
+          <Link href="/start">
+            <Button size="lg" className="gap-2 text-base px-6 h-12">
+              Start my move
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+          <p className="text-xs text-muted-foreground mt-4">
+            Free to start. No account required to see your results.
+          </p>
+        </div>
       </div>
-      <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground leading-tight mb-5">
-        Move countries without
-        <br />
-        getting lost.
-      </h1>
-      <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-8 leading-relaxed">
-        Where to go, how to enter legally, what to prepare, what can go wrong,
-        and what to do next — in one place.
-      </p>
-      <Link href="/start">
-        <Button size="lg" className="gap-2 text-base px-6 h-12">
-          Start my move
-          <ArrowRight className="h-4 w-4" />
-        </Button>
-      </Link>
-      <p className="text-xs text-muted-foreground mt-4">
-        Free to start. No account required to see your results.
-      </p>
     </section>
+  );
+}
+
+function RouteChip({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-border/80 bg-background/88 px-4 py-3 shadow-[0_1px_1px_rgba(15,23,42,0.03)]">
+      <p className="editorial-kicker text-muted-foreground">{label}</p>
+      <p className="mt-1 text-sm font-medium text-foreground">{value}</p>
+    </div>
   );
 }
 
@@ -118,8 +154,8 @@ function HowItWorksSection() {
       </p>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {steps.map((step) => (
-          <div key={step.number} className="bg-card rounded-xl border p-5">
-            <div className="text-xs font-mono text-primary font-semibold mb-3">
+          <div key={step.number} className="surface-card rounded-[24px] p-5">
+            <div className="editorial-kicker text-primary mb-3">
               {step.number}
             </div>
             <h3 className="font-semibold text-sm mb-2">{step.title}</h3>

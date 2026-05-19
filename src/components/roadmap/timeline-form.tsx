@@ -65,8 +65,8 @@ export function TimelineForm({ profile }: TimelineFormProps) {
       description="Set your target move window so the roadmap can pace the next steps around real timing."
       onBack={() => router.push("/app/roadmap")}
       onSubmit={handleSubmit}
-      submitLabel="Save timeline"
-      savingLabel="Saving timeline..."
+      submitLabel="Save"
+      savingLabel="Saving..."
       saving={saving}
       canSubmit={canSubmit}
       error={error}

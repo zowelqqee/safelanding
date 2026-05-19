@@ -75,8 +75,8 @@ export function BudgetForm({ profile }: BudgetFormProps) {
       description="Make the plan realistic by capturing your monthly budget and emergency runway."
       onBack={() => router.push("/app/roadmap")}
       onSubmit={handleSubmit}
-      submitLabel="Save budget reality"
-      savingLabel="Saving budget..."
+      submitLabel="Save"
+      savingLabel="Saving..."
       saving={saving}
       canSubmit={canSubmit}
       error={error}

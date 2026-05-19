@@ -77,8 +77,8 @@ export function FamilyForm({ profile }: FamilyFormProps) {
       description="Capture who may be moving with you so later document and risk checks can stay accurate."
       onBack={() => router.push("/app/roadmap")}
       onSubmit={handleSubmit}
-      submitLabel="Save family info"
-      savingLabel="Saving family info..."
+      submitLabel="Save"
+      savingLabel="Saving..."
       saving={saving}
       canSubmit={canSubmit}
       error={error}

@@ -132,7 +132,7 @@ export default async function CityPage({
             <div className="mt-6 flex flex-wrap gap-2">
               <Link href={cityCompareHref}>
                 <Button variant="outline" className="gap-2">
-                  Compare cities
+                  Compare
                   <BarChart3 className="h-4 w-4" />
                 </Button>
               </Link>
@@ -144,7 +144,7 @@ export default async function CityPage({
               </Link>
               <Link href="/start">
                 <Button className="gap-2">
-                  Start your move here
+                  Start my move
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>

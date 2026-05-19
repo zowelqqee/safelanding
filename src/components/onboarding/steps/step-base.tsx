@@ -15,7 +15,7 @@ interface Props {
   onBack: () => void;
 }
 
-export function StepBase({ citizenship, currentCountry, residenceCountry, language, onChange, onNext, onBack }: Props) {
+export function StepBase({ citizenship, currentCountry, language, onChange, onNext, onBack }: Props) {
   const canContinue = citizenship.trim().length > 0;
 
   return (

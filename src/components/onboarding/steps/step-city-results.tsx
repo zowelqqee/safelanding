@@ -116,14 +116,14 @@ function CityCard({
         </div>
       ))}
 
-      <div className="flex gap-2 pt-0.5">
-        <Button size="sm" className="flex-1 h-10 gap-1.5" onClick={onSelect}>
-          Choose {city.name}
+      <div className="flex flex-col gap-2 pt-0.5 sm:flex-row">
+        <Button size="sm" className="h-10 flex-1 gap-1.5" onClick={onSelect}>
+          Choose this destination
           <ArrowRight className="h-3.5 w-3.5" />
         </Button>
         <Link href={`/explore/${countrySlug}/${city.slug}`} target="_blank">
-          <Button variant="outline" size="sm" className="h-10 px-3">
-            View
+          <Button variant="outline" size="sm" className="h-10 w-full px-3">
+            Compare
           </Button>
         </Link>
       </div>
@@ -156,7 +156,7 @@ export function StepCityResults({ state, onSelect, onShortlistToggle, onBack }: 
         </div>
         <h2 className="text-2xl font-bold tracking-tight mb-1">Choose your city</h2>
         <p className="text-sm text-muted-foreground">
-          Matched to your preferences. Save favorites or pick one to continue.
+          Matched to your preferences. Save, compare, then choose the city that feels most realistic.
         </p>
       </div>
 
@@ -172,8 +172,13 @@ export function StepCityResults({ state, onSelect, onShortlistToggle, onBack }: 
       )}
 
       {results.length === 0 ? (
-        <div className="text-sm text-muted-foreground py-8 text-center">
-          No cities found for this country yet.
+        <div className="rounded-2xl border border-dashed bg-card px-4 py-8 text-center">
+          <p className="text-sm font-medium text-foreground">
+            No city matches are ready here yet
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Choose a different country and we&apos;ll keep the rest of your profile intact.
+          </p>
         </div>
       ) : (
         <div className="flex flex-col gap-3">

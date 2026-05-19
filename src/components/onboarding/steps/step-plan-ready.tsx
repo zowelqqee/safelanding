@@ -23,14 +23,14 @@ export function StepPlanReady({ state, onConfirm, onBack }: Props) {
   const blockers = path.weakPoints.slice(0, 3);
 
   const NEXT_STEP_MAP: Record<string, string> = {
-    remote: "Gather your income proof and check the minimum income threshold",
-    study: "Confirm your institution admission status and collect financial documents",
-    work: "Confirm your job offer letter or start identifying eligible employers",
+    remote: "Confirm your timeline, budget, and work details before you move into partner-reviewed guidance later.",
+    study: "Confirm your timeline, study status, and budget before you move into the next roadmap stage.",
+    work: "Confirm your timing, work status, and financial reality before you move into the next roadmap stage.",
     exploration: "Plan your scouting trip and research neighborhoods in person",
-    family: "Collect family status documents (marriage certificate, birth certificates)",
-    capital: "Document your passive income sources and calculate the financial requirement",
+    family: "Confirm who is moving with you and what practical constraints that creates for the plan.",
+    capital: "Pressure-test your financial reality before you move into the next roadmap stage.",
   };
-  const nextStep = NEXT_STEP_MAP[path.scenario] ?? "Review the document checklist for your path";
+  const nextStep = NEXT_STEP_MAP[path.scenario] ?? "Review your move profile and create your roadmap.";
 
   return (
     <div className="flex flex-col flex-1 gap-6 pt-4">
@@ -40,7 +40,7 @@ export function StepPlanReady({ state, onConfirm, onBack }: Props) {
         </div>
         <h2 className="text-2xl font-bold tracking-tight mb-1">Your move plan is ready</h2>
         <p className="text-sm text-muted-foreground">
-          Here's what you've chosen. Review it before we build your journey.
+          Here&apos;s what you&apos;ve chosen. Review it before we build your roadmap.
         </p>
       </div>
 
@@ -100,7 +100,7 @@ export function StepPlanReady({ state, onConfirm, onBack }: Props) {
 
       <div className="flex flex-col gap-2 pb-6">
         <Button onClick={onConfirm} className="h-12 gap-2 text-base">
-          Create my journey
+          Create my roadmap
           <ArrowRight className="h-4 w-4" />
         </Button>
         <Button variant="ghost" size="sm" onClick={onBack} className="text-muted-foreground">

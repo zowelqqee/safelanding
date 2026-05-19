@@ -61,16 +61,16 @@ export function RoadmapLevelCard({
   return (
     <section className="relative pl-6">
       {index > 0 && (
-        <div className="absolute bottom-full left-[11px] top-[-20px] w-px bg-border" />
+        <div className="absolute bottom-full left-[11px] top-[-20px] w-px bg-[linear-gradient(180deg,rgba(148,163,184,0.15),rgba(148,163,184,0.7),rgba(148,163,184,0.15))]" />
       )}
 
       <div
         className={cn(
-          "absolute left-0 top-6 flex h-6 w-6 items-center justify-center rounded-full border text-[11px] font-semibold",
-          level.status === "completed" && "border-emerald-200 bg-emerald-50 text-emerald-700",
-          level.status === "active" && "border-sky-200 bg-sky-50 text-sky-700",
+          "route-dot absolute left-0 top-6 flex h-6 w-6 items-center justify-center rounded-full border text-[11px] font-semibold",
+          level.status === "completed" && "border-emerald-300 bg-[linear-gradient(180deg,#ecfdf5,#d1fae5)] text-emerald-700",
+          level.status === "active" && "border-sky-300 bg-[linear-gradient(180deg,#f0f9ff,#e0f2fe)] text-sky-700",
           level.status === "locked" && "border-border bg-background text-muted-foreground",
-          level.status === "waiting" && "border-amber-200 bg-amber-50 text-amber-700",
+          level.status === "waiting" && "border-amber-200 bg-[linear-gradient(180deg,#fffbeb,#fef3c7)] text-amber-700",
           level.status === "blocked" && "border-rose-200 bg-rose-50 text-rose-700"
         )}
       >
@@ -79,9 +79,9 @@ export function RoadmapLevelCard({
 
       <div
         className={cn(
-          "rounded-[26px] border bg-card p-5 shadow-sm transition-colors",
-          isCurrent && "border-sky-200 shadow-[0_0_0_1px_rgba(125,211,252,0.35)]",
-          isLocked && "opacity-90"
+          "surface-card rounded-[26px] p-5 transition-colors",
+          isCurrent && "border-sky-200 shadow-[0_0_0_1px_rgba(125,211,252,0.22),0_16px_36px_rgba(15,23,42,0.05)]",
+          isLocked && "opacity-95"
         )}
       >
         <div className="flex flex-wrap items-start gap-3">
@@ -92,7 +92,7 @@ export function RoadmapLevelCard({
               </h2>
               <span
                 className={cn(
-                  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium",
+                  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium tracking-[0.12em] uppercase",
                   getLevelStatusClasses(level.status)
                 )}
               >
@@ -158,7 +158,7 @@ export function RoadmapLevelCard({
             </Link>
             <Link href="/app/move-brief" className="inline-flex">
               <Button variant="outline" className="h-11 w-full md:w-auto">
-                Open Move Brief
+                View Move Brief
               </Button>
             </Link>
           </div>

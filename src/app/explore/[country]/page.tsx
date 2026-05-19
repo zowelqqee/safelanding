@@ -121,7 +121,7 @@ export default async function CountryPage({
             <div className="mt-6 flex flex-wrap gap-2">
               <Link href={`/compare?type=country&c=${country.id}`}>
                 <Button variant="outline" className="gap-2">
-                  Compare countries
+                  Compare
                   <BarChart3 className="h-4 w-4" />
                 </Button>
               </Link>
@@ -133,7 +133,7 @@ export default async function CountryPage({
               </Link>
               <Link href="/start">
                 <Button className="gap-2">
-                  Find your fit here
+                  Start my move
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
@@ -257,6 +257,9 @@ export default async function CountryPage({
                     <p>Rent: {city.avg_rent_range}</p>
                     <p>Budget: {city.monthly_budget_range}</p>
                   </div>
+                  <p className="mt-4 text-sm font-medium text-primary">
+                    Choose this destination
+                  </p>
                 </Link>
               ))}
             </div>

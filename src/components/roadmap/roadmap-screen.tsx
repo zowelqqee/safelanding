@@ -42,7 +42,7 @@ export function RoadmapScreen({ roadmap }: RoadmapScreenProps) {
                     variant="outline"
                     className="border-white/15 bg-white/10 text-white hover:bg-white/15 hover:text-white"
                   >
-                    Open Move Brief
+                    View Move Brief
                   </Button>
                 </Link>
               </div>

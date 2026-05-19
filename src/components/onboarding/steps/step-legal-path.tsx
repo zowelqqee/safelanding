@@ -118,7 +118,7 @@ function PathCard({
       </div>
 
       <Button size="sm" className="h-10 gap-1.5" onClick={onSelect}>
-        Start this path
+        Choose this legal path
         <ArrowRight className="h-3.5 w-3.5" />
       </Button>
     </div>
@@ -155,7 +155,7 @@ export function StepLegalPath({ state, onSelect, onBack }: Props) {
         </div>
         <h2 className="text-2xl font-bold tracking-tight mb-1">Choose your legal path</h2>
         <p className="text-sm text-muted-foreground">
-          These paths are available for {country?.name ?? "your destination"}. Pick the one that fits your situation.
+          These paths are available for {country?.name ?? "your destination"}. Choose the one that fits your situation best.
         </p>
       </div>
 

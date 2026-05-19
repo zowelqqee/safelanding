@@ -69,11 +69,11 @@ export function RoadmapNode({ node }: RoadmapNodeProps) {
   const content = (
     <div
       className={cn(
-        "rounded-2xl border px-4 py-3 transition-colors",
-        node.status === "active" && "border-sky-200 bg-sky-50/80 shadow-[0_0_0_1px_rgba(186,230,253,0.55)]",
-        node.status === "completed" && "border-emerald-200 bg-emerald-50/80",
-        node.status === "locked" && "border-dashed border-border bg-muted/35 opacity-80",
-        node.status === "waiting" && "border-amber-200 bg-amber-50/80",
+        "rounded-[22px] border px-4 py-3 transition-colors",
+        node.status === "active" && "border-sky-200 bg-[linear-gradient(180deg,rgba(240,249,255,0.98),rgba(248,250,252,0.98))] shadow-[0_0_0_1px_rgba(186,230,253,0.5)]",
+        node.status === "completed" && "border-emerald-200 bg-[linear-gradient(180deg,rgba(236,253,245,0.96),rgba(240,253,250,0.98))]",
+        node.status === "locked" && "border-dashed border-border bg-[rgba(248,250,252,0.82)] opacity-90",
+        node.status === "waiting" && "border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,0.96),rgba(255,255,255,0.98))]",
         isInteractive && "hover:border-sky-300 hover:bg-sky-50"
       )}
     >
@@ -86,7 +86,7 @@ export function RoadmapNode({ node }: RoadmapNodeProps) {
             <p className="text-sm font-medium text-foreground">{node.title}</p>
             <span
               className={cn(
-                "inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium",
+                "inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.12em]",
                 getStatusClasses(node.status)
               )}
             >
@@ -100,7 +100,7 @@ export function RoadmapNode({ node }: RoadmapNodeProps) {
           )}
           {isInteractive && (
             <p className="text-xs font-medium text-sky-700">
-              {node.status === "completed" ? "Review or edit" : "Open form"}
+              {node.status === "completed" ? "Review or update" : "Continue"}
             </p>
           )}
         </div>

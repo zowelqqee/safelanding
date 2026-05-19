@@ -173,12 +173,12 @@ export function PersonalDetailsForm({ profile }: PersonalDetailsFormProps) {
               {saving ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Saving details...
+                  Saving...
                 </>
               ) : (
                 <>
                   <Check className="h-4 w-4" />
-                  Confirm details
+                  Save
                 </>
               )}
             </Button>

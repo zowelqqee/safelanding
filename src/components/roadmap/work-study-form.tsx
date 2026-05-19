@@ -81,8 +81,8 @@ export function WorkStudyForm({ profile }: WorkStudyFormProps) {
       description="Capture the employment or study facts that shape which legal path is realistic."
       onBack={() => router.push("/app/roadmap")}
       onSubmit={handleSubmit}
-      submitLabel="Save work/study details"
-      savingLabel="Saving details..."
+      submitLabel="Save"
+      savingLabel="Saving..."
       saving={saving}
       canSubmit={canSubmit}
       error={error}

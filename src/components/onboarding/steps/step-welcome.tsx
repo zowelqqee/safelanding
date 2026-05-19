@@ -32,8 +32,8 @@ export function StepWelcome({
         Your move, step by step.
       </h1>
       <p className="text-muted-foreground max-w-sm leading-relaxed mb-2">
-        Soft Landing helps you choose where to move, find your legal path,
-        prepare documents, and land without chaos.
+        Soft Landing helps you choose where to move, understand realistic legal paths,
+        build your move profile, and follow a clear roadmap.
       </p>
       <p className="text-xs text-muted-foreground mb-10">
         Takes about 3 minutes. No account required to see your results.

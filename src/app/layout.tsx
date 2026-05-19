@@ -42,7 +42,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col antialiased">
+      <body className="atlas-shell min-h-full flex flex-col antialiased">
         {children}
         <Toaster position="top-center" />
       </body>

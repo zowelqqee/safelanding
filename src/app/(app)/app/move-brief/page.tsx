@@ -34,7 +34,7 @@ export default async function MoveBriefPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-6 md:py-8">
       <div className="space-y-5">
-        <section className="overflow-hidden rounded-[30px] border bg-card shadow-sm">
+        <section className="surface-card-strong overflow-hidden rounded-[30px]">
           <div className="border-b bg-[linear-gradient(135deg,rgba(15,23,42,0.98),rgba(30,41,59,0.96))] px-5 py-6 text-white md:px-7">
             <Link
               href="/app/roadmap"
@@ -60,7 +60,7 @@ export default async function MoveBriefPage() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-right backdrop-blur">
+              <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-right">
                 <p className="text-[11px] uppercase tracking-[0.14em] text-white/65">
                   Current stage
                 </p>
@@ -108,7 +108,7 @@ export default async function MoveBriefPage() {
                   <DetailCard label="Current stage" value={brief.destination.currentStage} />
                 </div>
 
-                <div className="rounded-2xl border bg-muted/35 px-4 py-4">
+                <div className="rounded-2xl border border-border/80 bg-muted/35 px-4 py-4">
                   <p className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
                     Goal
                   </p>
@@ -124,7 +124,7 @@ export default async function MoveBriefPage() {
                 title="User profile summary"
                 subtitle="The current facts your roadmap and fit logic are using."
               />
-              <div className="divide-y">
+              <div className="divide-y paper-divider">
                 {brief.profileSummary.map((item) => (
                   <div
                     key={item.label}
@@ -132,7 +132,7 @@ export default async function MoveBriefPage() {
                   >
                     <UserRound className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm text-muted-foreground">{item.label}</p>
+                      <p className="editorial-kicker text-muted-foreground">{item.label}</p>
                       <p className="mt-1 text-sm font-medium leading-relaxed text-foreground">
                         {item.value}
                       </p>
@@ -149,13 +149,13 @@ export default async function MoveBriefPage() {
               />
               <div className="space-y-3 px-5 py-5">
                 {brief.blockers.map((blocker) => (
-                  <div
-                    key={blocker}
-                    className="rounded-2xl border border-amber-200 bg-amber-50/80 px-4 py-4"
-                  >
+                  <div key={blocker} className="rounded-2xl border border-amber-200 bg-amber-50/80 px-4 py-4">
                     <div className="flex items-start gap-3">
                       <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
-                      <p className="text-sm leading-relaxed text-amber-950">{blocker}</p>
+                      <div>
+                        <p className="editorial-kicker text-amber-700">Blocker</p>
+                        <p className="mt-1 text-sm leading-relaxed text-amber-950">{blocker}</p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -183,7 +183,7 @@ export default async function MoveBriefPage() {
               />
               <div className="space-y-4 px-5 py-5">
                 <div className="rounded-2xl border border-sky-200 bg-sky-50/80 px-4 py-4">
-                  <p className="text-xs font-medium uppercase tracking-[0.12em] text-sky-700">
+                  <p className="editorial-kicker text-sky-700">
                     Primary next step
                   </p>
                   <p className="mt-2 text-sm font-medium text-sky-950">
@@ -203,7 +203,7 @@ export default async function MoveBriefPage() {
                   </Link>
                   <Link href="/app/explore" className="block">
                     <Button variant="outline" className="h-11 w-full justify-between gap-2">
-                      Compare another destination
+                      Compare
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </Link>
@@ -226,7 +226,7 @@ export default async function MoveBriefPage() {
             <Card>
               <CardHeader
                 title="Prepared for partner review"
-                subtitle="A placeholder handoff state for the partner-reviewed layer that comes later."
+                subtitle="A clean summary you can use before the partner-reviewed layer is fully active."
               />
               <div id="partner-review" className="space-y-4 px-5 py-5 scroll-mt-24">
                 <p className="text-sm leading-relaxed text-muted-foreground">
@@ -258,7 +258,7 @@ export default async function MoveBriefPage() {
 }
 
 function Card({ children }: { children: React.ReactNode }) {
-  return <section className="overflow-hidden rounded-[26px] border bg-card shadow-sm">{children}</section>;
+  return <section className="surface-card overflow-hidden rounded-[26px]">{children}</section>;
 }
 
 function CardHeader({
@@ -269,7 +269,7 @@ function CardHeader({
   subtitle: string;
 }) {
   return (
-    <div className="border-b px-5 py-4">
+    <div className="paper-divider border-b px-5 py-4">
       <h2 className="text-base font-semibold tracking-tight text-foreground">{title}</h2>
       <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{subtitle}</p>
     </div>
@@ -286,8 +286,8 @@ function SummaryCard({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border bg-background px-4 py-4">
-      <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+    <div className="rounded-2xl border border-border/80 bg-background/88 px-4 py-4">
+      <div className="flex items-center gap-2 editorial-kicker text-muted-foreground">
         <Icon className="h-3.5 w-3.5" />
         {label}
       </div>
@@ -304,8 +304,8 @@ function DetailCard({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border bg-background px-4 py-4">
-      <p className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+    <div className="rounded-2xl border border-border/80 bg-background/88 px-4 py-4">
+      <p className="editorial-kicker text-muted-foreground">
         {label}
       </p>
       <p className="mt-2 text-sm font-medium leading-relaxed text-foreground">{value}</p>
@@ -321,8 +321,8 @@ function FitCard({
   fit: { label: "Strong" | "Medium" | "Weak"; score?: number };
 }) {
   return (
-    <div className="rounded-2xl border bg-background px-4 py-4">
-      <p className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+    <div className="rounded-2xl border border-border/80 bg-background/88 px-4 py-4">
+      <p className="editorial-kicker text-muted-foreground">
         {label}
       </p>
       <div className="mt-2 flex items-center justify-between gap-3">
@@ -345,11 +345,11 @@ function EmptyState() {
       </div>
       <h1 className="mt-5 text-2xl font-semibold tracking-tight">Build your move brief</h1>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-        Start onboarding or finish your roadmap selections first, then we&apos;ll summarize your destination, path, blockers, and next step here.
+        Finish your destination, legal path, and roadmap choices first, then we&apos;ll summarize your plan here.
       </p>
       <Link href="/app/roadmap" className="mt-6 inline-flex">
         <Button size="lg" className="gap-2">
-          Open roadmap
+          View roadmap
           <ArrowRight className="h-4 w-4" />
         </Button>
       </Link>

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { savePartnerReviewRequest } from "@/lib/partner-review/partner-review";
+import { savePartnerReviewRequest } from "@/lib/partner-review/partner-review-client";
 import type { PartnerReviewRequest } from "@/types";
 
 interface PartnerReviewFormProps {
@@ -81,13 +81,13 @@ export function PartnerReviewForm({
   return (
     <div className="space-y-4">
       {request && (
-        <section className="rounded-[26px] border bg-card p-5 shadow-sm">
+        <section className="surface-card rounded-[26px] p-5">
           <div className="flex items-start gap-3">
             <div className="mt-0.5 flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium uppercase tracking-[0.14em] text-emerald-700">
+              <p className="editorial-kicker text-emerald-700">
                 Existing request
               </p>
               <h2 className="mt-1 text-lg font-semibold tracking-tight">
@@ -104,13 +104,13 @@ export function PartnerReviewForm({
         </section>
       )}
 
-      <section className="rounded-[26px] border bg-card shadow-sm">
-        <div className="border-b px-5 py-4">
+      <section className="surface-card overflow-hidden rounded-[26px]">
+        <div className="paper-divider border-b px-5 py-4">
           <h2 className="text-base font-semibold tracking-tight">
             {request ? "Update request" : "Request details"}
           </h2>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-            We&apos;ll save this with your current Move Brief context. No document checklist is shown here.
+            We&apos;ll save this with your current Move Brief context. No document checklist appears here.
           </p>
         </div>
 
@@ -142,7 +142,7 @@ export function PartnerReviewForm({
             />
           </div>
 
-          <label className="flex items-start gap-3 rounded-2xl border bg-muted/35 px-4 py-4">
+          <label className="flex items-start gap-3 rounded-2xl border border-border/80 bg-muted/35 px-4 py-4">
             <input
               type="checkbox"
               checked={consentGiven}
@@ -168,12 +168,10 @@ export function PartnerReviewForm({
             {saving ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Saving request...
+                Saving...
               </>
-            ) : request ? (
-              "Update request"
             ) : (
-              "Request review"
+              "Request partner review"
             )}
           </Button>
         </form>

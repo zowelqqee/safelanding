@@ -56,47 +56,47 @@
 }
 
 :root {
-  --background: oklch(0.99 0.002 247);
+  --background: oklch(0.985 0.004 240);
   --foreground: oklch(0.17 0.01 256);
-  --card: oklch(1 0 0);
+  --card: oklch(0.995 0.003 240);
   --card-foreground: oklch(0.17 0.01 256);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.17 0.01 256);
-  --primary: oklch(0.56 0.20 256);
+  --primary: oklch(0.52 0.12 243);
   --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.96 0.004 247);
+  --secondary: oklch(0.955 0.006 240);
   --secondary-foreground: oklch(0.25 0.01 256);
-  --muted: oklch(0.96 0.004 247);
-  --muted-foreground: oklch(0.52 0.012 256);
-  --accent: oklch(0.94 0.015 256);
+  --muted: oklch(0.955 0.006 240);
+  --muted-foreground: oklch(0.50 0.014 252);
+  --accent: oklch(0.94 0.010 225);
   --accent-foreground: oklch(0.25 0.01 256);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.91 0.006 247);
-  --input: oklch(0.91 0.006 247);
-  --ring: oklch(0.56 0.20 256);
-  --radius: 0.75rem;
+  --border: oklch(0.89 0.008 240);
+  --input: oklch(0.89 0.008 240);
+  --ring: oklch(0.52 0.12 243);
+  --radius: 0.95rem;
 
-  --brand-primary: oklch(0.56 0.20 256);
-  --brand-amber: oklch(0.72 0.15 55);
-  --brand-green: oklch(0.64 0.15 152);
+  --brand-primary: oklch(0.52 0.12 243);
+  --brand-amber: oklch(0.73 0.10 64);
+  --brand-green: oklch(0.63 0.10 171);
   --readiness-low: oklch(0.72 0.15 25);
   --readiness-mid: oklch(0.72 0.15 55);
   --readiness-high: oklch(0.68 0.14 200);
   --readiness-ready: oklch(0.64 0.15 152);
 
-  --chart-1: oklch(0.56 0.20 256);
-  --chart-2: oklch(0.72 0.15 55);
-  --chart-3: oklch(0.64 0.15 152);
+  --chart-1: oklch(0.52 0.12 243);
+  --chart-2: oklch(0.73 0.10 64);
+  --chart-3: oklch(0.63 0.10 171);
   --chart-4: oklch(0.65 0.18 300);
   --chart-5: oklch(0.55 0.16 25);
-  --sidebar: oklch(0.97 0.004 247);
+  --sidebar: oklch(0.97 0.005 240);
   --sidebar-foreground: oklch(0.17 0.01 256);
-  --sidebar-primary: oklch(0.56 0.20 256);
+  --sidebar-primary: oklch(0.52 0.12 243);
   --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.94 0.015 256);
+  --sidebar-accent: oklch(0.94 0.010 225);
   --sidebar-accent-foreground: oklch(0.25 0.01 256);
-  --sidebar-border: oklch(0.91 0.006 247);
-  --sidebar-ring: oklch(0.56 0.20 256);
+  --sidebar-border: oklch(0.89 0.008 240);
+  --sidebar-ring: oklch(0.52 0.12 243);
 }
 
 @layer base {
@@ -105,6 +105,12 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(circle at 20% 20%, color-mix(in oklab, var(--color-primary) 4%, transparent) 0, transparent 24rem),
+      linear-gradient(to right, color-mix(in oklab, var(--color-border) 38%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--color-border) 34%, transparent) 1px, transparent 1px);
+    background-size: auto, 28px 28px, 28px 28px;
+    background-position: 0 0, center top, center top;
   }
   html {
     @apply font-sans;
@@ -112,6 +118,49 @@
 }
 
 @layer utilities {
+  .atlas-shell {
+    position: relative;
+    isolation: isolate;
+  }
+  .atlas-shell::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.32;
+    background-image:
+      radial-gradient(circle at 15% 18%, rgba(74, 102, 165, 0.05), transparent 18rem),
+      radial-gradient(circle at 82% 10%, rgba(109, 137, 92, 0.04), transparent 14rem),
+      linear-gradient(140deg, rgba(255,255,255,0.72), rgba(255,255,255,0));
+    z-index: -1;
+  }
+  .surface-card {
+    background: color-mix(in oklab, var(--color-card) 96%, white);
+    border: 1px solid color-mix(in oklab, var(--color-border) 92%, white);
+    box-shadow:
+      0 1px 1px rgba(15, 23, 42, 0.03),
+      0 10px 26px rgba(15, 23, 42, 0.035);
+  }
+  .surface-card-strong {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.94), rgba(250,251,253,0.96));
+    border: 1px solid color-mix(in oklab, var(--color-border) 88%, white);
+    box-shadow:
+      0 1px 1px rgba(15, 23, 42, 0.03),
+      0 14px 34px rgba(15, 23, 42, 0.045);
+  }
+  .editorial-kicker {
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .paper-divider {
+    border-color: color-mix(in oklab, var(--color-border) 88%, white);
+  }
+  .route-dot {
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.85);
+  }
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }

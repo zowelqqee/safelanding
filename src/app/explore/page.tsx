@@ -40,7 +40,7 @@ export default function ExplorePage() {
             </div>
             <Link href="/compare">
               <Button variant="outline" className="gap-2">
-                Compare now
+                Compare
                 <BarChart3 className="h-4 w-4" />
               </Button>
             </Link>
@@ -86,7 +86,7 @@ export default function ExplorePage() {
           </p>
           <Link href="/start">
             <Button className="gap-2">
-              Find my destination
+              Start my move
               <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>

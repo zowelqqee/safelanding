@@ -1,8 +1,9 @@
-import { createClient as createBrowserClient } from "@/lib/supabase/client";
-import { createClient as createServerClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
 import type { PartnerReviewRequest } from "@/types";
-
-const TABLE = "partner_review_requests";
+import {
+  normalizePartnerReviewRequest,
+  PARTNER_REVIEW_TABLE,
+} from "./partner-review-shared";
 
 type SavePartnerReviewRequestInput = {
   moveProfileId: string;
@@ -14,38 +15,11 @@ type SavePartnerReviewRequestInput = {
   consentGiven: boolean;
 };
 
-function normalizeRequest(
-  row: Record<string, unknown> | null | undefined
-): PartnerReviewRequest | null {
-  if (!row) return null;
-  return row as PartnerReviewRequest;
-}
-
-export async function getPartnerReviewRequestServer(
-  userId: string,
-  moveProfileId: string
-): Promise<PartnerReviewRequest | null> {
-  const supabase = await createServerClient();
-  const { data, error } = await supabase
-    .from(TABLE)
-    .select("*")
-    .eq("user_id", userId)
-    .eq("move_profile_id", moveProfileId)
-    .limit(1);
-
-  if (error) {
-    console.error("[Soft Landing] getPartnerReviewRequestServer error:", error);
-    return null;
-  }
-
-  return normalizeRequest(data?.[0]);
-}
-
 export async function savePartnerReviewRequest(
   input: SavePartnerReviewRequestInput
 ): Promise<{ request: PartnerReviewRequest | null; error: string | null }> {
   try {
-    const supabase = createBrowserClient();
+    const supabase = createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -55,7 +29,7 @@ export async function savePartnerReviewRequest(
     }
 
     const { data: existingRows, error: selectError } = await supabase
-      .from(TABLE)
+      .from(PARTNER_REVIEW_TABLE)
       .select("*")
       .eq("user_id", user.id)
       .eq("move_profile_id", input.moveProfileId)
@@ -65,11 +39,11 @@ export async function savePartnerReviewRequest(
       throw selectError;
     }
 
-    const existing = normalizeRequest(existingRows?.[0]);
+    const existing = normalizePartnerReviewRequest(existingRows?.[0]);
 
     if (existing) {
       const { data: updatedRows, error: updateError } = await supabase
-        .from(TABLE)
+        .from(PARTNER_REVIEW_TABLE)
         .update({
           selected_country_id: input.selectedCountryId,
           selected_city_id: input.selectedCityId,
@@ -88,13 +62,13 @@ export async function savePartnerReviewRequest(
       }
 
       return {
-        request: normalizeRequest(updatedRows?.[0]) ?? existing,
+        request: normalizePartnerReviewRequest(updatedRows?.[0]) ?? existing,
         error: null,
       };
     }
 
     const { data: insertedRows, error: insertError } = await supabase
-      .from(TABLE)
+      .from(PARTNER_REVIEW_TABLE)
       .insert({
         user_id: user.id,
         move_profile_id: input.moveProfileId,
@@ -114,7 +88,7 @@ export async function savePartnerReviewRequest(
     }
 
     return {
-      request: normalizeRequest(insertedRows?.[0]),
+      request: normalizePartnerReviewRequest(insertedRows?.[0]),
       error: null,
     };
   } catch (error) {

@@ -133,7 +133,7 @@ export default async function ProfilePage() {
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link href="/app/move-brief" className="inline-flex">
                   <Button variant="outline" className="gap-2">
-                    Open Move Brief
+                    View Move Brief
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>

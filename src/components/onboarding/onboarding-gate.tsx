@@ -17,8 +17,11 @@ export function OnboardingGate() {
   // Still checking auth state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 px-4 text-center">
         <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+        <p className="text-sm text-muted-foreground">
+          Loading your move profile...
+        </p>
       </div>
     );
   }
@@ -44,7 +47,7 @@ export function OnboardingGate() {
           <div className="space-y-1.5">
             <h1 className="text-2xl font-bold tracking-tight">Create your free move profile</h1>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
-              Save your relocation progress, shortlist, legal path, and future roadmap.
+              Save your shortlist, chosen legal path, and roadmap progress as you plan your move.
             </p>
           </div>
         </div>

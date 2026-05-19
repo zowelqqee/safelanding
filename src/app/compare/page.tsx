@@ -213,14 +213,14 @@ function CountryCompareCard({
   fit: ReturnType<typeof matchCountries>[number];
 }) {
   return (
-    <div className="rounded-[28px] border bg-card p-5 shadow-sm">
+    <div className="surface-card-strong rounded-[28px] p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="text-3xl">{country.emoji}</div>
           <h2 className="mt-3 text-lg font-semibold">{country.name}</h2>
           <p className="text-sm text-muted-foreground">{country.region}</p>
         </div>
-        <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
+        <span className="rounded-full border border-primary/15 bg-primary/8 px-3 py-1 text-sm font-semibold text-primary">
           {fit.overallFit}% overall
         </span>
       </div>
@@ -228,17 +228,17 @@ function CountryCompareCard({
       <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{country.summary}</p>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl bg-muted/50 px-3 py-3">
+        <div className="rounded-2xl border border-border/70 bg-background/80 px-3 py-3">
           <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Lifestyle fit</p>
           <p className="mt-1 text-2xl font-semibold">{fit.lifestyleFit}%</p>
         </div>
-        <div className="rounded-2xl bg-muted/50 px-3 py-3">
+        <div className="rounded-2xl border border-border/70 bg-background/80 px-3 py-3">
           <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Legal fit</p>
           <p className="mt-1 text-2xl font-semibold">{fit.legalFit}%</p>
         </div>
-        <div className="rounded-2xl bg-muted/50 px-3 py-3">
-          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Main blocker</p>
-          <p className="mt-1 text-sm font-medium leading-snug">{fit.mainBlocker}</p>
+        <div className="rounded-2xl border border-amber-200 bg-amber-50/90 px-3 py-3">
+          <p className="text-xs uppercase tracking-[0.14em] text-amber-700">Main blocker</p>
+          <p className="mt-1 text-sm font-medium leading-snug text-amber-950">{fit.mainBlocker}</p>
         </div>
       </div>
 
@@ -264,7 +264,7 @@ function CountryCompareCard({
       <div className="mt-5 flex gap-2">
         <Link href={`/explore/${country.slug}`} className="flex-1">
           <Button variant="outline" className="h-11 w-full gap-2">
-            View country
+            Choose this destination
             <ArrowRight className="h-4 w-4" />
           </Button>
         </Link>
@@ -292,13 +292,13 @@ function CityCompareCard({
   if (!city) return null;
 
   return (
-    <div className="rounded-[28px] border bg-card p-5 shadow-sm">
+    <div className="surface-card-strong rounded-[28px] p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm text-muted-foreground">{city.country}</p>
           <h2 className="text-lg font-semibold">{city.name}</h2>
         </div>
-        <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
+        <span className="rounded-full border border-primary/15 bg-primary/8 px-3 py-1 text-sm font-semibold text-primary">
           {levelLabel(city.first_90_days_difficulty)}
         </span>
       </div>
@@ -351,7 +351,7 @@ function CityCompareCard({
       <div className="mt-5 flex gap-2">
         <Link href={`/explore/${city.countryId}/${city.slug}`} className="flex-1">
           <Button variant="outline" className="h-11 w-full gap-2">
-            View city
+            Choose this destination
             <ArrowRight className="h-4 w-4" />
           </Button>
         </Link>
@@ -424,7 +424,7 @@ function CompareExperience({
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4">
           <Link href="/explore" className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-4 w-4" />
@@ -488,7 +488,7 @@ function CompareExperience({
           ) : (
             <>
               <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
-                <div className="rounded-[28px] border bg-card p-5 shadow-sm">
+                <div className="surface-card rounded-[28px] p-5">
                   <p className="text-sm font-medium">Choose a country</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {COUNTRIES.map((country) => (
@@ -539,7 +539,7 @@ function CompareExperience({
 
 export default function ComparePage() {
   return (
-    <Suspense>
+    <Suspense fallback={<CompareLoadingState />}>
       <CompareContent />
     </Suspense>
   );
@@ -549,4 +549,21 @@ function CompareContent() {
   const searchParams = useSearchParams();
 
   return <CompareExperience key={searchParams.toString()} searchParams={searchParams} />;
+}
+
+function CompareLoadingState() {
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        <div className="rounded-[28px] border bg-card p-6 text-center shadow-sm">
+          <p className="text-lg font-semibold tracking-tight text-foreground">
+            Loading comparison
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Preparing your side-by-side view...
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 }
