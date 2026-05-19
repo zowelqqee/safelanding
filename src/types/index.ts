@@ -29,7 +29,6 @@ export type CountryProfile = {
   long_term_stability: 1 | 2 | 3 | 4 | 5;
   calm_lifestyle: 1 | 2 | 3 | 4 | 5;
   public_transport: 1 | 2 | 3 | 4 | 5;
-  coastal: boolean;
   main_legal_blocker: string;
   main_lifestyle_blocker: string;
   what_people_underestimate: string;
