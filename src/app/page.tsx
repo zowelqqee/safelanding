@@ -25,7 +25,12 @@ function LandingHeader() {
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-        <span className="font-semibold text-foreground tracking-tight">Soft Landing</span>
+        <Link
+          href="/"
+          className="font-semibold text-foreground tracking-tight transition-opacity hover:opacity-80"
+        >
+          Soft Landing
+        </Link>
         <LandingHeaderActions />
       </div>
     </header>

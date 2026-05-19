@@ -28,6 +28,7 @@ export default async function TasksPage() {
   const visibleNodes = currentLevel.nodes.filter(
     (node) => node.status === "active" || node.status === "waiting"
   );
+  const shouldShowMoveBriefLink = roadmap.nextTaskLabel === "Request partner review";
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 space-y-5">
@@ -51,6 +52,14 @@ export default async function TasksPage() {
           <Link href={activeNode.href} className="mt-4 inline-flex">
             <Button size="sm" className="gap-2">
               Open current step
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+        )}
+        {shouldShowMoveBriefLink && (
+          <Link href="/app/partner-review" className="mt-3 inline-flex">
+            <Button size="sm" variant="outline" className="gap-2">
+              Request partner review
               <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>

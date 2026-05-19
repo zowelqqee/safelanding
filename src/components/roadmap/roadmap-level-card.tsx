@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CheckCircle2, Lock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -145,6 +146,21 @@ export function RoadmapLevelCard({
             <Button disabled className="mt-3 h-11 w-full md:w-auto">
               {level.ctaLabel}
             </Button>
+          </div>
+        )}
+
+        {level.id === "prepare-documents" && level.status === "active" && (
+          <div className="mt-4 flex flex-col gap-3 md:flex-row">
+            <Link href="/app/partner-review" className="inline-flex">
+              <Button className="h-11 w-full md:w-auto">
+                Request partner review
+              </Button>
+            </Link>
+            <Link href="/app/move-brief" className="inline-flex">
+              <Button variant="outline" className="h-11 w-full md:w-auto">
+                Open Move Brief
+              </Button>
+            </Link>
           </div>
         )}
 

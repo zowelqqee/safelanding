@@ -465,6 +465,21 @@ export type MoveProfilePatch = Partial<
   Omit<MoveProfile, "id" | "user_id" | "anonymous_id" | "created_at" | "updated_at">
 >;
 
+export type PartnerReviewRequest = {
+  id?: string;
+  user_id: string;
+  move_profile_id: string;
+  selected_country_id: string | null;
+  selected_city_id: string | null;
+  selected_legal_path_id: string | null;
+  email: string;
+  message: string | null;
+  consent_given: boolean;
+  status: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
 // ─── Generated roadmap ───────────────────────────────────────────────────────
 
 export type RoadmapStatus =

@@ -347,12 +347,6 @@ function buildPrepareDocumentsLevel(profile: MoveProfile): RoadmapLevel {
       status,
       PREPARE_DOCUMENTS_NODES.map(() => false)
     ),
-    ctaLabel: buildProfileCompleted
-      ? "Join waitlist for verified document guidance"
-      : undefined,
-    ctaDescription: buildProfileCompleted
-      ? "Document guidance for this path requires verified local partners. We are not showing document checklists yet."
-      : undefined,
   };
 }
 

@@ -32,9 +32,12 @@ export default async function AppLayout({
     <div className="flex flex-col min-h-screen bg-background">
       {/* Desktop top nav — hidden on mobile */}
       <header className="hidden md:flex items-center border-b border-border bg-card px-6 h-14 shrink-0">
-        <span className="font-semibold text-primary text-base tracking-tight mr-8">
+        <Link
+          href="/"
+          className="font-semibold text-primary text-base tracking-tight mr-8 transition-opacity hover:opacity-80"
+        >
           Soft Landing
-        </span>
+        </Link>
         <nav className="flex items-center gap-1">
           {NAV_ITEMS.map((item) => (
             <Link

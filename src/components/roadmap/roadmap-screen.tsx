@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { Compass, Route, Sparkles, Target } from "lucide-react";
 import { getMovePreparationLabel } from "@/lib/roadmap/roadmapGenerator";
 import type { Roadmap } from "@/types";
+import { Button } from "@/components/ui/button";
 import { RoadmapLevelCard } from "./roadmap-level-card";
 
 interface RoadmapScreenProps {
@@ -35,6 +37,14 @@ export function RoadmapScreen({ roadmap }: RoadmapScreenProps) {
                   </h1>
                   <p className="text-sm text-white/75 md:text-base">{roadmap.subtitle}</p>
                 </div>
+                <Link href="/app/move-brief" className="inline-flex">
+                  <Button
+                    variant="outline"
+                    className="border-white/15 bg-white/10 text-white hover:bg-white/15 hover:text-white"
+                  >
+                    Open Move Brief
+                  </Button>
+                </Link>
               </div>
 
               <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-right backdrop-blur">

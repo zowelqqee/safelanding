@@ -129,6 +129,22 @@ export default async function ProfilePage() {
               label="Current roadmap stage"
               value={currentLevel?.title ?? "—"}
             />
+            <div className="border-t px-4 py-4">
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Link href="/app/move-brief" className="inline-flex">
+                  <Button variant="outline" className="gap-2">
+                    Open Move Brief
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/app/partner-review" className="inline-flex">
+                  <Button className="gap-2">
+                    Request partner review
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </SectionCard>
 
           <SectionCard>
