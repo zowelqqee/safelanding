@@ -135,6 +135,58 @@ export type CityMatchResult = {
   first90DaysDifficulty: number;
 };
 
+export type CityRealitySignalTopic =
+  | "housing"
+  | "language"
+  | "bureaucracy"
+  | "money"
+  | "community"
+  | "first_90_days"
+  | "regret"
+  | "advice";
+
+export type CityRealitySignalSentiment = "positive" | "mixed" | "negative";
+
+export type CityRealitySnapshotSignal = {
+  title: string;
+  description: string;
+};
+
+export type CityRealityStorySignal = {
+  quote: string;
+  sourceLabel: string;
+  sourceUrl: string;
+  sourceAgeLabel?: string;
+  topic: CityRealitySignalTopic;
+  sentiment: CityRealitySignalSentiment;
+  summary?: string;
+};
+
+export type CityRealitySourceLink = {
+  label: string;
+  url: string;
+  topic: CityRealitySignalTopic;
+};
+
+export type CityRealityPatternSummary = {
+  peopleLove: string[];
+  peopleStruggleWith: string[];
+  peopleUnderestimate: string[];
+  first90Days: string[];
+};
+
+export type CityRealityReport = {
+  cityId: string;
+  countryId: string;
+  summary: string;
+  disclaimer: string;
+  snapshotSignals: CityRealitySnapshotSignal[];
+  storySignals: CityRealityStorySignal[];
+  patternSummary: CityRealityPatternSummary;
+  adviceBeforeMove: string[];
+  sourceLinks: CityRealitySourceLink[];
+};
+
 // ─── Legal paths ──────────────────────────────────────────────────────────────
 
 export type LegalPath = {
