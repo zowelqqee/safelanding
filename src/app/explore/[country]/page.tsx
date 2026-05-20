@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, BarChart3, MapPin } from "lucide-react";
 import { RelocationVideoStories } from "@/components/city/relocation-video-stories";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { getCitiesForCountry } from "@/lib/data/cities";
 import { COUNTRIES, getCountryBySlug } from "@/lib/data/countries";
 import { getLegalPathsForCountry } from "@/lib/data/legal-paths";
 import { getRelocationVideoStoriesForCountry } from "@/lib/data/relocation-video-stories";
+import { getExistingPublicImageSrc } from "@/lib/server/public-image";
 
 export async function generateStaticParams() {
   return COUNTRIES.map((country) => ({ country: country.slug }));
@@ -74,6 +76,92 @@ function SectionCard({
   );
 }
 
+function EditorialImagePlaceholder({ label }: { label: string }) {
+  return (
+    <div className="relative h-full min-h-[160px] overflow-hidden rounded-[22px] border border-[var(--city-border)] bg-[#f7efe0]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_24%,rgba(194,124,43,0.18),transparent_30%),radial-gradient(circle_at_78%_35%,rgba(74,124,89,0.13),transparent_26%),linear-gradient(135deg,rgba(255,255,255,0.75),rgba(240,228,200,0.7))]" />
+      <div className="absolute left-5 right-5 top-[54%] h-px bg-amber-900/20" />
+      <div className="absolute left-8 top-[54%] h-3 w-3 -translate-y-1/2 rounded-full border border-amber-800/30 bg-[#fffdf8]" />
+      <div className="absolute right-8 top-[54%] h-4 w-4 -translate-y-1/2 rounded-full border border-emerald-800/25 bg-[#fffdf8]" />
+      <div className="absolute bottom-3 left-3 right-3 rounded-2xl border border-white/70 bg-white/65 px-3 py-2.5 backdrop-blur-sm">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-amber-900/70">
+          Curated image pending
+        </p>
+        <p className="mt-1 text-sm font-medium text-stone-900">{label}</p>
+      </div>
+    </div>
+  );
+}
+
+function CountryHeroImagePanel({
+  countryName,
+  imageSrc,
+}: {
+  countryName: string;
+  imageSrc?: string;
+}) {
+  return (
+    <div className="w-full rounded-[24px] border border-[var(--city-border)] bg-[var(--city-warm-muted)]/45 p-2">
+      <div className="relative min-h-[190px] overflow-hidden rounded-[20px]">
+        {imageSrc ? (
+          <>
+            <Image
+              src={imageSrc}
+              alt={`${countryName} relocation overview`}
+              fill
+              sizes="(min-width: 1024px) 320px, 100vw"
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/45 via-stone-950/5 to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/75">
+                Country dossier
+              </p>
+              <p className="mt-1 font-serif text-xl font-medium text-white">{countryName}</p>
+            </div>
+          </>
+        ) : (
+          <EditorialImagePlaceholder label={`${countryName} relocation overview`} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function CityThumbnail({
+  cityName,
+  imageSrc,
+}: {
+  cityName: string;
+  imageSrc?: string;
+}) {
+  return (
+    <div className="relative mb-4 h-24 overflow-hidden rounded-2xl border border-[var(--city-border)] bg-[#f7efe0]">
+      {imageSrc ? (
+        <Image
+          src={imageSrc}
+          alt={`${cityName} city preview`}
+          fill
+          sizes="(min-width: 1280px) 220px, (min-width: 768px) 50vw, 100vw"
+          className="object-cover"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_30%,rgba(194,124,43,0.17),transparent_30%),linear-gradient(135deg,rgba(255,255,255,0.65),rgba(240,228,200,0.7))]">
+          <div className="absolute left-4 right-4 top-1/2 h-px bg-amber-900/20" />
+          <div className="absolute left-5 top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full border border-amber-800/25 bg-white/70" />
+          <div className="absolute right-6 top-1/2 h-3.5 w-3.5 -translate-y-1/2 rounded-full border border-emerald-800/20 bg-white/70" />
+        </div>
+      )}
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-950/35 to-transparent px-3 py-2">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/80">
+          City preview
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default async function CountryPage({
   params,
 }: {
@@ -87,6 +175,7 @@ export default async function CountryPage({
   const cities = getCitiesForCountry(country.id);
   const paths = getLegalPathsForCountry(country.id);
   const relocationVideoStories = getRelocationVideoStoriesForCountry(country.id);
+  const countryHeroImage = getExistingPublicImageSrc(country.heroImage);
   const cityCompareHref = `/compare?type=city&country=${country.id}&city=${cities
     .map((city) => city.id)
     .join(",")}`;
@@ -108,18 +197,22 @@ export default async function CountryPage({
                 </p>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-2 lg:w-[360px]">
-                <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
-                  <p className="city-section-kicker">Main legal blocker</p>
-                  <p className="mt-2 text-sm font-medium leading-relaxed text-stone-900">
-                    {country.main_legal_blocker}
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
-                  <p className="city-section-kicker">Main lifestyle blocker</p>
-                  <p className="mt-2 text-sm font-medium leading-relaxed text-stone-900">
-                    {country.main_lifestyle_blocker}
-                  </p>
+              <div className="flex flex-col gap-3 lg:w-[360px] lg:shrink-0">
+                <CountryHeroImagePanel countryName={country.name} imageSrc={countryHeroImage} />
+
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                  <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
+                    <p className="city-section-kicker">Main legal blocker</p>
+                    <p className="mt-2 text-sm font-medium leading-relaxed text-stone-900">
+                      {country.main_legal_blocker}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
+                    <p className="city-section-kicker">Main lifestyle blocker</p>
+                    <p className="mt-2 text-sm font-medium leading-relaxed text-stone-900">
+                      {country.main_lifestyle_blocker}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -247,25 +340,30 @@ export default async function CountryPage({
 
           <SectionCard title="Compare cities inside this country">
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {cities.map((city) => (
-                <Link
-                  key={city.id}
-                  href={`/explore/${country.slug}/${city.slug}`}
-                  className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/40 p-4 transition-colors hover:border-stone-400 hover:bg-[var(--city-warm-muted)]"
-                >
-                  <h3 className="text-base font-semibold text-stone-900">{city.name}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--city-muted-fg)]">
-                    {city.summary}
-                  </p>
-                  <div className="mt-3 space-y-1 text-xs text-[var(--city-muted-fg)]">
-                    <p>Rent: {city.avg_rent_range}</p>
-                    <p>Budget: {city.monthly_budget_range}</p>
-                  </div>
-                  <p className="mt-4 text-sm font-medium text-stone-700">
-                    Explore city →
-                  </p>
-                </Link>
-              ))}
+              {cities.map((city) => {
+                const thumbnailImage = getExistingPublicImageSrc(city.thumbnailImage ?? city.heroImage);
+
+                return (
+                  <Link
+                    key={city.id}
+                    href={`/explore/${country.slug}/${city.slug}`}
+                    className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/40 p-4 transition-colors hover:border-stone-400 hover:bg-[var(--city-warm-muted)]"
+                  >
+                    <CityThumbnail cityName={city.name} imageSrc={thumbnailImage} />
+                    <h3 className="text-base font-semibold text-stone-900">{city.name}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-[var(--city-muted-fg)]">
+                      {city.summary}
+                    </p>
+                    <div className="mt-3 space-y-1 text-xs text-[var(--city-muted-fg)]">
+                      <p>Rent: {city.avg_rent_range}</p>
+                      <p>Budget: {city.monthly_budget_range}</p>
+                    </div>
+                    <p className="mt-4 text-sm font-medium text-stone-700">
+                      Explore city →
+                    </p>
+                  </Link>
+                );
+              })}
             </div>
           </SectionCard>
 

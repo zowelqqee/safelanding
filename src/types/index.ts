@@ -37,6 +37,7 @@ export type CountryProfile = {
   city_ids: string[];
   available_legal_path_ids: string[];
   journey_available: boolean;
+  heroImage?: string;
   costLevel: 1 | 2 | 3 | 4 | 5;
   housingDifficulty: 1 | 2 | 3 | 4 | 5;
   englishFriendliness: 1 | 2 | 3 | 4 | 5;
@@ -118,6 +119,8 @@ export type CityProfile = {
   firstNinetyDays: FirstNinetyDays;
   housingAvgRent?: string;
   monthlyBudgetMin?: string;
+  heroImage?: string;
+  thumbnailImage?: string;
 };
 
 export type FirstNinetyDays = {

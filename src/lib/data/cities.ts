@@ -28,6 +28,8 @@ type RawCity = {
   coastal: boolean;
   big_city: boolean;
   calm_lifestyle: 1 | 2 | 3 | 4 | 5;
+  heroImage?: string;
+  thumbnailImage?: string;
 };
 
 const RAW_CITIES: RawCity[] = [
@@ -1599,7 +1601,53 @@ function buildFirstNinetyDays(preview: string[]): FirstNinetyDays {
   };
 }
 
+const CITY_IMAGE_PATHS: Record<string, string> = {
+  valencia: "/images/cities/valencia.jpg",
+  barcelona: "/images/cities/barcelona.jpg",
+  madrid: "/images/cities/madrid.jpg",
+  alicante: "/images/cities/alicante.jpg",
+  lisbon: "/images/cities/lisbon.jpg",
+  porto: "/images/cities/porto.jpg",
+  madeira: "/images/cities/madeira.jpg",
+  algarve: "/images/cities/algrave.jpg",
+  berlin: "/images/cities/berlin.jpg",
+  munich: "/images/cities/munich.jpg",
+  hamburg: "/images/cities/hamburg.jpg",
+  frankfurt: "/images/cities/frankfurt.jpg",
+  amsterdam: "/images/cities/amsterdam.jpg",
+  rotterdam: "/images/cities/rotterdam.jpg",
+  utrecht: "/images/cities/utrecht.jpg",
+  eindhoven: "/images/cities/einghoven.jpg",
+  london: "/images/cities/london.jpg",
+  manchester: "/images/cities/manchester.jpg",
+  edinburgh: "/images/cities/edinburgh.jpg",
+  birmingham: "/images/cities/birmingham.jpg",
+  toronto: "/images/cities/toronto.jpg",
+  vancouver: "/images/cities/vancuver.jpg",
+  calgary: "/images/cities/calgary.jpg",
+  montreal: "/images/cities/montreal.jpg",
+  "new-york": "/images/cities/new york.jpg",
+  "san-francisco": "/images/cities/san francisco.jpg",
+  miami: "/images/cities/miami.jpg",
+  austin: "/images/cities/austin.jpg",
+  dubai: "/images/cities/dubai.jpg",
+  "abu-dhabi": "/images/cities/abu dhabi.jpg",
+  bangkok: "/images/cities/bangkok.jpg",
+  "chiang-mai": "/images/cities/chang mai.jpg",
+  phuket: "/images/cities/phuket.jpg",
+  "mexico-city": "/images/cities/mexico city.jpg",
+  "playa-del-carmen": "/images/cities/playa del carme.jpg",
+  guadalajara: "/images/cities/Guadalajara.jpg",
+  warsaw: "/images/cities/warsaw.jpg",
+  krakow: "/images/cities/krakow.jpg",
+  wroclaw: "/images/cities/wroclaw.jpg",
+  prague: "/images/cities/prague.jpg",
+  brno: "/images/cities/brno.jpg",
+};
+
 function buildCity(city: RawCity): CityProfile {
+  const curatedImage = CITY_IMAGE_PATHS[city.id];
+
   return {
     ...city,
     countryId: city.country_id,
@@ -1622,6 +1670,8 @@ function buildCity(city: RawCity): CityProfile {
     housingAvgRent: city.avg_rent_range,
     monthlyBudgetMin: city.monthly_budget_range,
     bigCity: city.big_city,
+    heroImage: curatedImage ?? city.heroImage,
+    thumbnailImage: curatedImage ?? city.thumbnailImage,
   };
 }
 

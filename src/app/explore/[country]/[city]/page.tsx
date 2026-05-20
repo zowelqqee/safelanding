@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, BarChart3, ChevronDown, Shield } from "lucide-react";
 import { CityRealityLayer } from "@/components/city/city-reality-layer";
 import { RelocationVideoStories } from "@/components/city/relocation-video-stories";
@@ -10,7 +11,8 @@ import { COUNTRIES, getCountryBySlug } from "@/lib/data/countries";
 import { getCityRealityReportById } from "@/lib/data/city-reality-reports";
 import { getLegalPathsForCountry } from "@/lib/data/legal-paths";
 import { getRelocationVideoStoriesForCity } from "@/lib/data/relocation-video-stories";
-import type { CityProfile, LegalPath } from "@/types";
+import { getExistingPublicImageSrc } from "@/lib/server/public-image";
+import type { CityProfile, CountryProfile, LegalPath } from "@/types";
 
 export async function generateStaticParams() {
   return CITIES.map((city) => {
@@ -126,6 +128,61 @@ function CityTag({ children }: { children: React.ReactNode }) {
     <span className="inline-block rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-[11px] font-medium text-[var(--city-muted-fg)]">
       {children}
     </span>
+  );
+}
+
+function EditorialImagePlaceholder({ label }: { label: string }) {
+  return (
+    <div className="relative h-full min-h-[180px] overflow-hidden rounded-[22px] border border-[var(--city-border)] bg-[#f7efe0]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(194,124,43,0.18),transparent_28%),radial-gradient(circle_at_80%_30%,rgba(74,124,89,0.14),transparent_26%),linear-gradient(135deg,rgba(255,255,255,0.7),rgba(240,228,200,0.65))]" />
+      <div className="absolute left-6 right-6 top-1/2 h-px -translate-y-1/2 bg-amber-900/20" />
+      <div className="absolute left-8 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border border-amber-800/30 bg-[#fffdf8]" />
+      <div className="absolute right-10 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border border-emerald-800/25 bg-[#fffdf8]" />
+      <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/70 bg-white/65 px-4 py-3 backdrop-blur-sm">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-amber-900/70">
+          Curated image pending
+        </p>
+        <p className="mt-1 text-sm font-medium text-stone-900">{label}</p>
+      </div>
+    </div>
+  );
+}
+
+function CityHeroImagePanel({
+  city,
+  country,
+  imageSrc,
+}: {
+  city: CityProfile;
+  country: CountryProfile;
+  imageSrc?: string;
+}) {
+  return (
+    <div className="rounded-[24px] border border-[var(--city-border)] bg-[var(--city-warm-muted)]/45 p-2">
+      <div className="relative min-h-[190px] overflow-hidden rounded-[20px]">
+        {imageSrc ? (
+          <>
+            <Image
+              src={imageSrc}
+              alt={`${city.name}, ${country.name}`}
+              fill
+              sizes="(min-width: 1024px) 300px, 100vw"
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/45 via-stone-950/5 to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/75">
+                City image
+              </p>
+              <p className="mt-1 font-serif text-xl font-medium text-white">{city.name}</p>
+            </div>
+          </>
+        ) : (
+          <EditorialImagePlaceholder label={`${city.name} relocation dossier`} />
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -320,6 +377,7 @@ export default async function CityPage({
   const paths = getLegalPathsForCountry(country.id);
   const realityReport = getCityRealityReportById(city.id);
   const relocationVideoStories = getRelocationVideoStoriesForCity(country.id, city.id);
+  const cityHeroImage = getExistingPublicImageSrc(city.heroImage);
 
   const cityTags: string[] = [
     city.coastal ? "Coastal" : null,
@@ -377,8 +435,9 @@ export default async function CityPage({
                 </div>
               </div>
 
-              {/* Right: blockers */}
+              {/* Right: image + blockers */}
               <div className="flex flex-col gap-3 lg:w-[300px] lg:shrink-0">
+                <CityHeroImagePanel city={city} country={country} imageSrc={cityHeroImage} />
                 <BlockerCard
                   text={country.main_legal_blocker}
                   variant="legal"

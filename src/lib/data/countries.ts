@@ -35,10 +35,26 @@ type RawCountry = {
   city_ids: string[];
   available_legal_path_ids: string[];
   journey_available: boolean;
+  heroImage?: string;
 };
 
 const COUNTRY_DISCLAIMER =
   "Requirements vary by route and timing. Income thresholds and evidence rules must be verified before applying. Professional review recommended.";
+
+const COUNTRY_IMAGE_PATHS: Record<string, string> = {
+  spain: "/images/countries/spain.jpg",
+  portugal: "/images/countries/portugal.jpg",
+  germany: "/images/countries/germany.jpg",
+  netherlands: "/images/countries/netherlands.jpg",
+  uk: "/images/countries/UK.jpg",
+  canada: "/images/countries/canada.jpg",
+  us: "/images/countries/US.jpg",
+  uae: "/images/countries/UAE.jpg",
+  thailand: "/images/countries/thailand.jpg",
+  mexico: "/images/countries/mexico.jpg",
+  poland: "/images/countries/poland.jpg",
+  "czech-republic": "/images/countries/czech.jpg",
+};
 
 const RAW_COUNTRIES: RawCountry[] = [
   {
@@ -800,6 +816,8 @@ const RAW_COUNTRIES: RawCountry[] = [
 ];
 
 function buildCountry(country: RawCountry): CountryProfile {
+  const curatedImage = COUNTRY_IMAGE_PATHS[country.id];
+
   return {
     ...country,
     slug: country.id,
@@ -821,6 +839,7 @@ function buildCountry(country: RawCountry): CountryProfile {
     availableLegalPathIds: country.available_legal_path_ids,
     cityIds: country.city_ids,
     journeyAvailable: country.journey_available,
+    heroImage: curatedImage ?? country.heroImage,
   };
 }
 

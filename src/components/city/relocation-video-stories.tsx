@@ -1,5 +1,7 @@
+import Image from "next/image";
 import { ChevronDown, ExternalLink, PlayCircle } from "lucide-react";
 
+import { getExistingPublicImageSrc } from "@/lib/server/public-image";
 import type {
   RelocationVideoPersonType,
   RelocationVideoSentiment,
@@ -66,6 +68,7 @@ function ShowMore({ children, label }: { children: React.ReactNode; label: strin
 
 function VideoStoryCard({ story }: { story: RelocationVideoStory }) {
   const sentiment = sentimentMeta[story.sentiment];
+  const thumbnailSrc = getExistingPublicImageSrc(story.thumbnailUrl);
   const movementLabel = [
     personTypeLabels[story.personType],
     story.movedFrom ? `${story.movedFrom} to ${story.movedTo}` : story.movedTo,
@@ -75,6 +78,30 @@ function VideoStoryCard({ story }: { story: RelocationVideoStory }) {
 
   return (
     <article className="flex h-full flex-col rounded-[20px] border border-[var(--city-reality-border)] bg-[var(--city-reality-card)] p-4 shadow-[0_1px_0_rgba(80,60,20,0.04)]">
+      <div className="relative mb-4 h-32 overflow-hidden rounded-2xl border border-[var(--city-reality-border)] bg-[#f7efe0]">
+        {thumbnailSrc ? (
+          <Image
+            src={thumbnailSrc}
+            alt={`${story.title} thumbnail`}
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(194,124,43,0.18),transparent_32%),radial-gradient(circle_at_80%_35%,rgba(74,124,89,0.12),transparent_28%),linear-gradient(135deg,rgba(255,255,255,0.72),rgba(240,228,200,0.68))]">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-amber-800/20 bg-white/70 text-amber-800 backdrop-blur-sm">
+                <PlayCircle className="h-5 w-5" />
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-3 rounded-full border border-white/60 bg-white/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-stone-700 backdrop-blur-sm">
+          <span>{story.platform}</span>
+          <span className="min-w-0 truncate">{story.channelName}</span>
+        </div>
+      </div>
+
       <div className="flex flex-wrap items-center gap-2">
         <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-800">
           {topicLabels[story.topic]}
