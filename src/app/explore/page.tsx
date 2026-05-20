@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, BarChart3, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SiteHeader } from "@/components/site/site-header";
 import { COUNTRIES } from "@/lib/data/countries";
 
 export const metadata = {
@@ -11,14 +12,7 @@ export const metadata = {
 export default function ExplorePage() {
   return (
     <div className="city-page-wrap min-h-screen flex flex-col">
-      <header className="sticky top-0 z-50 border-b border-[var(--city-border)] bg-[var(--city-bg)]/95 backdrop-blur">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="font-semibold text-stone-900 tracking-tight">Soft Landing</Link>
-          <Link href="/start">
-            <Button size="sm" className="rounded-full text-xs">Start my move</Button>
-          </Link>
-        </div>
-      </header>
+      <SiteHeader variant="public" />
 
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 sm:px-6 py-8 flex flex-col gap-8">
         <div>

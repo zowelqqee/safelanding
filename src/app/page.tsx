@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { ArrowRight, Shield, CheckCircle, FileText, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { LandingHeaderActions } from "@/components/landing/landing-header-actions";
+import { SiteHeader } from "@/components/site/site-header";
 import { COUNTRIES } from "@/lib/data/countries";
 
 export default function LandingPage() {
   return (
     <div className="city-page-wrap flex flex-col min-h-screen">
-      <LandingHeader />
+      <SiteHeader variant="public" action="landing" />
       <main className="flex-1">
         <HeroSection />
         <StatementSection />
@@ -18,22 +18,6 @@ export default function LandingPage() {
       </main>
       <LandingFooter />
     </div>
-  );
-}
-
-function LandingHeader() {
-  return (
-    <header className="sticky top-0 z-50 border-b border-[var(--city-border)] bg-[var(--city-bg)]/95 backdrop-blur">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-        <Link
-          href="/"
-          className="font-semibold text-stone-900 tracking-tight text-base transition-opacity hover:opacity-70"
-        >
-          Soft Landing
-        </Link>
-        <LandingHeaderActions />
-      </div>
-    </header>
   );
 }
 

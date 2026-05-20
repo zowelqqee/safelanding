@@ -1,12 +1,15 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, BarChart3, ChevronDown, ChevronRight, Shield } from "lucide-react";
+import { ArrowRight, BarChart3, ChevronDown, Shield } from "lucide-react";
 import { CityRealityLayer } from "@/components/city/city-reality-layer";
+import { RelocationVideoStories } from "@/components/city/relocation-video-stories";
+import { SiteHeader } from "@/components/site/site-header";
 import { Button } from "@/components/ui/button";
 import { CITIES, getCityBySlug } from "@/lib/data/cities";
 import { COUNTRIES, getCountryBySlug } from "@/lib/data/countries";
 import { getCityRealityReportById } from "@/lib/data/city-reality-reports";
 import { getLegalPathsForCountry } from "@/lib/data/legal-paths";
+import { getRelocationVideoStoriesForCity } from "@/lib/data/relocation-video-stories";
 import type { CityProfile, LegalPath } from "@/types";
 
 export async function generateStaticParams() {
@@ -316,6 +319,7 @@ export default async function CityPage({
   const cityCompareHref = `/compare?type=city&country=${country.id}&city=${compareCityIds.join(",")}`;
   const paths = getLegalPathsForCountry(country.id);
   const realityReport = getCityRealityReportById(city.id);
+  const relocationVideoStories = getRelocationVideoStoriesForCity(country.id, city.id);
 
   const cityTags: string[] = [
     city.coastal ? "Coastal" : null,
@@ -327,24 +331,7 @@ export default async function CityPage({
 
   return (
     <div className="city-page-wrap">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-[var(--city-border)] bg-[var(--city-bg)]/95 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <nav className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--city-muted-fg)]">
-            <Link href="/explore" className="hover:text-stone-800 transition-colors">Explore</Link>
-            <ChevronRight className="h-3 w-3" />
-            <Link href={`/explore/${country.slug}`} className="hover:text-stone-800 transition-colors">{country.name}</Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="text-stone-800">{city.name}</span>
-          </nav>
-          <Link href="/start">
-            <Button size="sm" className="rounded-full text-xs">
-              Start my move
-              <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-            </Button>
-          </Link>
-        </div>
-      </header>
+      <SiteHeader variant="public" />
 
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
         <div className="space-y-6">
@@ -424,6 +411,8 @@ export default async function CityPage({
               </div>
             )}
           </div>
+
+          <RelocationVideoStories stories={relocationVideoStories} />
 
           {/* Legal paths */}
           <section>

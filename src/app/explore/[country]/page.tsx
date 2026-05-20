@@ -1,10 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, BarChart3, Globe, MapPin } from "lucide-react";
+import { ArrowRight, BarChart3, MapPin } from "lucide-react";
+import { RelocationVideoStories } from "@/components/city/relocation-video-stories";
 import { Button } from "@/components/ui/button";
+import { SiteHeader } from "@/components/site/site-header";
 import { getCitiesForCountry } from "@/lib/data/cities";
 import { COUNTRIES, getCountryBySlug } from "@/lib/data/countries";
 import { getLegalPathsForCountry } from "@/lib/data/legal-paths";
+import { getRelocationVideoStoriesForCountry } from "@/lib/data/relocation-video-stories";
 
 export async function generateStaticParams() {
   return COUNTRIES.map((country) => ({ country: country.slug }));
@@ -83,23 +86,14 @@ export default async function CountryPage({
 
   const cities = getCitiesForCountry(country.id);
   const paths = getLegalPathsForCountry(country.id);
+  const relocationVideoStories = getRelocationVideoStoriesForCountry(country.id);
   const cityCompareHref = `/compare?type=city&country=${country.id}&city=${cities
     .map((city) => city.id)
     .join(",")}`;
 
   return (
     <div className="city-page-wrap min-h-screen">
-      <header className="sticky top-0 z-50 border-b border-[var(--city-border)] bg-[var(--city-card)]/95 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
-          <Link href="/explore" className="flex items-center gap-2 text-sm text-[var(--city-muted-fg)] hover:text-stone-900 transition-colors">
-            <Globe className="h-4 w-4" />
-            All destinations
-          </Link>
-          <Link href="/start">
-            <Button size="sm" className="rounded-full">Start your move</Button>
-          </Link>
-        </div>
-      </header>
+      <SiteHeader variant="public" />
 
       <main className="mx-auto max-w-5xl px-4 py-8">
         <div className="space-y-6">
@@ -274,6 +268,11 @@ export default async function CountryPage({
               ))}
             </div>
           </SectionCard>
+
+          <RelocationVideoStories
+            stories={relocationVideoStories}
+            emptyMessage="Видео от переехавших для этой страны ещё подбираются."
+          />
 
           <SectionCard title="Legal paths">
             <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 mb-4">

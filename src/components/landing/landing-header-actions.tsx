@@ -11,11 +11,8 @@ export function LandingHeaderActions() {
   if (loading || !user) {
     return (
       <div className="flex items-center gap-2">
-        <Link
-          href="/explore"
-          className="text-sm text-[var(--city-muted-fg)] hover:text-stone-900 hidden sm:block"
-        >
-          Explore
+        <Link href="/auth/sign-in" className="text-sm text-[var(--city-muted-fg)] hover:text-stone-900 hidden sm:block">
+          Sign in
         </Link>
         <Link href="/start">
           <Button size="sm">Start my move</Button>
@@ -26,14 +23,8 @@ export function LandingHeaderActions() {
 
   return (
     <div className="flex items-center gap-2">
-      <Link
-        href="/explore"
-        className="text-sm text-[var(--city-muted-fg)] hover:text-stone-900 hidden sm:block"
-      >
-        Explore
-      </Link>
-      <Link href="/start">
-        <Button size="sm">Continue</Button>
+      <Link href="/app/roadmap">
+        <Button size="sm">Open app</Button>
       </Link>
       <SignOutButton variant="ghost" size="sm" className="text-muted-foreground" />
     </div>

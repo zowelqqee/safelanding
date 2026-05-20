@@ -187,6 +187,57 @@ export type CityRealityReport = {
   sourceLinks: CityRealitySourceLink[];
 };
 
+// ─── Relocation video stories ────────────────────────────────────────────────
+
+export type RelocationVideoPlatform = "youtube" | "other";
+
+export type RelocationVideoPersonType =
+  | "remote_worker"
+  | "student"
+  | "family"
+  | "founder"
+  | "employee"
+  | "freelancer"
+  | "unknown";
+
+export type RelocationVideoTopic =
+  | "housing"
+  | "cost"
+  | "documents"
+  | "language"
+  | "work"
+  | "community"
+  | "first_90_days"
+  | "mistakes"
+  | "regret"
+  | "adaptation"
+  | "general";
+
+export type RelocationVideoSentiment = "positive" | "mixed" | "negative";
+
+export type RelocationVideoStory = {
+  id: string;
+  countryId: string;
+  cityId?: string;
+  title: string;
+  channelName: string;
+  videoUrl: string;
+  thumbnailUrl?: string;
+  platform: RelocationVideoPlatform;
+  personType: RelocationVideoPersonType;
+  movedFrom?: string;
+  movedTo: string;
+  livedThereFor?: string;
+  topic: RelocationVideoTopic;
+  sentiment: RelocationVideoSentiment;
+  keyTakeaway: string;
+  summary: string;
+  language: string;
+  publishedAt?: string;
+  collectedAt: string;
+  verified: boolean;
+};
+
 // ─── Legal paths ──────────────────────────────────────────────────────────────
 
 export type LegalPath = {

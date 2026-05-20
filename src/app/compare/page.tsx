@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, MapPin, Shield, Sparkles } from "lucide-react";
+import { ArrowRight, MapPin, Shield, Sparkles } from "lucide-react";
+import { SiteHeader } from "@/components/site/site-header";
 import { Button } from "@/components/ui/button";
 import { getCitiesForCountry, getCityById } from "@/lib/data/cities";
 import { COUNTRIES, getCountryById } from "@/lib/data/countries";
@@ -428,18 +429,7 @@ function CompareExperience({
 
   return (
     <div className="city-page-wrap min-h-screen">
-      <header className="sticky top-0 z-50 border-b border-[var(--city-border)] bg-[var(--city-card)]/95 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4">
-          <Link href="/explore" className="flex items-center gap-1.5 text-sm text-[var(--city-muted-fg)] hover:text-stone-900 transition-colors">
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Link>
-          <span className="font-semibold text-stone-900">Compare destinations</span>
-          <Link href="/start" className="ml-auto">
-            <Button size="sm" className="rounded-full">Start your move</Button>
-          </Link>
-        </div>
-      </header>
+      <SiteHeader variant="public" />
 
       <main className="mx-auto max-w-6xl px-4 py-6">
         <div className="space-y-6">

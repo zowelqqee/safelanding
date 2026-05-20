@@ -402,7 +402,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
   const progress = Math.round((state.step / CONTENT_STEPS) * 100);
 
   return (
-    <div className="city-page-wrap min-h-screen flex flex-col">
+    <div className="flex flex-1 flex-col">
       {showProgress && (
         <div className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-[var(--city-border)]">
           <motion.div

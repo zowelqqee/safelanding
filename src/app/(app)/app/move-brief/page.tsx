@@ -3,7 +3,6 @@ import {
   ArrowLeft,
   ArrowRight,
   CheckCircle2,
-  FileText,
   Globe,
   MapPin,
   Route,

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Compass, Route, Sparkles, Target } from "lucide-react";
+import { Route, Sparkles, Target } from "lucide-react";
 import { getMovePreparationLabel } from "@/lib/roadmap/roadmapGenerator";
 import type { Roadmap } from "@/types";
 import { Button } from "@/components/ui/button";
