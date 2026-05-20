@@ -2821,6 +2821,1115 @@ const REPORT_ENHANCEMENTS: Record<string, CityRealityReport | undefined> = {
       },
     ],
   }),
+  calgary: buildEnhancedReport("calgary", {
+    summary:
+      "Calgary move stories often sound practical and surprisingly hopeful. Public threads keep circling around housing value versus Vancouver or Toronto, social life built through activities rather than passive city magic, and the sense that Calgary works best when you come for space, outdoor rhythm, and a lower-burn reset.",
+    snapshotSignals: [
+      {
+        title: "Value is part of the pitch",
+        description: "Many public stories frame Calgary as a relief valve compared with more punishing Canadian housing markets.",
+      },
+      {
+        title: "Friendships tend to come through activities",
+        description: "Volunteering, sports, and hobby groups show up much more often than spontaneous big-city social life.",
+      },
+      {
+        title: "The move rewards initiative",
+        description: "Public stories often suggest Calgary becomes easy to like once people actively build routine and community.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "moving back for work and social opportunities.",
+        sourceLabel: "r/Calgary",
+        sourceAgeLabel: "1.7y ago",
+        sourceUrl: "https://www.reddit.com/r/Calgary/comments/1f1es06/moving_to_calgary_megathread/",
+        topic: "community",
+        sentiment: "positive",
+      },
+      {
+        quote: "all of my adult friends have been made through shared activities like mountain biking and adult volleyball leagues",
+        sourceLabel: "r/Calgary",
+        sourceAgeLabel: "2.8y ago",
+        sourceUrl: "https://www.reddit.com/r/Calgary/comments/15d938r/how_do_people_make_friends_in_calgary/",
+        topic: "community",
+        sentiment: "positive",
+      },
+      {
+        quote: "While we are friendly in Calgary, you will find it difficult to easily make friends here.",
+        sourceLabel: "r/Calgary",
+        sourceAgeLabel: "2.8y ago",
+        sourceUrl: "https://www.reddit.com/r/Calgary/comments/15d938r/how_do_people_make_friends_in_calgary/",
+        topic: "community",
+        sentiment: "mixed",
+      },
+      {
+        quote: "I’ve found Calgary to be the easiest to make friends.",
+        sourceLabel: "r/Calgary",
+        sourceAgeLabel: "2mo ago",
+        sourceUrl: "https://www.reddit.com/r/Calgary/comments/1ropz5c/new_friends/",
+        topic: "community",
+        sentiment: "positive",
+      },
+      {
+        quote: "Volunteer for some of the art & music festivals all over the city this summer.",
+        sourceLabel: "r/CalgarySocialClub",
+        sourceAgeLabel: "2mo ago",
+        sourceUrl: "https://www.reddit.com/r/CalgarySocialClub/comments/1rka6wk/looking_to_make_friends/",
+        topic: "advice",
+        sentiment: "positive",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "Moving to Calgary - Megathread",
+        url: "https://www.reddit.com/r/Calgary/comments/1f1es06/moving_to_calgary_megathread/",
+        topic: "community",
+      },
+      {
+        label: "How do people make friends in Calgary?",
+        url: "https://www.reddit.com/r/Calgary/comments/15d938r/how_do_people_make_friends_in_calgary/",
+        topic: "community",
+      },
+      {
+        label: "New Friends",
+        url: "https://www.reddit.com/r/Calgary/comments/1ropz5c/new_friends/",
+        topic: "community",
+      },
+      {
+        label: "Looking to make friends",
+        url: "https://www.reddit.com/r/CalgarySocialClub/comments/1rka6wk/looking_to_make_friends/",
+        topic: "advice",
+      },
+    ],
+  }),
+  austin: buildEnhancedReport("austin", {
+    summary:
+      "Austin move stories tend to split between excitement and calibration. Public threads still describe the city as friendly, active, and full of things to do, but they also keep warning that people often move for the festival version of Austin, then run into rent pressure and the reality that adult friendships take work.",
+    snapshotSignals: [
+      {
+        title: "People often move for the vibe, then meet the housing math",
+        description: "A repeated public theme is that Austin feels great until rent, location, and quality expectations get specific.",
+      },
+      {
+        title: "Community exists, but it is not automatic",
+        description: "Many stories say Austin can feel social once you actively join recurring groups rather than wait for the city to do the work.",
+      },
+      {
+        title: "Expectation-setting matters a lot",
+        description: "The strongest regret stories are often about coming for a fantasy version of Austin rather than the real one.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "People regret moving to Austin because they made the decision based upon their visit during ACL, SxSW, etc",
+        sourceLabel: "r/Austin",
+        sourceAgeLabel: "3.4y ago",
+        sourceUrl: "https://www.reddit.com/r/Austin/comments/zwmgyc/why_are_so_many_people_saying_they_regret_moving/",
+        topic: "regret",
+        sentiment: "mixed",
+      },
+      {
+        quote: "my friends who rented, even in Round Rock / Hutto / Cedar Park areas had a 25-30% increase and eventually got priced out.",
+        sourceLabel: "r/Austin",
+        sourceAgeLabel: "3.4y ago",
+        sourceUrl: "https://www.reddit.com/r/Austin/comments/zwmgyc/why_are_so_many_people_saying_they_regret_moving/",
+        topic: "money",
+        sentiment: "negative",
+      },
+      {
+        quote: "Making friends after your 20s is definitely a bit harder, for sure.",
+        sourceLabel: "r/Austin",
+        sourceAgeLabel: "3.6y ago",
+        sourceUrl: "https://www.reddit.com/r/Austin/comments/xqud9s/just_moved_to_austin_after_a_breakup_31m_and_man/",
+        topic: "community",
+        sentiment: "mixed",
+      },
+      {
+        quote: "Most of the friends I've made in Austin I've made Lone Star Curling Club!",
+        sourceLabel: "r/Austin",
+        sourceAgeLabel: "3.6y ago",
+        sourceUrl: "https://www.reddit.com/r/Austin/comments/xqud9s/just_moved_to_austin_after_a_breakup_31m_and_man/",
+        topic: "advice",
+        sentiment: "positive",
+      },
+      {
+        quote: "it’s fun here, friendly and not everyone has to talk about work and their social value every 2 seconds like in NYC.",
+        sourceLabel: "r/askaustin",
+        sourceAgeLabel: "yesterday",
+        sourceUrl: "https://www.reddit.com/r/askaustin/comments/1tha90i/moving_to_austin_lots_of_questions/",
+        topic: "community",
+        sentiment: "positive",
+      },
+      {
+        quote: "I moved to Austin about 1–2 months ago and I haven’t really explored or made friends yet.",
+        sourceLabel: "r/askaustin",
+        sourceAgeLabel: "2wk ago",
+        sourceUrl: "https://www.reddit.com/r/askaustin/comments/1t1uz8w/just_moved_here_craving_community_25f_austin/",
+        topic: "first_90_days",
+        sentiment: "mixed",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "Why Are So Many People Saying They Regret Moving to Austin?",
+        url: "https://www.reddit.com/r/Austin/comments/zwmgyc/why_are_so_many_people_saying_they_regret_moving/",
+        topic: "regret",
+      },
+      {
+        label: "Just moved to Austin after a breakup",
+        url: "https://www.reddit.com/r/Austin/comments/xqud9s/just_moved_to_austin_after_a_breakup_31m_and_man/",
+        topic: "community",
+      },
+      {
+        label: "Moving to Austin - lots of questions",
+        url: "https://www.reddit.com/r/askaustin/comments/1tha90i/moving_to_austin_lots_of_questions/",
+        topic: "community",
+      },
+      {
+        label: "Just moved here & craving community",
+        url: "https://www.reddit.com/r/askaustin/comments/1t1uz8w/just_moved_here_craving_community_25f_austin/",
+        topic: "first_90_days",
+      },
+    ],
+  }),
+  alicante: buildEnhancedReport("alicante", {
+    summary:
+      "Alicante move stories often read like a lower-burn Spain option that people choose on purpose. Public threads keep praising the sea, safety, cost profile, and international access, while still warning that local wages, language, and long-term fit depend on what kind of move this actually is.",
+    snapshotSignals: [
+      {
+        title: "Alicante is chosen for quality of life, not career scale",
+        description: "Public stories often treat the city as a lifestyle-first move with a calmer daily rhythm.",
+      },
+      {
+        title: "International enough to start, Spanish enough to matter",
+        description: "A repeated theme is that the city feels accessible while still rewarding real Spanish over time.",
+      },
+      {
+        title: "It works best when expectations stay small and honest",
+        description: "People sound happiest when they want sea, safety, and manageable daily life rather than big-city momentum.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "we wanted access to the sea, safety, good COL, good food, and an international community, that was still primarily Spanish",
+        sourceLabel: "r/Alicante",
+        sourceAgeLabel: "2.4y ago",
+        sourceUrl: "https://www.reddit.com/r/Alicante/comments/18uttgh/moving_to_alicante/",
+        topic: "community",
+        sentiment: "positive",
+      },
+      {
+        quote: "Yeah I expect to move into lower wages for my field",
+        sourceLabel: "r/Alicante",
+        sourceAgeLabel: "2.4y ago",
+        sourceUrl: "https://www.reddit.com/r/Alicante/comments/18uttgh/moving_to_alicante/",
+        topic: "money",
+        sentiment: "mixed",
+      },
+      {
+        quote: "Go to the FaceBook expat groups for Spain for a lot more community info",
+        sourceLabel: "r/Alicante",
+        sourceAgeLabel: "2.4y ago",
+        sourceUrl: "https://www.reddit.com/r/Alicante/comments/18uttgh/moving_to_alicante/",
+        topic: "advice",
+        sentiment: "positive",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "Moving to Alicante",
+        url: "https://www.reddit.com/r/Alicante/comments/18uttgh/moving_to_alicante/",
+        topic: "community",
+      },
+    ],
+  }),
+  madeira: buildEnhancedReport("madeira", {
+    summary:
+      "Madeira move stories often push back against the postcard fantasy. Public threads keep praising the island’s beauty and forgiving daily rhythm, while repeatedly warning about housing shifts, humidity and mold, transport variation, and the fact that Portuguese and local integration matter more than many online guides suggest.",
+    snapshotSignals: [
+      {
+        title: "The postcard version hides practical friction",
+        description: "Weather, steep terrain, and house condition show up in public stories much more than in generic Madeira content.",
+      },
+      {
+        title: "Housing changed with remote demand",
+        description: "Several stories describe the market as more pressured and less forgiving than people expect from an island move.",
+      },
+      {
+        title: "Language and integration still matter",
+        description: "Madeira can be more forgiving than mainland Portugal at first, but public stories still push toward Portuguese if the move is serious.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "there are practical realities, especially around housing, that can make or break the experience if you’re unprepared.",
+        sourceLabel: "r/PortugalExpats",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/PortugalExpats/comments/1pqhh7o/considering_moving_to_madeira_here_are_some/",
+        topic: "housing",
+        sentiment: "mixed",
+      },
+      {
+        quote: "older homes often have damp problems.",
+        sourceLabel: "r/PortugalExpats",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/PortugalExpats/comments/1pqhh7o/considering_moving_to_madeira_here_are_some/",
+        topic: "housing",
+        sentiment: "negative",
+      },
+      {
+        quote: "remote workers have increased prices.",
+        sourceLabel: "r/PortugalExpats",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/PortugalExpats/comments/1pqhh7o/considering_moving_to_madeira_here_are_some/",
+        topic: "money",
+        sentiment: "negative",
+      },
+      {
+        quote: "Portuguese language specifically the accent makes it harder to understand and learn.",
+        sourceLabel: "r/PortugalExpats",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/PortugalExpats/comments/1pqhh7o/considering_moving_to_madeira_here_are_some/",
+        topic: "language",
+        sentiment: "mixed",
+      },
+      {
+        quote: "Madeira is more forgiving on not knowing Portuguese.",
+        sourceLabel: "r/PortugalExpats",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/PortugalExpats/comments/1pqhh7o/considering_moving_to_madeira_here_are_some/",
+        topic: "language",
+        sentiment: "positive",
+      },
+      {
+        quote: "although it's the same country I found it to be quite different.",
+        sourceLabel: "r/Madeira",
+        sourceAgeLabel: "4.3y ago",
+        sourceUrl: "https://www.reddit.com/r/Madeira/comments/sabrks/expats_in_madeira_how_do_you_like_it_living_on/",
+        topic: "community",
+        sentiment: "mixed",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "Considering moving to Madeira? Here are some pitfalls...",
+        url: "https://www.reddit.com/r/PortugalExpats/comments/1pqhh7o/considering_moving_to_madeira_here_are_some/",
+        topic: "housing",
+      },
+      {
+        label: "Expats in Madeira: how do you like it living on Madeira?",
+        url: "https://www.reddit.com/r/Madeira/comments/sabrks/expats_in_madeira_how_do_you_like_it_living_on/",
+        topic: "community",
+      },
+    ],
+  }),
+  algarve: buildEnhancedReport("algarve", {
+    summary:
+      "Algarve move stories often sound positive about climate and ease, but sharper on price than old Portugal clichés suggest. Public threads keep mentioning English-speaking convenience, expat density, and the fact that Algarve rents and daily prices can still surprise people who arrive expecting an easy bargain.",
+    snapshotSignals: [
+      {
+        title: "English makes Algarve feel easy at first",
+        description: "Public stories often describe the region as one of the softer landings in Portugal for English-speaking movers.",
+      },
+      {
+        title: "The price is still Algarve price",
+        description: "Repeated signals warn that rental and day-to-day costs are higher than many newcomers assume.",
+      },
+      {
+        title: "Expat density changes the feel",
+        description: "Several threads imply that where you land in the Algarve matters because some areas feel much more international than Portuguese.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "Price wise, its still the Algarve so we had to do our shopping in Tavira",
+        sourceLabel: "r/PortugalExpats",
+        sourceAgeLabel: "2mo ago",
+        sourceUrl: "https://www.reddit.com/r/PortugalExpats/comments/1rjzul7/people_are_still_moving_to_portugal_you_just_dont/",
+        topic: "money",
+        sentiment: "negative",
+      },
+      {
+        quote: "it was Algarve prices and Algarve rental prices.",
+        sourceLabel: "r/PortugalExpats",
+        sourceAgeLabel: "2mo ago",
+        sourceUrl: "https://www.reddit.com/r/PortugalExpats/comments/1rjzul7/people_are_still_moving_to_portugal_you_just_dont/",
+        topic: "housing",
+        sentiment: "negative",
+      },
+      {
+        quote: "The Algarve is outside Lisbon and Porto and English is very widely spoken.",
+        sourceLabel: "r/PortugalExpats",
+        sourceAgeLabel: "2mo ago",
+        sourceUrl: "https://www.reddit.com/r/PortugalExpats/comments/1rucehw/important_for_expats_moving_to_portugal/",
+        topic: "language",
+        sentiment: "positive",
+      },
+      {
+        quote: "we have found even trying to Portuguese goes a long way.",
+        sourceLabel: "r/PortugalExpats",
+        sourceAgeLabel: "2mo ago",
+        sourceUrl: "https://www.reddit.com/r/PortugalExpats/comments/1rucehw/important_for_expats_moving_to_portugal/",
+        topic: "advice",
+        sentiment: "positive",
+      },
+      {
+        quote: "One of the reasons we don’t want foreigners here is not because we have some kind of prejudice",
+        sourceLabel: "r/PortugalExpats",
+        sourceAgeLabel: "2mo ago",
+        sourceUrl: "https://www.reddit.com/r/PortugalExpats/comments/1rucehw/important_for_expats_moving_to_portugal/",
+        topic: "community",
+        sentiment: "mixed",
+      },
+      {
+        quote: "My girlfriend and I have been thinking of moving to the Algarve.",
+        sourceLabel: "r/Algarve",
+        sourceAgeLabel: "3.7y ago",
+        sourceUrl: "https://www.reddit.com/r/Algarve/comments/wxcegd/moving_to_algarve/",
+        topic: "first_90_days",
+        sentiment: "mixed",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "People are still moving to Portugal. You just don't need to live in Lisboa.",
+        url: "https://www.reddit.com/r/PortugalExpats/comments/1rjzul7/people_are_still_moving_to_portugal_you_just_dont/",
+        topic: "money",
+      },
+      {
+        label: "Important for expats moving to Portugal",
+        url: "https://www.reddit.com/r/PortugalExpats/comments/1rucehw/important_for_expats_moving_to_portugal/",
+        topic: "language",
+      },
+      {
+        label: "Moving to Algarve?",
+        url: "https://www.reddit.com/r/Algarve/comments/wxcegd/moving_to_algarve/",
+        topic: "first_90_days",
+      },
+    ],
+  }),
+  guadalajara: buildEnhancedReport("guadalajara", {
+    summary:
+      "Guadalajara move stories are still thinner than for Mexico City, but the real public signals we do have already point in a familiar direction: people treat it as a practical alternative with strong local-life upside, while still expecting Spanish and neighborhood knowledge to matter more than any generic 'expat city' framing.",
+    snapshotSignals: [
+      {
+        title: "Guadalajara gets framed as the practical alternative",
+        description: "Public stories often position it as a solid choice when Mexico City feels too intense or too expensive.",
+      },
+      {
+        title: "Spanish is part of the move logic",
+        description: "The stories we have still treat language as a serious part of the adjustment, not an optional add-on.",
+      },
+      {
+        title: "The city needs on-the-ground context",
+        description: "Advice tends to be less generic and more about what life actually feels like once you arrive for work or longer stay.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "My online research led me to Guadalajara as a solid alternative.",
+        sourceLabel: "r/mexicoexpats",
+        sourceAgeLabel: "last month",
+        sourceUrl: "https://www.reddit.com/r/mexicoexpats/comments/1s9vsl5/guadalajara_possible_move/",
+        topic: "advice",
+        sentiment: "positive",
+      },
+      {
+        quote: "Want to chat about life in Mexico or game with other expats and locals?",
+        sourceLabel: "r/mexicoexpats",
+        sourceAgeLabel: "last month",
+        sourceUrl: "https://www.reddit.com/r/mexicoexpats/comments/1s9vsl5/guadalajara_possible_move/",
+        topic: "community",
+        sentiment: "positive",
+      },
+      {
+        quote: "Sorry for English (still learning Spanish).",
+        sourceLabel: "r/Guadalajara",
+        sourceAgeLabel: "3.7y ago",
+        sourceUrl: "https://www.reddit.com/r/Guadalajara/comments/x80bfy/moving_to_mexico_guadalajara_for_work_would_like/",
+        topic: "language",
+        sentiment: "mixed",
+      },
+      {
+        quote: "I am a South Asian who have to move to Guadalajara for work in next couple of months.",
+        sourceLabel: "r/Guadalajara",
+        sourceAgeLabel: "3.7y ago",
+        sourceUrl: "https://www.reddit.com/r/Guadalajara/comments/x80bfy/moving_to_mexico_guadalajara_for_work_would_like/",
+        topic: "first_90_days",
+        sentiment: "mixed",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "Guadalajara possible move",
+        url: "https://www.reddit.com/r/mexicoexpats/comments/1s9vsl5/guadalajara_possible_move/",
+        topic: "community",
+      },
+      {
+        label: "Moving to Mexico (Guadalajara) for work",
+        url: "https://www.reddit.com/r/Guadalajara/comments/x80bfy/moving_to_mexico_guadalajara_for_work_would_like/",
+        topic: "language",
+      },
+    ],
+  }),
+  edinburgh: buildEnhancedReport("edinburgh", {
+    summary:
+      "Edinburgh move stories usually sound affectionate and exasperated at the same time. People love the city’s beauty, culture, and long-term livability, while also warning that rent is rough, the housing market is chaotic, and the city can feel socially transient unless you actively build your own circles.",
+    snapshotSignals: [
+      {
+        title: "Edinburgh is easy to love, hard to enter cheaply",
+        description: "Public stories repeatedly talk about strong quality of life alongside a painful rental market.",
+      },
+      {
+        title: "Living a little further out is normal",
+        description: "A recurring theme is that many movers solve the city by stepping back from the center without losing much socially.",
+      },
+      {
+        title: "The city can feel socially transient",
+        description: "Several stories suggest that people move in and out enough that friendships still take active effort.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "renting is incredibly expensive, especially in the city centre.",
+        sourceLabel: "r/Edinburgh",
+        sourceAgeLabel: "7mo ago",
+        sourceUrl: "https://www.reddit.com/r/Edinburgh/comments/1no28a0/should_i_move_to_edinburgh/",
+        topic: "housing",
+        sentiment: "negative",
+      },
+      {
+        quote: "I moved out of the city centre years ago for cheaper rent, and didn't notice a massive drop in my social life",
+        sourceLabel: "r/Edinburgh",
+        sourceAgeLabel: "7mo ago",
+        sourceUrl: "https://www.reddit.com/r/Edinburgh/comments/1no28a0/should_i_move_to_edinburgh/",
+        topic: "advice",
+        sentiment: "positive",
+      },
+      {
+        quote: "the housing market here is a shambles - finding a rental is a feat in itself",
+        sourceLabel: "r/Edinburgh",
+        sourceAgeLabel: "7mo ago",
+        sourceUrl: "https://www.reddit.com/r/Edinburgh/comments/1no28a0/should_i_move_to_edinburgh/",
+        topic: "housing",
+        sentiment: "negative",
+      },
+      {
+        quote: "After a while I became hesitant to connect with new people as in my experience Edinburgh is very windy people in terms of people moving in and out.",
+        sourceLabel: "r/Edinburgh",
+        sourceAgeLabel: "7mo ago",
+        sourceUrl: "https://www.reddit.com/r/Edinburgh/comments/1no28a0/should_i_move_to_edinburgh/",
+        topic: "community",
+        sentiment: "mixed",
+      },
+      {
+        quote: "I've got a number of pals from Inverness who moved to Edinburgh and live here very happily",
+        sourceLabel: "r/Edinburgh",
+        sourceAgeLabel: "7mo ago",
+        sourceUrl: "https://www.reddit.com/r/Edinburgh/comments/1no28a0/should_i_move_to_edinburgh/",
+        topic: "community",
+        sentiment: "positive",
+      },
+      {
+        quote: "Since moving to Edinburgh life is easier .",
+        sourceLabel: "r/Edinburgh",
+        sourceAgeLabel: "7mo ago",
+        sourceUrl: "https://www.reddit.com/r/Edinburgh/comments/1no28a0/should_i_move_to_edinburgh/",
+        topic: "regret",
+        sentiment: "positive",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "Should I move to Edinburgh?",
+        url: "https://www.reddit.com/r/Edinburgh/comments/1no28a0/should_i_move_to_edinburgh/",
+        topic: "housing",
+      },
+    ],
+  }),
+  manchester: buildEnhancedReport("manchester", {
+    summary:
+      "Manchester move stories usually frame the city as a serious alternative rather than a compromise. People like the energy, friendliness, and big-city life outside London, but they still warn that rent is climbing, neighborhood fit matters a lot, and the weather really does shape the experience.",
+    snapshotSignals: [
+      {
+        title: "Manchester feels like a real London alternative",
+        description: "Public stories often treat the city as a place where people can keep urban energy without taking on full London burn.",
+      },
+      {
+        title: "Housing is not cheap enough to ignore",
+        description: "The city still reads as better value than London, but repeated stories warn that the obvious bargains are disappearing fast.",
+      },
+      {
+        title: "Neighborhood and transport decide the move",
+        description: "A recurring theme is that tram and bus access, not generic city-center hype, determine whether day-to-day life works.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "I can get a really nice place in Manchester by myself",
+        sourceLabel: "r/AskUK",
+        sourceAgeLabel: "4.3y ago",
+        sourceUrl: "https://www.reddit.com/r/AskUK/comments/sv025m/anyone_moved_to_manchester_by_themselves_how_was_it/",
+        topic: "housing",
+        sentiment: "positive",
+      },
+      {
+        quote: "people are friendlier, there is more community feel",
+        sourceLabel: "r/AskUK",
+        sourceAgeLabel: "4.4y ago",
+        sourceUrl: "https://www.reddit.com/r/AskUK/comments/rp7dc5/what_are_the_pros_of_moving_to_manchester_from/",
+        topic: "community",
+        sentiment: "positive",
+      },
+      {
+        quote: "weather's worse and it's rougher.",
+        sourceLabel: "r/AskUK",
+        sourceAgeLabel: "4.4y ago",
+        sourceUrl: "https://www.reddit.com/r/AskUK/comments/rp7dc5/what_are_the_pros_of_moving_to_manchester_from/",
+        topic: "regret",
+        sentiment: "negative",
+      },
+      {
+        quote: "I felt like this once, and then realised nowhere came close to Manchester when it comes to living costs/quality of life ratio in the UK.",
+        sourceLabel: "r/AskUK",
+        sourceAgeLabel: "last year",
+        sourceUrl: "https://www.reddit.com/r/AskUK/comments/1keh94d/which_uk_city_would_you_move_to/",
+        topic: "money",
+        sentiment: "positive",
+      },
+      {
+        quote: "£50k gives you a fair bit of choice for where to live",
+        sourceLabel: "r/manchester",
+        sourceAgeLabel: "2mo ago",
+        sourceUrl: "https://www.reddit.com/r/manchester/comments/1rg1o20/the_out_about_visiting_moving_to_manchester/",
+        topic: "housing",
+        sentiment: "mixed",
+      },
+      {
+        quote: "anywhere with good tram or bus connections to your job is probably a good place to start looking",
+        sourceLabel: "r/manchester",
+        sourceAgeLabel: "2mo ago",
+        sourceUrl: "https://www.reddit.com/r/manchester/comments/1rg1o20/the_out_about_visiting_moving_to_manchester/",
+        topic: "advice",
+        sentiment: "positive",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "Anyone moved to Manchester by themselves / how was it?",
+        url: "https://www.reddit.com/r/AskUK/comments/sv025m/anyone_moved_to_manchester_by_themselves_how_was_it/",
+        topic: "housing",
+      },
+      {
+        label: "What are the pros of moving to Manchester from London?",
+        url: "https://www.reddit.com/r/AskUK/comments/rp7dc5/what_are_the_pros_of_moving_to_manchester_from/",
+        topic: "community",
+      },
+      {
+        label: "Which UK city would you move to?",
+        url: "https://www.reddit.com/r/AskUK/comments/1keh94d/which_uk_city_would_you_move_to/",
+        topic: "money",
+      },
+      {
+        label: "The Out & About, Visiting & Moving to Manchester Weekly Thread",
+        url: "https://www.reddit.com/r/manchester/comments/1rg1o20/the_out_about_visiting_moving_to_manchester/",
+        topic: "advice",
+      },
+    ],
+  }),
+  birmingham: buildEnhancedReport("birmingham", {
+    summary:
+      "Birmingham move stories are more positive than its reputation suggests. People repeatedly describe it as better value than London or Bristol, socially warmer than outsiders expect, and highly neighborhood-dependent, while also warning that some areas feel rough, traffic is annoying, and the city-center dream is not always the best version of Birmingham.",
+    snapshotSignals: [
+      {
+        title: "Birmingham is more loved by residents than by its reputation",
+        description: "Public stories often sound defensive in the same direction: people who actually moved there tend to like it more than people who mock it from distance.",
+      },
+      {
+        title: "The right area changes everything",
+        description: "Move stories keep repeating that Brum is not one thing, and the quality of life shifts a lot by neighborhood.",
+      },
+      {
+        title: "Value is the main pull",
+        description: "The strongest recurring positive theme is that people can build a more normal urban life here than in pricier UK cities.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "The majority of people criticising brum have never been there.",
+        sourceLabel: "r/BirminghamUK",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/BirminghamUK/comments/1p5cl14/moving_to_birmingham/",
+        topic: "regret",
+        sentiment: "positive",
+      },
+      {
+        quote: "Birmingham has real heart and the people are funny, kind and welcoming.",
+        sourceLabel: "r/BirminghamUK",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/BirminghamUK/comments/1p5cl14/moving_to_birmingham/",
+        topic: "community",
+        sentiment: "positive",
+      },
+      {
+        quote: "Be careful where you move, the city is full of pockets of entirely different experiences and people.",
+        sourceLabel: "r/BirminghamUK",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/BirminghamUK/comments/1p5cl14/moving_to_birmingham/",
+        topic: "housing",
+        sentiment: "mixed",
+      },
+      {
+        quote: "I can actually live alone comfortably.",
+        sourceLabel: "r/BirminghamUK",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/BirminghamUK/comments/1p5cl14/moving_to_birmingham/",
+        topic: "money",
+        sentiment: "positive",
+      },
+      {
+        quote: "There is less to do here but still enough",
+        sourceLabel: "r/BirminghamUK",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/BirminghamUK/comments/1p5cl14/moving_to_birmingham/",
+        topic: "regret",
+        sentiment: "mixed",
+      },
+      {
+        quote: "We’re a very bus-reliant city.",
+        sourceLabel: "r/brum",
+        sourceAgeLabel: "1.7y ago",
+        sourceUrl: "https://www.reddit.com/r/brum/comments/1ewb4g8/moving_to_birmingham/",
+        topic: "first_90_days",
+        sentiment: "mixed",
+      },
+      {
+        quote: "Birmingham is a cultural melting pot, you'll fit in no matter what.",
+        sourceLabel: "r/brum",
+        sourceAgeLabel: "1.7y ago",
+        sourceUrl: "https://www.reddit.com/r/brum/comments/1ewb4g8/moving_to_birmingham/",
+        topic: "community",
+        sentiment: "positive",
+      },
+      {
+        quote: "Aim for the South, believe me.",
+        sourceLabel: "r/BirminghamUK",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/BirminghamUK/comments/1po9l9x/moving_to_birmingham_honest_views/",
+        topic: "advice",
+        sentiment: "mixed",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "Moving to Birmingham",
+        url: "https://www.reddit.com/r/BirminghamUK/comments/1p5cl14/moving_to_birmingham/",
+        topic: "housing",
+      },
+      {
+        label: "Moving to Birmingham",
+        url: "https://www.reddit.com/r/brum/comments/1ewb4g8/moving_to_birmingham/",
+        topic: "community",
+      },
+      {
+        label: "Moving to Birmingham - Honest Views?",
+        url: "https://www.reddit.com/r/BirminghamUK/comments/1po9l9x/moving_to_birmingham_honest_views/",
+        topic: "advice",
+      },
+    ],
+  }),
+  "playa-del-carmen": buildEnhancedReport("playa-del-carmen", {
+    summary:
+      "Playa del Carmen move stories sound seductive and cautionary at the same time. People love the weather, friendships, and easy lifestyle services, but they repeatedly warn that the place is transient, the tourist premium is real, and long-term fit often depends on whether you build a routine beyond the party-and-beach version of town.",
+    snapshotSignals: [
+      {
+        title: "Playa is easy to enjoy and harder to anchor",
+        description: "Public stories often describe a strong first lifestyle hit followed by a real test of whether the town is enough for everyday life.",
+      },
+      {
+        title: "The expat bubble is both the draw and the trap",
+        description: "People find community quickly, but many stories say the move works better when it is not limited to the foreign bubble.",
+      },
+      {
+        title: "Spanish and long-stay realism change the outcome",
+        description: "The repeated advice is to learn the language, understand residency friction, and test whether the town still works after the honeymoon phase.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "I absolutely loved it!",
+        sourceLabel: "r/playadelcarmen",
+        sourceAgeLabel: "2.8y ago",
+        sourceUrl: "https://www.reddit.com/r/playadelcarmen/comments/157z126/plan_on_moving_to_playa/",
+        topic: "regret",
+        sentiment: "positive",
+      },
+      {
+        quote: "Made the best friends.",
+        sourceLabel: "r/playadelcarmen",
+        sourceAgeLabel: "2.8y ago",
+        sourceUrl: "https://www.reddit.com/r/playadelcarmen/comments/157z126/plan_on_moving_to_playa/",
+        topic: "community",
+        sentiment: "positive",
+      },
+      {
+        quote: "Things are way different now, in terms of price.",
+        sourceLabel: "r/playadelcarmen",
+        sourceAgeLabel: "2.8y ago",
+        sourceUrl: "https://www.reddit.com/r/playadelcarmen/comments/157z126/plan_on_moving_to_playa/",
+        topic: "money",
+        sentiment: "negative",
+      },
+      {
+        quote: "let go of the way you lived in the states and you will have a much better experience",
+        sourceLabel: "r/playadelcarmen",
+        sourceAgeLabel: "2.8y ago",
+        sourceUrl: "https://www.reddit.com/r/playadelcarmen/comments/157z126/plan_on_moving_to_playa/",
+        topic: "advice",
+        sentiment: "positive",
+      },
+      {
+        quote: "The expat tax is real",
+        sourceLabel: "r/playadelcarmen",
+        sourceAgeLabel: "6mo ago",
+        sourceUrl: "https://www.reddit.com/r/playadelcarmen/comments/1ottlsf/is_playa_del_carmen_transient/",
+        topic: "money",
+        sentiment: "negative",
+      },
+      {
+        quote: "the partying either gets old or it takes over your life",
+        sourceLabel: "r/playadelcarmen",
+        sourceAgeLabel: "6mo ago",
+        sourceUrl: "https://www.reddit.com/r/playadelcarmen/comments/1ottlsf/is_playa_del_carmen_transient/",
+        topic: "regret",
+        sentiment: "mixed",
+      },
+      {
+        quote: "you've experienced the bureaucracy, expat tax, the impact of learning spanish versus not",
+        sourceLabel: "r/playadelcarmen",
+        sourceAgeLabel: "6mo ago",
+        sourceUrl: "https://www.reddit.com/r/playadelcarmen/comments/1ottlsf/is_playa_del_carmen_transient/",
+        topic: "bureaucracy",
+        sentiment: "mixed",
+      },
+      {
+        quote: "Playa is good to call it your base and then if possible travel.",
+        sourceLabel: "r/playadelcarmen",
+        sourceAgeLabel: "4wk ago",
+        sourceUrl: "https://www.reddit.com/r/playadelcarmen/comments/1ss30py/is_playa_del_carmen_a_good_place_to_live_in_yours/",
+        topic: "advice",
+        sentiment: "positive",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "Plan on moving to Playa",
+        url: "https://www.reddit.com/r/playadelcarmen/comments/157z126/plan_on_moving_to_playa/",
+        topic: "community",
+      },
+      {
+        label: "Is Playa Del Carmen transient?",
+        url: "https://www.reddit.com/r/playadelcarmen/comments/1ottlsf/is_playa_del_carmen_transient/",
+        topic: "money",
+      },
+      {
+        label: "Is Playa Del Carmen a good place to live in yours 30s?",
+        url: "https://www.reddit.com/r/playadelcarmen/comments/1ss30py/is_playa_del_carmen_a_good_place_to_live_in_yours/",
+        topic: "advice",
+      },
+    ],
+  }),
+  krakow: buildEnhancedReport("krakow", {
+    summary:
+      "Krakow move stories are generally warm, but practical. People like the city’s livability, transit, and atmosphere, while repeatedly warning that good rentals move fast, prices are no longer the bargain outsiders expect, and newcomers should optimize around neighborhoods rather than postcard expectations.",
+    snapshotSignals: [
+      {
+        title: "Krakow is easier to love than to rent into well",
+        description: "The public stories are not anti-Krakow, but they do keep warning that the flat hunt is competitive and time-sensitive.",
+      },
+      {
+        title: "Transit and district choice matter more than old-town fantasy",
+        description: "A repeated theme is to organize the move around tram access and livable neighborhoods, not just beauty or tourist convenience.",
+      },
+      {
+        title: "The city feels more expensive than old guides suggest",
+        description: "Several public stories say the affordability story has weakened and requires more realistic budgeting.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "Good flats fly off the market really fast for the past few years",
+        sourceLabel: "r/krakow",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/krakow/comments/1pqt9h5/moving_to_krak%C3%B3w_neighborhood_renting_advice/",
+        topic: "housing",
+        sentiment: "negative",
+      },
+      {
+        quote: "it's better to pick something \"good enough\", get used to the city and then move a year later.",
+        sourceLabel: "r/krakow",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/krakow/comments/1pqt9h5/moving_to_krak%C3%B3w_neighborhood_renting_advice/",
+        topic: "advice",
+        sentiment: "positive",
+      },
+      {
+        quote: "Look how tram lines go to your workplace and look for flats along them.",
+        sourceLabel: "r/krakow",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/krakow/comments/1pqt9h5/moving_to_krak%C3%B3w_neighborhood_renting_advice/",
+        topic: "first_90_days",
+        sentiment: "positive",
+      },
+      {
+        quote: "never fall for some \"reservation fee\" before you see apartment",
+        sourceLabel: "r/krakow",
+        sourceAgeLabel: "5mo ago",
+        sourceUrl: "https://www.reddit.com/r/krakow/comments/1pqt9h5/moving_to_krak%C3%B3w_neighborhood_renting_advice/",
+        topic: "housing",
+        sentiment: "negative",
+      },
+      {
+        quote: "The city is getting into the expensive territory real estate wise",
+        sourceLabel: "r/krakow",
+        sourceAgeLabel: "4.1y ago",
+        sourceUrl: "https://www.reddit.com/r/krakow/comments/u135d0/moving_to_krak%C3%B3w/",
+        topic: "money",
+        sentiment: "negative",
+      },
+      {
+        quote: "We moved back to Kraków from Los Angeles in May and never want to leave.",
+        sourceLabel: "r/krakow",
+        sourceAgeLabel: "1.6y ago",
+        sourceUrl: "https://www.reddit.com/r/krakow/comments/1fpg8n2/moving_to_krakow_from_nyc_has_anyone_made_the_move/",
+        topic: "regret",
+        sentiment: "positive",
+      },
+      {
+        quote: "It’s hard to find a flat just for a few months",
+        sourceLabel: "r/krakow",
+        sourceAgeLabel: "1.4y ago",
+        sourceUrl: "https://www.reddit.com/r/krakow/comments/1hwo02n/moving_to_krakow/",
+        topic: "housing",
+        sentiment: "negative",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "Moving to Krakow - neighborhood & renting advice",
+        url: "https://www.reddit.com/r/krakow/comments/1pqt9h5/moving_to_krak%C3%B3w_neighborhood_renting_advice/",
+        topic: "housing",
+      },
+      {
+        label: "moving to Krakow",
+        url: "https://www.reddit.com/r/krakow/comments/u135d0/moving_to_krak%C3%B3w/",
+        topic: "money",
+      },
+      {
+        label: "Moving to Krakow from NYC - has anyone made the move?",
+        url: "https://www.reddit.com/r/krakow/comments/1fpg8n2/moving_to_krakow_from_nyc_has_anyone_made_the_move/",
+        topic: "regret",
+      },
+      {
+        label: "Moving to Krakow",
+        url: "https://www.reddit.com/r/krakow/comments/1hwo02n/moving_to_krakow/",
+        topic: "housing",
+      },
+    ],
+  }),
+  wroclaw: buildEnhancedReport("wroclaw", {
+    summary:
+      "Wroclaw move stories usually read like a practical success case with a few sharp caveats. People describe it as welcoming, easy enough in English, and strong for day-to-day quality of life, while still saying that Polish changes the depth of the move, winter hits hard, and the first setup phase can feel paperwork-heavy if you arrive without support.",
+    snapshotSignals: [
+      {
+        title: "Wroclaw often feels easier than outsiders expect",
+        description: "Public stories regularly frame it as a city where newcomers can function quickly, especially with English and a job anchor.",
+      },
+      {
+        title: "Polish is optional at first and important later",
+        description: "A repeated pattern is that you can survive in English, but language still decides how deep the move goes.",
+      },
+      {
+        title: "Quality of life wins over time, winter tests it",
+        description: "Stories often praise the city’s parks, biking, and livability while warning that winter mood and air can be rough.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "Wrocław is awsome.But language is tough.",
+        sourceLabel: "r/wroclaw",
+        sourceAgeLabel: "9mo ago",
+        sourceUrl: "https://www.reddit.com/r/wroclaw/comments/1muy1pg/mexican_moving_to_poland/",
+        topic: "language",
+        sentiment: "mixed",
+      },
+      {
+        quote: "You don't need Polish.",
+        sourceLabel: "r/wroclaw",
+        sourceAgeLabel: "9mo ago",
+        sourceUrl: "https://www.reddit.com/r/wroclaw/comments/1muy1pg/mexican_moving_to_poland/",
+        topic: "language",
+        sentiment: "positive",
+      },
+      {
+        quote: "this ofc limited the amount of interactions I could have and some of the experiences.",
+        sourceLabel: "r/wroclaw",
+        sourceAgeLabel: "9mo ago",
+        sourceUrl: "https://www.reddit.com/r/wroclaw/comments/1muy1pg/mexican_moving_to_poland/",
+        topic: "community",
+        sentiment: "mixed",
+      },
+      {
+        quote: "Meeting Polish people is hard.",
+        sourceLabel: "r/wroclaw",
+        sourceAgeLabel: "9mo ago",
+        sourceUrl: "https://www.reddit.com/r/wroclaw/comments/1muy1pg/mexican_moving_to_poland/",
+        topic: "community",
+        sentiment: "negative",
+      },
+      {
+        quote: "Familiarise yourself with Polish bureaucracy. It looks intense but, in reality, is super simple.",
+        sourceLabel: "r/wroclaw",
+        sourceAgeLabel: "9mo ago",
+        sourceUrl: "https://www.reddit.com/r/wroclaw/comments/1muy1pg/mexican_moving_to_poland/",
+        topic: "bureaucracy",
+        sentiment: "mixed",
+      },
+      {
+        quote: "Wrocław is great for biking.",
+        sourceLabel: "r/wroclaw",
+        sourceAgeLabel: "9mo ago",
+        sourceUrl: "https://www.reddit.com/r/wroclaw/comments/1muy1pg/mexican_moving_to_poland/",
+        topic: "advice",
+        sentiment: "positive",
+      },
+      {
+        quote: "The company is asking me... find an apartment... They're giving me seven days",
+        sourceLabel: "r/wroclaw",
+        sourceAgeLabel: "9mo ago",
+        sourceUrl: "https://www.reddit.com/r/wroclaw/comments/1mgrpu8/moving_to_wroclaw/",
+        topic: "first_90_days",
+        sentiment: "negative",
+      },
+      {
+        quote: "Spring, Summer, and Autumn are incredible",
+        sourceLabel: "r/wroclaw",
+        sourceAgeLabel: "9mo ago",
+        sourceUrl: "https://www.reddit.com/r/wroclaw/comments/1muy1pg/mexican_moving_to_poland/",
+        topic: "regret",
+        sentiment: "positive",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "Mexican moving to Poland",
+        url: "https://www.reddit.com/r/wroclaw/comments/1muy1pg/mexican_moving_to_poland/",
+        topic: "language",
+      },
+      {
+        label: "Moving to Wroclaw",
+        url: "https://www.reddit.com/r/wroclaw/comments/1mgrpu8/moving_to_wroclaw/",
+        topic: "first_90_days",
+      },
+    ],
+  }),
+  brno: buildEnhancedReport("brno", {
+    summary:
+      "Brno move stories usually sound grounded rather than dreamy. People describe it as safe, workable, and sometimes genuinely lovable, while also warning that salaries can be weak, housing has become more painful than outsiders expect, and the move makes the most sense when you actively want a smaller Czech city rather than a cheaper Prague substitute.",
+    snapshotSignals: [
+      {
+        title: "Brno works best when small-city tradeoffs are intentional",
+        description: "Public stories tend to like Brno more when the mover actually wants a calmer base, not just a low-cost workaround.",
+      },
+      {
+        title: "Salary-to-housing reality is the real test",
+        description: "Repeated public signals say the move can work, but weak offers get exposed quickly once rent and bills are real.",
+      },
+      {
+        title: "The city is friendly enough, but not frictionless",
+        description: "Stories regularly describe Brno as safe and livable while still warning about bureaucracy, Czech-language limits, and a smaller international scene.",
+      },
+    ],
+    storySignals: [
+      {
+        quote: "Brno is a very safe city",
+        sourceLabel: "r/czech",
+        sourceAgeLabel: "10mo ago",
+        sourceUrl: "https://www.reddit.com/r/czech/comments/1m1d3x8/move_to_brno/",
+        topic: "community",
+        sentiment: "positive",
+      },
+      {
+        quote: "it is quite English friendly (esp with young people).",
+        sourceLabel: "r/czech",
+        sourceAgeLabel: "10mo ago",
+        sourceUrl: "https://www.reddit.com/r/czech/comments/1m1d3x8/move_to_brno/",
+        topic: "language",
+        sentiment: "positive",
+      },
+      {
+        quote: "Bureaucracy and finding rental accommodation are nightmare here.",
+        sourceLabel: "r/czech",
+        sourceAgeLabel: "10mo ago",
+        sourceUrl: "https://www.reddit.com/r/czech/comments/1m1d3x8/move_to_brno/",
+        topic: "bureaucracy",
+        sentiment: "negative",
+      },
+      {
+        quote: "the housing situation is in such a state that anywhere where public transport goes, the price is off just by a small fraction",
+        sourceLabel: "r/Brno",
+        sourceAgeLabel: "3wk ago",
+        sourceUrl: "https://www.reddit.com/r/Brno/comments/1sxewdv/moving_to_brno/",
+        topic: "housing",
+        sentiment: "negative",
+      },
+      {
+        quote: "there's not a ton of native speakers in brno - at least compared to Prague.",
+        sourceLabel: "r/Brno",
+        sourceAgeLabel: "3wk ago",
+        sourceUrl: "https://www.reddit.com/r/Brno/comments/1sxewdv/moving_to_brno/",
+        topic: "community",
+        sentiment: "mixed",
+      },
+      {
+        quote: "Job market kinda sucks now though",
+        sourceLabel: "r/Brno",
+        sourceAgeLabel: "3wk ago",
+        sourceUrl: "https://www.reddit.com/r/Brno/comments/1sxewdv/moving_to_brno/",
+        topic: "money",
+        sentiment: "negative",
+      },
+      {
+        quote: "I moved here 13 years ago and still love it.",
+        sourceLabel: "r/Brno",
+        sourceAgeLabel: "3wk ago",
+        sourceUrl: "https://www.reddit.com/r/Brno/comments/1sxewdv/moving_to_brno/",
+        topic: "regret",
+        sentiment: "positive",
+      },
+      {
+        quote: "Public transport is a-fucking-mazing here.",
+        sourceLabel: "r/Brno",
+        sourceAgeLabel: "3wk ago",
+        sourceUrl: "https://www.reddit.com/r/Brno/comments/1sxewdv/moving_to_brno/",
+        topic: "first_90_days",
+        sentiment: "positive",
+      },
+    ],
+    sourceLinks: [
+      {
+        label: "Move to Brno",
+        url: "https://www.reddit.com/r/czech/comments/1m1d3x8/move_to_brno/",
+        topic: "bureaucracy",
+      },
+      {
+        label: "Moving to Brno",
+        url: "https://www.reddit.com/r/Brno/comments/1sxewdv/moving_to_brno/",
+        topic: "housing",
+      },
+    ],
+  }),
 };
 
 export const CITY_REALITY_REPORTS: CityRealityReport[] = CITIES.map((city) => {
