@@ -9,6 +9,7 @@
   --color-foreground: var(--foreground);
   --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+  --font-serif: var(--font-playfair-display), "Playfair Display", Georgia, "Times New Roman", serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -56,27 +57,43 @@
 }
 
 :root {
-  --background: oklch(0.985 0.004 240);
-  --foreground: oklch(0.17 0.01 256);
-  --card: oklch(0.995 0.003 240);
-  --card-foreground: oklch(0.17 0.01 256);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.17 0.01 256);
-  --primary: oklch(0.52 0.12 243);
+  /* Warm base — off-white paper tones replace cold blue-grey */
+  --background: oklch(0.978 0.010 75);
+  --foreground: oklch(0.155 0.012 50);
+  --card: oklch(0.996 0.006 75);
+  --card-foreground: oklch(0.155 0.012 50);
+  --popover: oklch(0.998 0.004 75);
+  --popover-foreground: oklch(0.155 0.012 50);
+  --primary: oklch(0.48 0.11 243);
   --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.955 0.006 240);
-  --secondary-foreground: oklch(0.25 0.01 256);
-  --muted: oklch(0.955 0.006 240);
-  --muted-foreground: oklch(0.50 0.014 252);
-  --accent: oklch(0.94 0.010 225);
-  --accent-foreground: oklch(0.25 0.01 256);
+  --secondary: oklch(0.950 0.012 72);
+  --secondary-foreground: oklch(0.22 0.012 50);
+  --muted: oklch(0.948 0.014 72);
+  --muted-foreground: oklch(0.490 0.016 58);
+  --accent: oklch(0.940 0.016 72);
+  --accent-foreground: oklch(0.22 0.012 50);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.89 0.008 240);
-  --input: oklch(0.89 0.008 240);
-  --ring: oklch(0.52 0.12 243);
+  --border: oklch(0.876 0.018 70);
+  --input: oklch(0.876 0.018 70);
+  --ring: oklch(0.48 0.11 243);
   --radius: 0.95rem;
 
-  --brand-primary: oklch(0.52 0.12 243);
+  /* City-page editorial tokens */
+  --city-bg: #f4ede0;
+  --city-card: #fdfaf5;
+  --city-border: #ddd4c0;
+  --city-muted-fg: #7a7265;
+  --city-warm-muted: #ede8df;
+  --city-reality-bg: #f0e4c8;
+  --city-reality-border: #d4c09a;
+  --city-reality-card: #fffdf8;
+
+  /* Semantic accent tokens */
+  --accent-gold: #a07830;
+  --accent-clay: #9b4f3f;
+  --accent-sage: #4a7c59;
+
+  --brand-primary: oklch(0.48 0.11 243);
   --brand-amber: oklch(0.73 0.10 64);
   --brand-green: oklch(0.63 0.10 171);
   --readiness-low: oklch(0.72 0.15 25);
@@ -89,14 +106,14 @@
   --chart-3: oklch(0.63 0.10 171);
   --chart-4: oklch(0.65 0.18 300);
   --chart-5: oklch(0.55 0.16 25);
-  --sidebar: oklch(0.97 0.005 240);
-  --sidebar-foreground: oklch(0.17 0.01 256);
-  --sidebar-primary: oklch(0.52 0.12 243);
+  --sidebar: oklch(0.970 0.010 72);
+  --sidebar-foreground: oklch(0.155 0.012 50);
+  --sidebar-primary: oklch(0.48 0.11 243);
   --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.94 0.010 225);
-  --sidebar-accent-foreground: oklch(0.25 0.01 256);
-  --sidebar-border: oklch(0.89 0.008 240);
-  --sidebar-ring: oklch(0.52 0.12 243);
+  --sidebar-accent: oklch(0.940 0.014 72);
+  --sidebar-accent-foreground: oklch(0.22 0.012 50);
+  --sidebar-border: oklch(0.876 0.018 70);
+  --sidebar-ring: oklch(0.48 0.11 243);
 }
 
 @layer base {
@@ -166,5 +183,51 @@
   }
   .pt-safe {
     padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  /* City editorial page shell */
+  .city-page-wrap {
+    background: var(--city-bg);
+    min-height: 100svh;
+  }
+  .city-card {
+    background: var(--city-card);
+    border: 1px solid var(--city-border);
+    box-shadow: 0 1px 2px rgba(80, 60, 20, 0.04), 0 4px 16px rgba(80, 60, 20, 0.04);
+  }
+  .city-reality-surface {
+    background: var(--city-reality-bg);
+    border: 1px solid var(--city-reality-border);
+    box-shadow: 0 1px 2px rgba(80, 60, 20, 0.05), 0 6px 24px rgba(80, 60, 20, 0.06);
+  }
+  .city-muted-text {
+    color: var(--city-muted-fg);
+  }
+  .city-section-kicker {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--city-muted-fg);
+  }
+
+  /* Score rail segments */
+  .score-segment {
+    height: 3px;
+    width: 18px;
+    border-radius: 99px;
+    background: var(--city-border);
+  }
+  .score-segment-filled {
+    background: #5c5044;
+  }
+  .score-segment-positive {
+    background: #4a7c59;
+  }
+  .score-segment-caution {
+    background: #c27c2b;
+  }
+  .score-segment-hard {
+    background: #b5524c;
   }
 }
