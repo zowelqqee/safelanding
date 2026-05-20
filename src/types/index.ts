@@ -586,6 +586,17 @@ export type PartnerReviewRequest = {
   updated_at?: string;
 };
 
+export type UserFeedback = {
+  id: string;
+  user_id: string | null;
+  move_profile_id: string | null;
+  source: string;
+  usefulness: string;
+  would_request_real_help: string | null;
+  comment: string | null;
+  created_at: string;
+};
+
 // ─── Generated roadmap ───────────────────────────────────────────────────────
 
 export type RoadmapStatus =

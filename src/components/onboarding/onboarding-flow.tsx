@@ -31,6 +31,7 @@ import {
   getCurrentMoveProfile,
   updateMoveProfile,
 } from "@/lib/profile/profileService";
+import { trackEvent } from "@/lib/analytics/trackEvent";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 
 // Steps: 0-welcome 1-base 2-goal 3-money 4-prefs 5-fear 6-region 7-optimization
@@ -236,9 +237,15 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
     router.push("/app/roadmap");
   };
 
+  const handleStartOnboarding = () => {
+    void trackEvent("onboarding_started");
+    next();
+  };
+
   // ── Selection handlers ─────────────────────────────────────────────────────
   const handleCountrySelected = (countryId: string) => {
     update({ selectedCountry: countryId });
+    void trackEvent("country_selected", { countryId });
     next();
     if (!isPreview) {
       updateMoveProfile({
@@ -251,6 +258,10 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
 
   const handleCitySelected = (cityId: string) => {
     update({ selectedCity: cityId });
+    void trackEvent("city_selected", {
+      cityId,
+      countryId: state.selectedCountry,
+    });
     next();
     if (!isPreview) {
       updateMoveProfile({
@@ -263,6 +274,16 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
 
   const handlePathSelected = (pathId: string) => {
     update({ selectedLegalPath: pathId });
+    void trackEvent("legal_path_selected", {
+      legalPathId: pathId,
+      cityId: state.selectedCity,
+      countryId: state.selectedCountry,
+    });
+    void trackEvent("onboarding_completed", {
+      legalPathId: pathId,
+      cityId: state.selectedCity,
+      countryId: state.selectedCountry,
+    });
     next();
     if (!isPreview) {
       updateMoveProfile({
@@ -310,7 +331,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
   const stepComponents = [
     <StepWelcome
       key="welcome"
-      onStart={next}
+      onStart={handleStartOnboarding}
       resume={profileLoaded ? resumeInfo : null}
       onResume={handleResume}
       showRoadmapCta={showRoadmapCta}

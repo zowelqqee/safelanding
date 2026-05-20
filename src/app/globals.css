@@ -189,6 +189,7 @@
   .city-page-wrap {
     background: var(--city-bg);
     min-height: 100svh;
+    overflow-x: clip;
   }
   .city-card {
     background: var(--city-card);

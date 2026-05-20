@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, BarChart3, ChevronDown, Shield } from "lucide-react";
+import { TrackPageEvent } from "@/components/analytics/track-page-event";
 import { CityRealityLayer } from "@/components/city/city-reality-layer";
 import { RelocationVideoStories } from "@/components/city/relocation-video-stories";
 import { SiteHeader } from "@/components/site/site-header";
@@ -87,8 +88,8 @@ function fitWarningLabel(item: string) {
 function ShowMore({ children, label = "Show more" }: { children: React.ReactNode; label?: string }) {
   return (
     <details className="group mt-4">
-      <summary className="inline-flex cursor-pointer list-none items-center gap-2 rounded-full border border-[var(--city-border)] bg-[var(--city-card)] px-4 py-2 text-xs font-medium text-[var(--city-muted-fg)] transition-colors hover:bg-[var(--city-warm-muted)]">
-        {label}
+      <summary className="inline-flex max-w-full cursor-pointer list-none items-center gap-2 rounded-full border border-[var(--city-border)] bg-[var(--city-card)] px-4 py-2 text-xs font-medium text-[var(--city-muted-fg)] transition-colors hover:bg-[var(--city-warm-muted)]">
+        <span className="min-w-0 truncate">{label}</span>
         <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" />
       </summary>
       <div className="mt-4">{children}</div>
@@ -108,7 +109,7 @@ function ScoreRail({ value, kind }: { value: number; kind: MetricKind }) {
 
 function BlockerCard({ text, variant }: { text: string; variant: "legal" | "lifestyle" }) {
   return (
-    <div className={`rounded-2xl px-4 py-4 ${
+    <div className={`min-w-0 rounded-2xl px-4 py-4 ${
       variant === "legal"
         ? "border border-rose-200/60 bg-rose-50/70"
         : "border border-amber-200/70 bg-amber-50/60"
@@ -118,14 +119,14 @@ function BlockerCard({ text, variant }: { text: string; variant: "legal" | "life
       }`}>
         {variant === "legal" ? "Legal reality" : "Lifestyle reality"}
       </p>
-      <p className="mt-2 text-sm leading-relaxed text-stone-800">{text}</p>
+      <p className="mt-2 break-words text-sm leading-relaxed text-stone-800">{text}</p>
     </div>
   );
 }
 
 function CityTag({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-block rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-[11px] font-medium text-[var(--city-muted-fg)]">
+    <span className="inline-block max-w-full rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-[11px] font-medium text-[var(--city-muted-fg)]">
       {children}
     </span>
   );
@@ -158,7 +159,7 @@ function CityHeroImagePanel({
   imageSrc?: string;
 }) {
   return (
-    <div className="rounded-[24px] border border-[var(--city-border)] bg-[var(--city-warm-muted)]/45 p-2">
+    <div className="min-w-0 rounded-[24px] border border-[var(--city-border)] bg-[var(--city-warm-muted)]/45 p-2">
       <div className="relative min-h-[190px] overflow-hidden rounded-[20px]">
         {imageSrc ? (
           <>
@@ -190,30 +191,30 @@ function CityHeroImagePanel({
 
 function FitSection({ city }: { city: CityProfile }) {
   return (
-    <div className="city-card overflow-hidden rounded-[22px]">
+    <div className="city-card min-w-0 overflow-hidden rounded-[22px]">
       <div className="border-b border-[var(--city-border)] px-5 py-4">
         <p className="city-section-kicker">Fit assessment</p>
         <h2 className="mt-1 text-base font-semibold tracking-tight text-stone-900">Does this fit you?</h2>
       </div>
-      <div className="grid grid-cols-2 gap-5 p-5">
-        <div>
+      <div className="grid grid-cols-1 gap-5 p-5 sm:grid-cols-2">
+        <div className="min-w-0">
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">Good for</p>
           <ul className="mt-3 space-y-2.5">
             {city.best_for.map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
-                <span className="text-sm leading-snug text-stone-800">{item}</span>
+                <span className="min-w-0 break-words text-sm leading-snug text-stone-800">{item}</span>
               </li>
             ))}
           </ul>
         </div>
-        <div>
+        <div className="min-w-0">
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-700">Hard if</p>
           <ul className="mt-3 space-y-2.5">
             {city.watch_out.map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
-                <span className="text-sm leading-snug text-[var(--city-muted-fg)]">{fitWarningLabel(item)}</span>
+                <span className="min-w-0 break-words text-sm leading-snug text-[var(--city-muted-fg)]">{fitWarningLabel(item)}</span>
               </li>
             ))}
           </ul>
@@ -234,16 +235,16 @@ function GlanceSection({ city }: { city: CityProfile }) {
   ];
 
   return (
-    <div className="city-card overflow-hidden rounded-[22px]">
+    <div className="city-card min-w-0 overflow-hidden rounded-[22px]">
       <div className="border-b border-[var(--city-border)] px-5 py-4">
         <p className="city-section-kicker">City metrics</p>
         <h2 className="mt-1 text-base font-semibold tracking-tight text-stone-900">At a glance</h2>
       </div>
       <div className="divide-y divide-[var(--city-border)] px-5">
         {metrics.map(({ label, value, kind }) => (
-          <div key={label} className="flex items-center justify-between gap-4 py-3">
-            <span className="text-sm text-[var(--city-muted-fg)]">{label}</span>
-            <div className="flex items-center gap-3">
+          <div key={label} className="flex items-center justify-between gap-3 py-3">
+            <span className="min-w-0 break-words text-sm text-[var(--city-muted-fg)]">{label}</span>
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
               <span className="text-xs font-semibold text-stone-800">{scoreLabel(kind, value)}</span>
               <ScoreRail value={value} kind={kind} />
             </div>
@@ -256,32 +257,32 @@ function GlanceSection({ city }: { city: CityProfile }) {
 
 function RealityPreviewSection({ city }: { city: CityProfile }) {
   return (
-    <div className="city-card overflow-hidden rounded-[22px]">
+    <div className="city-card min-w-0 overflow-hidden rounded-[22px]">
       <div className="border-b border-[var(--city-border)] px-5 py-4">
         <p className="city-section-kicker">Financial picture</p>
         <h2 className="mt-1 text-base font-semibold tracking-tight text-stone-900">Reality preview</h2>
       </div>
       <div className="p-5">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/50 px-4 py-3">
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--city-muted-fg)]">Avg rent</p>
-            <p className="mt-1.5 font-serif text-lg font-medium text-stone-900">{city.avg_rent_range}</p>
+            <p className="mt-1.5 break-words font-serif text-lg font-medium text-stone-900">{city.avg_rent_range}</p>
           </div>
           <div className="rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/50 px-4 py-3">
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--city-muted-fg)]">Monthly budget</p>
-            <p className="mt-1.5 font-serif text-lg font-medium text-stone-900">{city.monthly_budget_range}</p>
+            <p className="mt-1.5 break-words font-serif text-lg font-medium text-stone-900">{city.monthly_budget_range}</p>
           </div>
         </div>
         <div className="mt-3 rounded-xl border border-amber-200/60 bg-amber-50/50 px-4 py-3">
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-800">What people underestimate</p>
-          <p className="mt-1.5 text-sm leading-relaxed text-stone-800">{city.what_people_underestimate}</p>
+          <p className="mt-1.5 break-words text-sm leading-relaxed text-stone-800">{city.what_people_underestimate}</p>
         </div>
         <ShowMore label="First 90 days">
           <div className="space-y-2">
             {city.first_90_days_preview.map((item, i) => (
               <div key={item} className="flex items-start gap-3 rounded-xl border border-[var(--city-border)] bg-[var(--city-card)] px-4 py-3">
                 <span className="text-[10px] font-bold text-[var(--city-muted-fg)] mt-0.5">{String(i + 1).padStart(2, "0")}</span>
-                <p className="text-sm leading-relaxed text-stone-800">{item}</p>
+                <p className="min-w-0 break-words text-sm leading-relaxed text-stone-800">{item}</p>
               </div>
             ))}
           </div>
@@ -314,15 +315,15 @@ function LegalPathCard({ path }: { path: LegalPath }) {
   };
 
   return (
-    <div className="city-card overflow-hidden rounded-[22px] p-5">
+    <div className="city-card min-w-0 overflow-hidden rounded-[22px] p-5">
       <div className="flex items-start justify-between gap-3">
-        <div>
+        <div className="min-w-0">
           <span className={`inline-block rounded-full border px-2.5 py-1 text-[11px] font-medium ${scenarioStyles[path.scenario]}`}>
             {scenarioLabel[path.scenario]}
           </span>
-          <h3 className="mt-2.5 text-base font-semibold tracking-tight text-stone-900">{path.name}</h3>
+          <h3 className="mt-2.5 break-words text-base font-semibold tracking-tight text-stone-900">{path.name}</h3>
         </div>
-        <span className="shrink-0 rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1.5 text-[11px] font-medium text-[var(--city-muted-fg)]">
+        <span className="max-w-[42%] shrink-0 rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1.5 text-right text-[11px] font-medium leading-snug text-[var(--city-muted-fg)] sm:max-w-none">
           {path.estimated_preparation_time}
         </span>
       </div>
@@ -342,7 +343,7 @@ function LegalPathCard({ path }: { path: LegalPath }) {
           {path.good_if.slice(0, 2).map((item) => (
             <li key={item} className="flex items-start gap-2.5">
               <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
-              <span className="text-sm leading-snug text-stone-800">{item}</span>
+              <span className="min-w-0 break-words text-sm leading-snug text-stone-800">{item}</span>
             </li>
           ))}
         </ul>
@@ -350,7 +351,7 @@ function LegalPathCard({ path }: { path: LegalPath }) {
 
       <div className="mt-4 rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-3">
         <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--city-muted-fg)]">Main friction</p>
-        <p className="mt-1.5 text-sm leading-relaxed text-stone-800">{path.weak_points[0]}</p>
+        <p className="mt-1.5 break-words text-sm leading-relaxed text-stone-800">{path.weak_points[0]}</p>
       </div>
     </div>
   );
@@ -391,11 +392,11 @@ export default async function CityPage({
     <div className="city-page-wrap">
       <SiteHeader variant="public" />
 
-      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
-        <div className="space-y-6">
+      <main className="mx-auto min-w-0 max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+        <div className="min-w-0 space-y-6">
 
           {/* Hero */}
-          <section className="city-card overflow-hidden rounded-[28px] px-6 py-8 sm:px-10 sm:py-10">
+          <section className="city-card min-w-0 overflow-hidden rounded-[28px] px-5 py-7 sm:px-10 sm:py-10">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
               {/* Left: identity */}
               <div className="min-w-0 flex-1">
@@ -436,7 +437,7 @@ export default async function CityPage({
               </div>
 
               {/* Right: image + blockers */}
-              <div className="flex flex-col gap-3 lg:w-[300px] lg:shrink-0">
+              <div className="flex min-w-0 flex-col gap-3 lg:w-[300px] lg:shrink-0">
                 <CityHeroImagePanel city={city} country={country} imageSrc={cityHeroImage} />
                 <BlockerCard
                   text={country.main_legal_blocker}
@@ -451,9 +452,9 @@ export default async function CityPage({
           </section>
 
           {/* Two-zone: structured fit (left) + reality layer (right) */}
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_3fr] lg:items-start">
+          <div className="grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-[2fr_3fr] lg:items-start">
             {/* Left: structured city fit */}
-            <div className="flex flex-col gap-5">
+            <div className="flex min-w-0 flex-col gap-5">
               <FitSection city={city} />
               <GlanceSection city={city} />
               <RealityPreviewSection city={city} />
@@ -463,14 +464,22 @@ export default async function CityPage({
             {realityReport ? (
               <CityRealityLayer report={realityReport} />
             ) : (
-              <div className="city-reality-surface rounded-[28px] p-6">
+              <div className="city-reality-surface min-w-0 overflow-hidden rounded-[28px] p-6">
                 <p className="city-section-kicker text-amber-800">Reality layer</p>
-                <p className="mt-2 font-serif text-2xl font-medium text-stone-900">Reality from people who moved</p>
-                <p className="mt-3 text-sm text-[var(--city-muted-fg)]">Reality signals for this city are being curated.</p>
+                <p className="mt-2 break-words font-serif text-2xl font-medium text-stone-900">Reality from people who moved</p>
+                <p className="mt-3 break-words text-sm text-[var(--city-muted-fg)]">Reality signals for this city are being curated.</p>
               </div>
             )}
           </div>
 
+          <TrackPageEvent
+            eventName="city_reality_viewed"
+            payload={{
+              cityId: city.id,
+              countryId: country.id,
+              hasRealityReport: Boolean(realityReport),
+            }}
+          />
           <RelocationVideoStories stories={relocationVideoStories} />
 
           {/* Legal paths */}
@@ -478,7 +487,7 @@ export default async function CityPage({
             <div className="mb-5 flex items-baseline justify-between gap-4">
               <div>
                 <p className="city-section-kicker">Legal framework</p>
-                <h2 className="mt-1 font-serif text-2xl font-medium tracking-tight text-stone-900">
+                <h2 className="mt-1 break-words font-serif text-2xl font-medium tracking-tight text-stone-900">
                   Legal paths for {country.name}
                 </h2>
               </div>
@@ -488,7 +497,7 @@ export default async function CityPage({
               Fit assessments only — not legal advice. Requirements vary and must be verified before applying.
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid min-w-0 gap-4 md:grid-cols-2">
               {paths.slice(0, 2).map((path) => (
                 <LegalPathCard key={path.id} path={path} />
               ))}
@@ -496,7 +505,7 @@ export default async function CityPage({
 
             {paths.length > 2 && (
               <ShowMore label={`Show ${paths.length - 2} more path${paths.length - 2 > 1 ? "s" : ""}`}>
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid min-w-0 gap-4 md:grid-cols-2">
                   {paths.slice(2).map((path) => (
                     <LegalPathCard key={path.id} path={path} />
                   ))}

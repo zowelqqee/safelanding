@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/site/site-header";
 import { signUpWithEmail } from "@/lib/auth/authService";
+import { trackEvent } from "@/lib/analytics/trackEvent";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function SignUpPage() {
       return;
     }
 
+    void trackEvent("signup_completed");
     router.push("/start");
     router.refresh();
   }

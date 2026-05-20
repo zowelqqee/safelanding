@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { FeedbackCard } from "@/components/feedback/feedback-card";
+import { trackEvent } from "@/lib/analytics/trackEvent";
 import { savePartnerReviewRequest } from "@/lib/partner-review/partner-review-client";
 import type { PartnerReviewRequest } from "@/types";
 
@@ -76,6 +78,13 @@ export function PartnerReviewForm({
 
     setRequest(result.request);
     setSaved(true);
+    void trackEvent("partner_review_requested", {
+      moveProfileId,
+      selectedCountryId,
+      selectedCityId,
+      selectedLegalPathId,
+      status: result.request?.status ?? "requested",
+    });
   }
 
   return (
@@ -102,6 +111,14 @@ export function PartnerReviewForm({
             </div>
           </div>
         </section>
+      )}
+
+      {request && (
+        <FeedbackCard
+          moveProfileId={moveProfileId}
+          source="partner_review_success"
+          mode="partner_review_success"
+        />
       )}
 
       <section className="surface-card overflow-hidden rounded-[26px]">

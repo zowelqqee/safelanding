@@ -10,6 +10,8 @@ import {
   UserRound,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TrackPageEvent } from "@/components/analytics/track-page-event";
+import { FeedbackCard } from "@/components/feedback/feedback-card";
 import { getCurrentMoveProfileServer } from "@/lib/profile/profileServer";
 import { buildMoveBrief } from "@/lib/move-brief/build-move-brief";
 
@@ -32,6 +34,15 @@ export default async function MoveBriefPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-6 md:py-8">
+      <TrackPageEvent
+        eventName="move_brief_viewed"
+        payload={{
+          moveProfileId: profile.id,
+          countryId: profile.selected_country_id,
+          cityId: profile.selected_city_id,
+          legalPathId: profile.selected_legal_path_id,
+        }}
+      />
       <div className="space-y-4">
         <section className="city-card overflow-hidden rounded-[28px]">
           <div className="border-b border-[var(--city-border)] bg-[var(--city-warm-muted)] px-5 py-6 md:px-7">
@@ -230,6 +241,12 @@ export default async function MoveBriefPage() {
             </div>
           </div>
         </section>
+
+        <FeedbackCard
+          moveProfileId={profile.id}
+          source="move_brief"
+          mode="move_brief"
+        />
       </div>
     </div>
   );

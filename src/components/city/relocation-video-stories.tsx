@@ -1,6 +1,7 @@
 import Image from "next/image";
-import { ChevronDown, ExternalLink, PlayCircle } from "lucide-react";
+import { ChevronDown, PlayCircle } from "lucide-react";
 
+import { TrackedVideoLink } from "@/components/analytics/tracked-video-link";
 import { getExistingPublicImageSrc } from "@/lib/server/public-image";
 import type {
   RelocationVideoPersonType,
@@ -57,8 +58,8 @@ const personTypeLabels: Record<RelocationVideoPersonType, string> = {
 function ShowMore({ children, label }: { children: React.ReactNode; label: string }) {
   return (
     <details className="group mt-4">
-      <summary className="inline-flex cursor-pointer list-none items-center gap-2 rounded-full border border-[var(--city-reality-border)] bg-[var(--city-reality-card)] px-4 py-2 text-xs font-medium text-[var(--city-muted-fg)] transition-colors hover:bg-amber-100/60">
-        {label}
+      <summary className="inline-flex max-w-full cursor-pointer list-none items-center gap-2 rounded-full border border-[var(--city-reality-border)] bg-[var(--city-reality-card)] px-4 py-2 text-xs font-medium text-[var(--city-muted-fg)] transition-colors hover:bg-amber-100/60">
+        <span className="min-w-0 truncate">{label}</span>
         <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" />
       </summary>
       <div className="mt-4">{children}</div>
@@ -77,7 +78,7 @@ function VideoStoryCard({ story }: { story: RelocationVideoStory }) {
   const linkLabel = story.platform === "youtube" ? "Смотреть на YouTube" : "Открыть источник";
 
   return (
-    <article className="flex h-full flex-col rounded-[20px] border border-[var(--city-reality-border)] bg-[var(--city-reality-card)] p-4 shadow-[0_1px_0_rgba(80,60,20,0.04)]">
+    <article className="flex h-full min-w-0 flex-col rounded-[20px] border border-[var(--city-reality-border)] bg-[var(--city-reality-card)] p-4 shadow-[0_1px_0_rgba(80,60,20,0.04)]">
       <div className="relative mb-4 h-32 overflow-hidden rounded-2xl border border-[var(--city-reality-border)] bg-[#f7efe0]">
         {thumbnailSrc ? (
           <Image
@@ -117,7 +118,7 @@ function VideoStoryCard({ story }: { story: RelocationVideoStory }) {
           <PlayCircle className="h-4 w-4" />
         </div>
         <div className="min-w-0">
-          <h3 className="text-base font-semibold leading-snug tracking-tight text-stone-900">
+          <h3 className="break-words text-base font-semibold leading-snug tracking-tight text-stone-900">
             {story.title}
           </h3>
           <p className="mt-1 text-xs font-medium text-[var(--city-muted-fg)]">
@@ -126,7 +127,7 @@ function VideoStoryCard({ story }: { story: RelocationVideoStory }) {
         </div>
       </div>
 
-      <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-[var(--city-muted-fg)]">
+      <p className="mt-3 break-words text-[11px] uppercase tracking-[0.12em] text-[var(--city-muted-fg)]">
         {movementLabel.join(" · ")}
       </p>
 
@@ -134,22 +135,21 @@ function VideoStoryCard({ story }: { story: RelocationVideoStory }) {
         <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-800">
           Главное
         </p>
-        <p className="mt-1.5 text-sm leading-relaxed text-stone-900">{story.keyTakeaway}</p>
+        <p className="mt-1.5 break-words text-sm leading-relaxed text-stone-900">{story.keyTakeaway}</p>
       </div>
 
-      <p className="mt-3 flex-1 text-sm leading-relaxed text-[var(--city-muted-fg)]">
+      <p className="mt-3 flex-1 break-words text-sm leading-relaxed text-[var(--city-muted-fg)]">
         {story.summary}
       </p>
 
-      <a
+      <TrackedVideoLink
         href={story.videoUrl}
-        target="_blank"
-        rel="noreferrer"
-        className="mt-4 inline-flex items-center justify-center gap-2 rounded-full border border-stone-300 bg-white px-4 py-2 text-sm font-semibold text-stone-800 transition-colors hover:border-stone-500 hover:bg-stone-50"
-      >
-        {linkLabel}
-        <ExternalLink className="h-3.5 w-3.5" />
-      </a>
+        label={linkLabel}
+        storyId={story.id}
+        cityId={story.cityId}
+        countryId={story.countryId}
+        topic={story.topic}
+      />
     </article>
   );
 }
@@ -166,21 +166,21 @@ export function RelocationVideoStories({
   const extraStories = verifiedStories.slice(4);
 
   return (
-    <section className="city-reality-surface rounded-[28px] p-5 sm:p-6">
+    <section className="city-reality-surface min-w-0 overflow-hidden rounded-[28px] p-5 sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="max-w-2xl">
+        <div className="min-w-0 max-w-2xl">
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-amber-800">
             relocation video layer
           </p>
           <h2 className="mt-2 font-serif text-2xl font-medium leading-tight tracking-tight text-stone-900 sm:text-3xl">
             Видео от тех, кто уже переехал
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-[var(--city-muted-fg)]">
+          <p className="mt-3 break-words text-sm leading-relaxed text-[var(--city-muted-fg)]">
             Живой опыт людей, которые прошли переезд и рассказывают, что оказалось сложнее,
             дороже или лучше, чем ожидали.
           </p>
         </div>
-        <div className="shrink-0 rounded-2xl border border-[var(--city-reality-border)] bg-[var(--city-reality-card)] px-4 py-3 text-xs leading-relaxed text-amber-900 sm:max-w-[240px]">
+        <div className="min-w-0 rounded-2xl border border-[var(--city-reality-border)] bg-[var(--city-reality-card)] px-4 py-3 text-xs leading-relaxed text-amber-900 sm:max-w-[240px] sm:shrink-0">
           Только личный relocation/lived-experience. Без туристических гидов, city tours и
           подборок достопримечательностей.
         </div>
@@ -188,7 +188,7 @@ export function RelocationVideoStories({
 
       {featuredStories.length > 0 ? (
         <>
-          <div className="mt-5 grid gap-3 md:grid-cols-2">
+          <div className="mt-5 grid min-w-0 gap-3 md:grid-cols-2">
             {featuredStories.map((story) => (
               <VideoStoryCard key={story.id} story={story} />
             ))}
@@ -196,7 +196,7 @@ export function RelocationVideoStories({
 
           {extraStories.length > 0 && (
             <ShowMore label={`Показать ещё ${extraStories.length}`}>
-              <div className="grid gap-3 md:grid-cols-2">
+              <div className="grid min-w-0 gap-3 md:grid-cols-2">
                 {extraStories.map((story) => (
                   <VideoStoryCard key={story.id} story={story} />
                 ))}

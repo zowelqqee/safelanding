@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RoadmapScreen } from "@/components/roadmap/roadmap-screen";
+import { TrackPageEvent } from "@/components/analytics/track-page-event";
 import { getCurrentMoveProfileServer } from "@/lib/profile/profileServer";
 import { generateRoadmap } from "@/lib/roadmap/roadmapGenerator";
 
@@ -35,5 +36,18 @@ export default async function RoadmapPage() {
 
   const roadmap = generateRoadmap(profile);
 
-  return <RoadmapScreen roadmap={roadmap} />;
+  return (
+    <>
+      <TrackPageEvent
+        eventName="roadmap_opened"
+        payload={{
+          moveProfileId: profile.id,
+          countryId: profile.selected_country_id,
+          cityId: profile.selected_city_id,
+          legalPathId: profile.selected_legal_path_id,
+        }}
+      />
+      <RoadmapScreen roadmap={roadmap} />
+    </>
+  );
 }
