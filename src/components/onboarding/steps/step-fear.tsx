@@ -39,19 +39,19 @@ export function StepFear({ value, onChange, onNext, onBack }: Props) {
             onClick={() => onChange(fear.value)}
             className={`w-full text-left p-4 rounded-xl border transition-colors ${
               value === fear.value
-                ? "border-primary bg-primary/10"
-                : "border-border bg-card hover:bg-muted"
+                ? "border-stone-800 bg-stone-100"
+                : "border-[var(--city-border)] bg-[var(--city-card)] hover:bg-[var(--city-warm-muted)]"
             }`}
           >
-            <div className="font-medium text-sm">{fear.label}</div>
-            <div className="text-xs text-muted-foreground mt-0.5">{fear.description}</div>
+            <div className="font-medium text-sm text-stone-900">{fear.label}</div>
+            <div className="text-xs text-[var(--city-muted-fg)] mt-0.5">{fear.description}</div>
           </button>
         ))}
       </div>
 
       <div className="flex gap-3 mt-auto pt-4">
-        <Button variant="outline" onClick={onBack} className="flex-1 h-11">Back</Button>
-        <Button onClick={onNext} className="flex-1 h-11">
+        <Button variant="outline" onClick={onBack} className="flex-1 h-11 rounded-full border-[var(--city-border)]">Back</Button>
+        <Button onClick={onNext} className="flex-1 h-11 rounded-full">
           {value ? "See my results" : "Skip & see results"}
         </Button>
       </div>

@@ -70,19 +70,19 @@ export function StepOptimization({ value, onChange, onNext, onBack }: Props) {
               className={cn(
                 "flex items-center gap-3 rounded-xl border px-4 py-3.5 text-left transition-colors",
                 active
-                  ? "border-primary bg-primary/5 text-foreground"
-                  : "border-border bg-card text-foreground hover:border-primary/40"
+                  ? "border-stone-800 bg-stone-100"
+                  : "border-[var(--city-border)] bg-[var(--city-card)] hover:bg-[var(--city-warm-muted)]"
               )}
             >
               <span className="text-xl shrink-0">{opt.emoji}</span>
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium">{opt.label}</div>
-                <div className="text-xs text-muted-foreground">{opt.description}</div>
+                <div className="text-sm font-medium text-stone-900">{opt.label}</div>
+                <div className="text-xs text-[var(--city-muted-fg)]">{opt.description}</div>
               </div>
               <div
                 className={cn(
                   "size-4 rounded-full border-2 shrink-0 transition-colors",
-                  active ? "bg-primary border-primary" : "border-border"
+                  active ? "bg-stone-800 border-stone-800" : "border-[var(--city-border)]"
                 )}
               />
             </button>
@@ -91,10 +91,10 @@ export function StepOptimization({ value, onChange, onNext, onBack }: Props) {
       </div>
 
       <div className="flex flex-col gap-2 pb-6">
-        <Button onClick={onNext} disabled={!value}>
+        <Button onClick={onNext} disabled={!value} className="rounded-full">
           Continue
         </Button>
-        <Button variant="ghost" size="sm" onClick={onBack} className="text-muted-foreground">
+        <Button variant="ghost" size="sm" onClick={onBack} className="text-[var(--city-muted-fg)]">
           ← Back
         </Button>
       </div>

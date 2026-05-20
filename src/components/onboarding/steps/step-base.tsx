@@ -57,8 +57,8 @@ export function StepBase({ citizenship, currentCountry, language, onChange, onNe
                 onClick={() => onChange({ language: lang })}
                 className={`h-11 rounded-lg border text-sm font-medium transition-colors ${
                   language === lang
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border bg-card text-muted-foreground hover:bg-muted"
+                    ? "border-stone-800 bg-stone-100 text-stone-900"
+                    : "border-[var(--city-border)] bg-[var(--city-card)] text-[var(--city-muted-fg)] hover:bg-[var(--city-warm-muted)]"
                 }`}
               >
                 {lang === "en" ? "English" : "Русский"}
@@ -69,10 +69,10 @@ export function StepBase({ citizenship, currentCountry, language, onChange, onNe
       </div>
 
       <div className="flex gap-3 mt-auto pt-4">
-        <Button variant="outline" onClick={onBack} className="flex-1 h-11">
+        <Button variant="outline" onClick={onBack} className="flex-1 h-11 rounded-full border-[var(--city-border)]">
           Back
         </Button>
-        <Button onClick={onNext} disabled={!canContinue} className="flex-1 h-11">
+        <Button onClick={onNext} disabled={!canContinue} className="flex-1 h-11 rounded-full">
           Continue
         </Button>
       </div>

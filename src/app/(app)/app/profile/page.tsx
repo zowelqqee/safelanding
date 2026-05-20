@@ -22,15 +22,13 @@ import {
 } from "@/lib/roadmap/roadmapGenerator";
 
 function SectionCard({ children }: { children: React.ReactNode }) {
-  return <div className="overflow-hidden rounded-2xl border bg-card">{children}</div>;
+  return <div className="city-card overflow-hidden rounded-[22px]">{children}</div>;
 }
 
 function SectionHeader({ title }: { title: string }) {
   return (
-    <div className="border-b px-4 py-3">
-      <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        {title}
-      </h2>
+    <div className="border-b border-[var(--city-border)] px-5 py-3.5">
+      <h2 className="city-section-kicker">{title}</h2>
     </div>
   );
 }
@@ -45,10 +43,10 @@ function Row({
   value: string;
 }) {
   return (
-    <div className="flex items-center gap-3 border-b px-4 py-3 last:border-b-0">
-      <Icon className="size-4 shrink-0 text-muted-foreground" />
-      <span className="flex-1 text-sm text-muted-foreground">{label}</span>
-      <span className="max-w-[220px] text-right text-sm font-medium leading-relaxed break-words">
+    <div className="flex items-center gap-3 border-b border-[var(--city-border)] px-5 py-3.5 last:border-b-0">
+      <Icon className="size-4 shrink-0 text-[var(--city-muted-fg)]" />
+      <span className="flex-1 text-sm text-[var(--city-muted-fg)]">{label}</span>
+      <span className="max-w-[220px] text-right text-sm font-medium leading-snug break-words text-stone-900">
         {value}
       </span>
     </div>
@@ -85,10 +83,11 @@ export default async function ProfilePage() {
   ) ?? [];
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6 space-y-5">
-      <div className="space-y-1">
-        <h1 className="text-xl font-semibold">Profile</h1>
-        <p className="text-sm text-muted-foreground">
+    <div className="mx-auto max-w-2xl px-4 py-6 space-y-4">
+      <div className="space-y-0.5">
+        <p className="city-section-kicker mb-1">Your account</p>
+        <h1 className="font-serif text-2xl font-medium text-stone-900">Profile</h1>
+        <p className="text-sm text-[var(--city-muted-fg)]">
           Your account, selections, and current move preparation snapshot.
         </p>
       </div>
@@ -129,16 +128,16 @@ export default async function ProfilePage() {
               label="Current roadmap stage"
               value={currentLevel?.title ?? "—"}
             />
-            <div className="border-t px-4 py-4">
-              <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="border-t border-[var(--city-border)] px-5 py-4">
+              <div className="flex flex-col gap-2.5 sm:flex-row">
                 <Link href="/app/move-brief" className="inline-flex">
-                  <Button variant="outline" className="gap-2">
+                  <Button variant="outline" className="gap-2 rounded-full border-[var(--city-border)]">
                     View Move Brief
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
                 <Link href="/app/partner-review" className="inline-flex">
-                  <Button className="gap-2">
+                  <Button className="gap-2 rounded-full">
                     Request partner review
                     <ArrowRight className="h-4 w-4" />
                   </Button>
@@ -152,7 +151,7 @@ export default async function ProfilePage() {
             <Row
               icon={User}
               label="Onboarding completed"
-              value={profile.onboarding_completed ? "Yes" : "No"}
+              value={profile.onboarding_completed ? "Yes" : "In progress"}
             />
             <Row icon={Route} label="Active step" value={profile.active_step} />
             <Row
@@ -170,13 +169,13 @@ export default async function ProfilePage() {
       ) : (
         <SectionCard>
           <SectionHeader title="Move summary" />
-          <div className="space-y-4 px-4 py-5">
-            <p className="text-sm leading-relaxed text-muted-foreground">
+          <div className="space-y-4 px-5 py-5">
+            <p className="text-sm leading-relaxed text-[var(--city-muted-fg)]">
               You&apos;re signed in, but you haven&apos;t created a move profile yet.
               Start onboarding to generate your roadmap.
             </p>
             <Link href="/start" className="inline-flex">
-              <Button className="gap-2">
+              <Button className="gap-2 rounded-full">
                 Start your move
                 <ArrowRight className="h-4 w-4" />
               </Button>
@@ -187,21 +186,21 @@ export default async function ProfilePage() {
 
       <SectionCard>
         <SectionHeader title="Settings" />
-        <div className="border-b px-4 py-3">
+        <div className="border-b border-[var(--city-border)] px-5 py-3.5">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">Language</span>
-            <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-foreground">
+            <span className="text-sm text-[var(--city-muted-fg)]">Language</span>
+            <span className="inline-flex items-center rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-2.5 py-0.5 text-xs font-medium text-stone-800">
               English
             </span>
           </div>
         </div>
-        <div className="px-4 py-3">
+        <div className="px-5 py-4">
           <SignOutButton />
         </div>
       </SectionCard>
 
-      <p className="pb-2 text-center text-xs text-muted-foreground">
-        Soft Landing v0.1
+      <p className="pb-2 text-center text-xs text-[var(--city-muted-fg)]">
+        Soft Landing v0.1 · Relocation intelligence
       </p>
     </div>
   );

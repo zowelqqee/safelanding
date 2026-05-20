@@ -44,84 +44,90 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-background">
-      <div className="w-full max-w-sm space-y-6">
-        {/* Logo */}
-        <div className="flex flex-col items-center text-center space-y-2">
-          <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center">
-            <MapPin className="h-5 w-5 text-primary" />
+    <div className="city-page-wrap min-h-screen flex flex-col items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+        <div className="city-card rounded-[28px] p-8 space-y-6">
+          <div className="flex flex-col items-center text-center space-y-3">
+            <div className="w-10 h-10 rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)] flex items-center justify-center">
+              <MapPin className="h-5 w-5 text-stone-700" />
+            </div>
+            <div>
+              <p className="city-section-kicker mb-1">Soft Landing</p>
+              <h1 className="font-serif text-2xl font-medium tracking-tight text-stone-900">Create your profile</h1>
+              <p className="text-sm text-[var(--city-muted-fg)] mt-1.5">
+                Save your relocation progress, shortlist, and legal path.
+              </p>
+            </div>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Create your profile</h1>
-          <p className="text-sm text-muted-foreground">
-            Save your relocation progress, shortlist, and legal path.
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-sm font-medium text-stone-800">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="border-[var(--city-border)] bg-[var(--city-card)] focus-visible:ring-stone-400"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="password" className="text-sm font-medium text-stone-800">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                autoComplete="new-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="At least 6 characters"
+                className="border-[var(--city-border)] bg-[var(--city-card)] focus-visible:ring-stone-400"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="confirm" className="text-sm font-medium text-stone-800">Confirm password</Label>
+              <Input
+                id="confirm"
+                type="password"
+                autoComplete="new-password"
+                required
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                placeholder="Repeat your password"
+                className="border-[var(--city-border)] bg-[var(--city-card)] focus-visible:ring-stone-400"
+              />
+            </div>
+
+            {error && (
+              <p className="text-sm text-destructive rounded-xl border border-destructive/30 bg-destructive/5 px-3 py-2.5">
+                {error}
+              </p>
+            )}
+
+            <Button type="submit" className="w-full h-11 gap-2 rounded-full" disabled={loading}>
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <>
+                  Create profile
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
+            </Button>
+          </form>
+
+          <p className="text-center text-sm text-[var(--city-muted-fg)]">
+            Already have an account?{" "}
+            <Link href="/auth/sign-in" className="text-stone-900 hover:underline font-medium">
+              Sign in
+            </Link>
           </p>
         </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="new-password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="At least 6 characters"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="confirm">Confirm password</Label>
-            <Input
-              id="confirm"
-              type="password"
-              autoComplete="new-password"
-              required
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
-              placeholder="Repeat your password"
-            />
-          </div>
-
-          {error && (
-            <p className="text-sm text-destructive rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2">
-              {error}
-            </p>
-          )}
-
-          <Button type="submit" className="w-full h-11 gap-2" disabled={loading}>
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <>
-                Create profile
-                <ArrowRight className="h-4 w-4" />
-              </>
-            )}
-          </Button>
-        </form>
-
-        <p className="text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <Link href="/auth/sign-in" className="text-primary hover:underline font-medium">
-            Sign in
-          </Link>
-        </p>
       </div>
     </div>
   );

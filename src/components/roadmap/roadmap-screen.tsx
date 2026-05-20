@@ -22,60 +22,50 @@ export function RoadmapScreen({ roadmap }: RoadmapScreenProps) {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-6 md:py-8">
-      <div className="space-y-6">
-        <section className="overflow-hidden rounded-[30px] border bg-card shadow-sm">
-          <div className="border-b bg-[linear-gradient(135deg,rgba(15,23,42,0.98),rgba(30,41,59,0.96))] px-5 py-6 text-white md:px-7">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div className="min-w-0 space-y-3">
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-white/80">
-                  <Compass className="h-3.5 w-3.5" />
-                  Roadmap
-                </span>
-                <div className="space-y-1">
-                  <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
+      <div className="space-y-5">
+        {/* Header card */}
+        <section className="city-card overflow-hidden rounded-[28px]">
+          <div className="border-b border-[var(--city-border)] bg-[var(--city-warm-muted)] px-5 py-6 md:px-7">
+            <div className="flex flex-wrap items-start justify-between gap-5">
+              <div className="min-w-0 space-y-2">
+                <p className="city-section-kicker">Relocation roadmap</p>
+                <div>
+                  <h1 className="font-serif text-2xl font-medium tracking-tight text-stone-900 md:text-3xl">
                     {roadmap.title}
                   </h1>
-                  <p className="text-sm text-white/75 md:text-base">{roadmap.subtitle}</p>
+                  <p className="mt-1 text-sm text-[var(--city-muted-fg)] md:text-base">{roadmap.subtitle}</p>
                 </div>
-                <Link href="/app/move-brief" className="inline-flex">
+                <Link href="/app/move-brief" className="inline-flex pt-1">
                   <Button
                     variant="outline"
-                    className="border-white/15 bg-white/10 text-white hover:bg-white/15 hover:text-white"
+                    size="sm"
+                    className="rounded-full border-[var(--city-border)] text-stone-700 bg-transparent hover:bg-[var(--city-card)]"
                   >
                     View Move Brief
                   </Button>
                 </Link>
               </div>
 
-              <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-right backdrop-blur">
-                <p className="text-[11px] uppercase tracking-[0.14em] text-white/65">
-                  Move preparation
-                </p>
-                <p className="mt-1 text-3xl font-semibold">{roadmap.readinessPercent}%</p>
-                <p className="text-xs text-white/75">{readinessLabel}</p>
+              <div className="city-card rounded-2xl px-5 py-4 text-right">
+                <p className="city-section-kicker mb-1">Move preparation</p>
+                <p className="font-serif text-4xl font-medium text-stone-900">{roadmap.readinessPercent}%</p>
+                <p className="text-xs text-[var(--city-muted-fg)] mt-0.5">{readinessLabel}</p>
               </div>
             </div>
           </div>
 
           <div className="grid gap-3 px-5 py-5 md:grid-cols-3 md:px-7">
-            <SummaryCard
-              icon={Sparkles}
-              label="Current level"
-              value={currentLevel.title}
-            />
-            <SummaryCard
-              icon={Target}
-              label="Next task"
-              value={roadmap.nextTaskLabel}
-            />
+            <SummaryCard icon={Sparkles} label="Current level" value={currentLevel.title} />
+            <SummaryCard icon={Target} label="Next task" value={roadmap.nextTaskLabel} />
             <SummaryCard
               icon={Route}
               label="Status"
-              value={`${roadmap.levels.filter((level) => level.status === "completed").length} of ${roadmap.levels.length} levels completed`}
+              value={`${roadmap.levels.filter((l) => l.status === "completed").length} of ${roadmap.levels.length} levels done`}
             />
           </div>
         </section>
 
+        {/* Level list */}
         <section className="space-y-4">
           {roadmap.levels.map((level, index) => (
             <RoadmapLevelCard
@@ -102,12 +92,12 @@ function SummaryCard({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border bg-background px-4 py-4">
-      <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+    <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-card)] px-4 py-4">
+      <div className="flex items-center gap-2 city-section-kicker mb-2">
         <Icon className="h-3.5 w-3.5" />
         {label}
       </div>
-      <p className="mt-2 text-sm font-medium leading-relaxed text-foreground">{value}</p>
+      <p className="text-sm font-medium leading-snug text-stone-900">{value}</p>
     </div>
   );
 }

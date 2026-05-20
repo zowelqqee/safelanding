@@ -28,18 +28,30 @@ export async function generateMetadata({
 
 function ScoreRail({ value, invert = false }: { value: number; invert?: boolean }) {
   const display = invert ? 6 - value : value;
+  const getSegmentClass = (index: number) => {
+    if (index >= display) return "h-2.5 w-4 rounded-full bg-[var(--city-border)]";
+    if (invert) {
+      return display <= 2
+        ? "h-2.5 w-4 rounded-full bg-[var(--accent-sage)]"
+        : display === 3
+        ? "h-2.5 w-4 rounded-full bg-[var(--accent-gold)]"
+        : "h-2.5 w-4 rounded-full bg-[var(--accent-clay)]";
+    }
+    return display >= 4
+      ? "h-2.5 w-4 rounded-full bg-[var(--accent-sage)]"
+      : display === 3
+      ? "h-2.5 w-4 rounded-full bg-[var(--accent-gold)]"
+      : "h-2.5 w-4 rounded-full bg-[var(--accent-clay)]";
+  };
 
   return (
     <div className="flex items-center gap-2">
       <div className="flex gap-1">
         {Array.from({ length: 5 }).map((_, index) => (
-          <span
-            key={index}
-            className={index < display ? "h-2.5 w-4 rounded-full bg-primary" : "h-2.5 w-4 rounded-full bg-muted"}
-          />
+          <span key={index} className={getSegmentClass(index)} />
         ))}
       </div>
-      <span className="text-xs text-muted-foreground">{display}/5</span>
+      <span className="text-xs text-[var(--city-muted-fg)]">{display}/5</span>
     </div>
   );
 }
@@ -52,8 +64,8 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-[28px] border bg-card p-5 shadow-sm">
-      <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+    <section className="city-card rounded-[22px] p-5">
+      <h2 className="font-semibold text-base text-stone-900">{title}</h2>
       <div className="mt-4">{children}</div>
     </section>
   );
@@ -76,42 +88,42 @@ export default async function CountryPage({
     .join(",")}`;
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
+    <div className="city-page-wrap min-h-screen">
+      <header className="sticky top-0 z-50 border-b border-[var(--city-border)] bg-[var(--city-card)]/95 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
-          <Link href="/explore" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+          <Link href="/explore" className="flex items-center gap-2 text-sm text-[var(--city-muted-fg)] hover:text-stone-900 transition-colors">
             <Globe className="h-4 w-4" />
-            Soft Landing
+            All destinations
           </Link>
           <Link href="/start">
-            <Button size="sm">Start your move</Button>
+            <Button size="sm" className="rounded-full">Start your move</Button>
           </Link>
         </div>
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-8">
-        <div className="space-y-8">
-          <section className="rounded-[32px] border bg-card p-6 shadow-sm">
+        <div className="space-y-6">
+          <section className="city-card rounded-[28px] p-6">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
               <div className="max-w-2xl">
                 <div className="text-4xl">{country.emoji}</div>
-                <p className="mt-4 text-sm font-medium text-primary">{country.region}</p>
-                <h1 className="mt-1 text-3xl font-semibold tracking-tight">{country.name}</h1>
-                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                <p className="mt-4 city-section-kicker">{country.region}</p>
+                <h1 className="mt-1 font-serif text-3xl font-medium text-stone-900">{country.name}</h1>
+                <p className="mt-4 text-base leading-relaxed text-[var(--city-muted-fg)]">
                   {country.summary}
                 </p>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2 lg:w-[360px]">
-                <div className="rounded-2xl bg-muted/50 px-4 py-4">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Main legal blocker</p>
-                  <p className="mt-2 text-sm font-medium leading-relaxed">
+                <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
+                  <p className="city-section-kicker">Main legal blocker</p>
+                  <p className="mt-2 text-sm font-medium leading-relaxed text-stone-900">
                     {country.main_legal_blocker}
                   </p>
                 </div>
-                <div className="rounded-2xl bg-muted/50 px-4 py-4">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Main lifestyle blocker</p>
-                  <p className="mt-2 text-sm font-medium leading-relaxed">
+                <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
+                  <p className="city-section-kicker">Main lifestyle blocker</p>
+                  <p className="mt-2 text-sm font-medium leading-relaxed text-stone-900">
                     {country.main_lifestyle_blocker}
                   </p>
                 </div>
@@ -120,19 +132,19 @@ export default async function CountryPage({
 
             <div className="mt-6 flex flex-wrap gap-2">
               <Link href={`/compare?type=country&c=${country.id}`}>
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2 rounded-full border-[var(--city-border)]">
                   Compare
                   <BarChart3 className="h-4 w-4" />
                 </Button>
               </Link>
               <Link href={cityCompareHref}>
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2 rounded-full border-[var(--city-border)]">
                   Compare cities
                   <MapPin className="h-4 w-4" />
                 </Button>
               </Link>
               <Link href="/start">
-                <Button className="gap-2">
+                <Button className="gap-2 rounded-full">
                   Start my move
                   <ArrowRight className="h-4 w-4" />
                 </Button>
@@ -143,20 +155,22 @@ export default async function CountryPage({
           <SectionCard title="Does this fit you?">
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <p className="text-sm font-medium text-foreground">Good fit if</p>
-                <ul className="mt-3 space-y-2">
+                <p className="text-sm font-semibold text-stone-900 mb-2">Good fit if</p>
+                <ul className="space-y-2">
                   {country.best_for.map((item) => (
-                    <li key={item} className="text-sm text-muted-foreground">
+                    <li key={item} className="text-sm text-[var(--city-muted-fg)] flex items-start gap-1.5">
+                      <span className="text-[var(--accent-sage)] mt-0.5">·</span>
                       {item}
                     </li>
                   ))}
                 </ul>
               </div>
               <div>
-                <p className="text-sm font-medium text-foreground">Bad fit if</p>
-                <ul className="mt-3 space-y-2">
+                <p className="text-sm font-semibold text-stone-900 mb-2">Watch out if</p>
+                <ul className="space-y-2">
                   {country.watch_out.map((item) => (
-                    <li key={item} className="text-sm text-muted-foreground">
+                    <li key={item} className="text-sm text-[var(--city-muted-fg)] flex items-start gap-1.5">
+                      <span className="text-amber-500 mt-0.5">·</span>
                       {item}
                     </li>
                   ))}
@@ -169,28 +183,24 @@ export default async function CountryPage({
             <SectionCard title="Reality preview">
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm font-medium text-foreground">Lifestyle fit factors</p>
-                  <ul className="mt-2 space-y-2">
+                  <p className="text-sm font-semibold text-stone-900 mb-2">Lifestyle fit factors</p>
+                  <ul className="space-y-1.5">
                     {country.lifestyle_fit_factors.map((item) => (
-                      <li key={item} className="text-sm text-muted-foreground">
-                        {item}
-                      </li>
+                      <li key={item} className="text-sm text-[var(--city-muted-fg)]">{item}</li>
                     ))}
                   </ul>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-foreground">Legal fit factors</p>
-                  <ul className="mt-2 space-y-2">
+                  <p className="text-sm font-semibold text-stone-900 mb-2">Legal fit factors</p>
+                  <ul className="space-y-1.5">
                     {country.legal_fit_factors.map((item) => (
-                      <li key={item} className="text-sm text-muted-foreground">
-                        {item}
-                      </li>
+                      <li key={item} className="text-sm text-[var(--city-muted-fg)]">{item}</li>
                     ))}
                   </ul>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-foreground">What people usually underestimate</p>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  <p className="text-sm font-semibold text-stone-900 mb-2">What people usually underestimate</p>
+                  <p className="text-sm leading-relaxed text-[var(--city-muted-fg)]">
                     {country.what_people_underestimate}
                   </p>
                 </div>
@@ -198,33 +208,33 @@ export default async function CountryPage({
             </SectionCard>
 
             <SectionCard title="At a glance">
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-muted-foreground">Cost level</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">Cost level</span>
                   <ScoreRail value={country.cost_level} invert />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-muted-foreground">Housing difficulty</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">Housing difficulty</span>
                   <ScoreRail value={country.housing_difficulty} invert />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-muted-foreground">English friendliness</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">English friendliness</span>
                   <ScoreRail value={country.english_friendliness} />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-muted-foreground">Career upside</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">Career upside</span>
                   <ScoreRail value={country.career_opportunities} />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-muted-foreground">Study fit</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">Study fit</span>
                   <ScoreRail value={country.study_fit} />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-muted-foreground">Remote work fit</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">Remote work fit</span>
                   <ScoreRail value={country.remote_work_fit} />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-muted-foreground">Long-term stability</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">Long-term stability</span>
                   <ScoreRail value={country.long_term_stability} />
                 </div>
               </div>
@@ -234,8 +244,8 @@ export default async function CountryPage({
           <SectionCard title="First 90 days preview">
             <div className="grid gap-3 md:grid-cols-3">
               {country.first_90_days_preview.map((item) => (
-                <div key={item} className="rounded-2xl border bg-background px-4 py-4">
-                  <p className="text-sm leading-relaxed text-muted-foreground">{item}</p>
+                <div key={item} className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
+                  <p className="text-sm leading-relaxed text-[var(--city-muted-fg)]">{item}</p>
                 </div>
               ))}
             </div>
@@ -247,18 +257,18 @@ export default async function CountryPage({
                 <Link
                   key={city.id}
                   href={`/explore/${country.slug}/${city.slug}`}
-                  className="rounded-2xl border bg-background p-4 transition-colors hover:border-primary/40"
+                  className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/40 p-4 transition-colors hover:border-stone-400 hover:bg-[var(--city-warm-muted)]"
                 >
-                  <h3 className="text-base font-semibold">{city.name}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  <h3 className="text-base font-semibold text-stone-900">{city.name}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[var(--city-muted-fg)]">
                     {city.summary}
                   </p>
-                  <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+                  <div className="mt-3 space-y-1 text-xs text-[var(--city-muted-fg)]">
                     <p>Rent: {city.avg_rent_range}</p>
                     <p>Budget: {city.monthly_budget_range}</p>
                   </div>
-                  <p className="mt-4 text-sm font-medium text-primary">
-                    Choose this destination
+                  <p className="mt-4 text-sm font-medium text-stone-700">
+                    Explore city →
                   </p>
                 </Link>
               ))}
@@ -266,26 +276,26 @@ export default async function CountryPage({
           </SectionCard>
 
           <SectionCard title="Legal paths">
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 mb-4">
               These are fit assessments, not legal advice. Requirements vary and must be verified before applying.
             </div>
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2">
               {paths.map((path) => (
-                <div key={path.id} className="rounded-2xl border bg-background p-4">
+                <div key={path.id} className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/40 p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <h3 className="text-base font-semibold">{path.name}</h3>
-                      <p className="mt-1 text-sm text-muted-foreground">{path.summary}</p>
+                      <h3 className="text-base font-semibold text-stone-900">{path.name}</h3>
+                      <p className="mt-1 text-sm text-[var(--city-muted-fg)]">{path.summary}</p>
                     </div>
-                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                    <span className="rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-xs font-medium text-stone-700 shrink-0">
                       {path.estimated_preparation_time}
                     </span>
                   </div>
                   <div className="mt-4">
-                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Good fit if</p>
-                    <ul className="mt-2 space-y-1">
+                    <p className="city-section-kicker mb-2">Good fit if</p>
+                    <ul className="space-y-1">
                       {path.good_if.slice(0, 2).map((item) => (
-                        <li key={item} className="text-sm text-muted-foreground">
+                        <li key={item} className="text-sm text-[var(--city-muted-fg)]">
                           {item}
                         </li>
                       ))}

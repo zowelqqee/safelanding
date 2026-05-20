@@ -13,7 +13,7 @@ export function LandingHeaderActions() {
       <div className="flex items-center gap-2">
         <Link
           href="/explore"
-          className="text-sm text-muted-foreground hover:text-foreground hidden sm:block"
+          className="text-sm text-[var(--city-muted-fg)] hover:text-stone-900 hidden sm:block"
         >
           Explore
         </Link>
@@ -28,7 +28,7 @@ export function LandingHeaderActions() {
     <div className="flex items-center gap-2">
       <Link
         href="/explore"
-        className="text-sm text-muted-foreground hover:text-foreground hidden sm:block"
+        className="text-sm text-[var(--city-muted-fg)] hover:text-stone-900 hidden sm:block"
       >
         Explore
       </Link>

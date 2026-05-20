@@ -18,7 +18,7 @@ export function AppBottomNav() {
 
   return (
     <nav
-      className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-card border-t border-border"
+      className="md:hidden fixed bottom-0 inset-x-0 z-50 border-t border-[var(--city-border)] bg-[var(--city-card)]"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       <div className="flex items-stretch">
@@ -29,10 +29,10 @@ export function AppBottomNav() {
               key={href}
               href={href}
               className={cn(
-                "flex flex-col items-center justify-center gap-0.5 flex-1 min-h-[56px] px-2 pt-2 pb-1 text-xs font-medium transition-colors",
+                "flex flex-col items-center justify-center gap-0.5 flex-1 min-h-[56px] px-2 pt-2 pb-1 text-[11px] font-medium transition-colors",
                 isActive
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "text-stone-900"
+                  : "text-[var(--city-muted-fg)] hover:text-stone-800"
               )}
             >
               <Icon

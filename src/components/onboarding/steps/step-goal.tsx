@@ -38,19 +38,19 @@ export function StepGoal({ value, onChange, onNext, onBack }: Props) {
             onClick={() => goal.available && onChange(goal.value)}
             className={`w-full text-left p-4 rounded-xl border transition-colors min-h-[64px] ${
               !goal.available
-                ? "opacity-40 cursor-not-allowed bg-muted border-border"
+                ? "opacity-40 cursor-not-allowed border-[var(--city-border)] bg-[var(--city-warm-muted)]"
                 : value === goal.value
-                ? "border-primary bg-primary/10"
-                : "border-border bg-card hover:bg-muted"
+                ? "border-stone-800 bg-stone-100"
+                : "border-[var(--city-border)] bg-[var(--city-card)] hover:bg-[var(--city-warm-muted)]"
             }`}
           >
             <div className="flex items-center justify-between">
               <div>
-                <div className="font-medium text-sm">{goal.label}</div>
-                <div className="text-xs text-muted-foreground mt-0.5">{goal.description}</div>
+                <div className="font-medium text-sm text-stone-900">{goal.label}</div>
+                <div className="text-xs text-[var(--city-muted-fg)] mt-0.5">{goal.description}</div>
               </div>
               {!goal.available && (
-                <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full ml-2 shrink-0">
+                <span className="text-xs text-[var(--city-muted-fg)] bg-[var(--city-warm-muted)] border border-[var(--city-border)] px-2 py-0.5 rounded-full ml-2 shrink-0">
                   Soon
                 </span>
               )}
@@ -60,8 +60,8 @@ export function StepGoal({ value, onChange, onNext, onBack }: Props) {
       </div>
 
       <div className="flex gap-3 mt-auto pt-4">
-        <Button variant="outline" onClick={onBack} className="flex-1 h-11">Back</Button>
-        <Button onClick={onNext} disabled={!value} className="flex-1 h-11">Continue</Button>
+        <Button variant="outline" onClick={onBack} className="flex-1 h-11 rounded-full border-[var(--city-border)]">Back</Button>
+        <Button onClick={onNext} disabled={!value} className="flex-1 h-11 rounded-full">Continue</Button>
       </div>
     </div>
   );

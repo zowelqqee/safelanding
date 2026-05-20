@@ -29,13 +29,13 @@ function getStatusClasses(status: RoadmapStatus) {
     case "completed":
       return "border-emerald-200 bg-emerald-50 text-emerald-700";
     case "active":
-      return "border-sky-200 bg-sky-50 text-sky-700";
+      return "border-amber-200 bg-amber-50 text-amber-700";
     case "waiting":
       return "border-amber-200 bg-amber-50 text-amber-700";
     case "blocked":
       return "border-rose-200 bg-rose-50 text-rose-700";
     default:
-      return "border-border bg-muted text-muted-foreground";
+      return "border-[var(--city-border)] bg-[var(--city-warm-muted)] text-[var(--city-muted-fg)]";
   }
 }
 
@@ -45,7 +45,7 @@ function StatusIcon({ status }: { status: RoadmapStatus }) {
   }
 
   if (status === "active") {
-    return <CircleDot className="h-4 w-4 text-sky-600" />;
+    return <CircleDot className="h-4 w-4 text-amber-600" />;
   }
 
   if (status === "waiting") {
@@ -56,7 +56,7 @@ function StatusIcon({ status }: { status: RoadmapStatus }) {
     return <AlertTriangle className="h-4 w-4 text-rose-600" />;
   }
 
-  return <Lock className="h-4 w-4 text-muted-foreground" />;
+  return <Lock className="h-4 w-4 text-[var(--city-muted-fg)]" />;
 }
 
 interface RoadmapNodeProps {
@@ -70,11 +70,11 @@ export function RoadmapNode({ node }: RoadmapNodeProps) {
     <div
       className={cn(
         "rounded-[22px] border px-4 py-3 transition-colors",
-        node.status === "active" && "border-sky-200 bg-[linear-gradient(180deg,rgba(240,249,255,0.98),rgba(248,250,252,0.98))] shadow-[0_0_0_1px_rgba(186,230,253,0.5)]",
-        node.status === "completed" && "border-emerald-200 bg-[linear-gradient(180deg,rgba(236,253,245,0.96),rgba(240,253,250,0.98))]",
-        node.status === "locked" && "border-dashed border-border bg-[rgba(248,250,252,0.82)] opacity-90",
-        node.status === "waiting" && "border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,0.96),rgba(255,255,255,0.98))]",
-        isInteractive && "hover:border-sky-300 hover:bg-sky-50"
+        node.status === "active" && "border-amber-300/70 bg-amber-50/80",
+        node.status === "completed" && "border-emerald-200 bg-emerald-50/60",
+        node.status === "locked" && "border-dashed border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 opacity-80",
+        node.status === "waiting" && "border-amber-200 bg-amber-50/60",
+        isInteractive && "hover:border-amber-400 hover:bg-amber-50"
       )}
     >
       <div className="flex items-start gap-3">
@@ -83,7 +83,7 @@ export function RoadmapNode({ node }: RoadmapNodeProps) {
         </div>
         <div className="min-w-0 flex-1 space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <p className="text-sm font-medium text-foreground">{node.title}</p>
+            <p className="text-sm font-medium text-stone-900">{node.title}</p>
             <span
               className={cn(
                 "inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.12em]",
@@ -94,12 +94,12 @@ export function RoadmapNode({ node }: RoadmapNodeProps) {
             </span>
           </div>
           {node.description && (
-            <p className="text-xs leading-relaxed text-muted-foreground">
+            <p className="text-xs leading-relaxed text-[var(--city-muted-fg)]">
               {node.description}
             </p>
           )}
           {isInteractive && (
-            <p className="text-xs font-medium text-sky-700">
+            <p className="text-xs font-medium text-amber-700">
               {node.status === "completed" ? "Review or update" : "Continue"}
             </p>
           )}

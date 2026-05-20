@@ -7,31 +7,31 @@ import { RoadmapNode } from "./roadmap-node";
 
 function getLevelStatusCopy(status: RoadmapStatus) {
   switch (status) {
-    case "completed":
-      return "Completed";
-    case "active":
-      return "In progress";
-    case "waiting":
-      return "Waiting";
-    case "blocked":
-      return "Blocked";
-    default:
-      return "Locked";
+    case "completed": return "Completed";
+    case "active": return "In progress";
+    case "waiting": return "Waiting";
+    case "blocked": return "Blocked";
+    default: return "Locked";
   }
 }
 
 function getLevelStatusClasses(status: RoadmapStatus) {
   switch (status) {
-    case "completed":
-      return "border-emerald-200 bg-emerald-50 text-emerald-700";
-    case "active":
-      return "border-sky-200 bg-sky-50 text-sky-700";
-    case "waiting":
-      return "border-amber-200 bg-amber-50 text-amber-700";
-    case "blocked":
-      return "border-rose-200 bg-rose-50 text-rose-700";
-    default:
-      return "border-border bg-muted text-muted-foreground";
+    case "completed": return "border-emerald-200 bg-emerald-50 text-emerald-700";
+    case "active": return "border-amber-200 bg-amber-50 text-amber-800";
+    case "waiting": return "border-stone-200 bg-stone-50 text-stone-600";
+    case "blocked": return "border-rose-200 bg-rose-50 text-rose-700";
+    default: return "border-[var(--city-border)] bg-[var(--city-warm-muted)] text-[var(--city-muted-fg)]";
+  }
+}
+
+function getProgressBarClass(status: RoadmapStatus) {
+  switch (status) {
+    case "completed": return "bg-emerald-500";
+    case "active": return "bg-amber-500";
+    case "waiting": return "bg-stone-400";
+    case "blocked": return "bg-rose-500";
+    default: return "bg-[var(--city-border)]";
   }
 }
 
@@ -51,26 +51,27 @@ export function RoadmapLevelCard({
   const isLocked = level.status === "locked";
   const footerCopy =
     level.status === "completed"
-      ? `This level is complete. Your next focus is ${currentLevelTitle}.`
+      ? `Complete. Next focus: ${currentLevelTitle}.`
       : level.id === "prepare-documents" && level.status === "active"
-        ? "Verified document guidance comes later. This stage unlocks with partner-reviewed support."
-      : level.status === "active"
-        ? "Complete the current step to keep your move progressing."
-        : "This stage unlocks after your move profile is complete.";
+        ? "Verified document guidance comes after partner-reviewed support is unlocked."
+        : level.status === "active"
+          ? "Complete this step to keep your move progressing."
+          : "Unlocks after your move profile is further along.";
 
   return (
     <section className="relative pl-6">
       {index > 0 && (
-        <div className="absolute bottom-full left-[11px] top-[-20px] w-px bg-[linear-gradient(180deg,rgba(148,163,184,0.15),rgba(148,163,184,0.7),rgba(148,163,184,0.15))]" />
+        <div className="absolute bottom-full left-[11px] top-[-20px] w-px bg-[linear-gradient(180deg,rgba(180,160,120,0.1),rgba(180,160,120,0.5),rgba(180,160,120,0.1))]" />
       )}
 
+      {/* Level dot */}
       <div
         className={cn(
           "route-dot absolute left-0 top-6 flex h-6 w-6 items-center justify-center rounded-full border text-[11px] font-semibold",
-          level.status === "completed" && "border-emerald-300 bg-[linear-gradient(180deg,#ecfdf5,#d1fae5)] text-emerald-700",
-          level.status === "active" && "border-sky-300 bg-[linear-gradient(180deg,#f0f9ff,#e0f2fe)] text-sky-700",
-          level.status === "locked" && "border-border bg-background text-muted-foreground",
-          level.status === "waiting" && "border-amber-200 bg-[linear-gradient(180deg,#fffbeb,#fef3c7)] text-amber-700",
+          level.status === "completed" && "border-emerald-300 bg-emerald-50 text-emerald-700",
+          level.status === "active" && "border-amber-300 bg-amber-50 text-amber-700",
+          level.status === "locked" && "border-[var(--city-border)] bg-[var(--city-warm-muted)] text-[var(--city-muted-fg)]",
+          level.status === "waiting" && "border-stone-300 bg-stone-50 text-stone-600",
           level.status === "blocked" && "border-rose-200 bg-rose-50 text-rose-700"
         )}
       >
@@ -79,99 +80,96 @@ export function RoadmapLevelCard({
 
       <div
         className={cn(
-          "surface-card rounded-[26px] p-5 transition-colors",
-          isCurrent && "border-sky-200 shadow-[0_0_0_1px_rgba(125,211,252,0.22),0_16px_36px_rgba(15,23,42,0.05)]",
-          isLocked && "opacity-95"
+          "city-card rounded-[24px] p-5 transition-colors",
+          isCurrent && "border-amber-300/60 shadow-[0_0_0_1px_rgba(217,119,6,0.12),0_12px_28px_rgba(120,80,20,0.07)]",
+          isLocked && "opacity-80"
         )}
       >
         <div className="flex flex-wrap items-start gap-3">
-          <div className="min-w-0 flex-1 space-y-2">
+          <div className="min-w-0 flex-1 space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-base font-semibold tracking-tight text-foreground">
+              <h2 className="text-base font-semibold tracking-tight text-stone-900">
                 {level.title}
               </h2>
               <span
                 className={cn(
-                  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium tracking-[0.12em] uppercase",
+                  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium tracking-[0.10em] uppercase",
                   getLevelStatusClasses(level.status)
                 )}
               >
                 {getLevelStatusCopy(level.status)}
               </span>
             </div>
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <p className="text-sm leading-relaxed text-[var(--city-muted-fg)]">
               {level.description}
             </p>
           </div>
 
           {isCurrent && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-[11px] font-medium text-sky-700">
+            <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-800">
               <Sparkles className="h-3.5 w-3.5" />
               Active now
             </span>
           )}
         </div>
 
-        <div className="mt-4 space-y-2">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+        {/* Progress bar */}
+        <div className="mt-4 space-y-1.5">
+          <div className="flex items-center justify-between text-xs text-[var(--city-muted-fg)]">
             <span>Progress</span>
-            <span className="font-medium text-foreground">{level.progress}%</span>
+            <span className="font-medium text-stone-800">{level.progress}%</span>
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-muted">
+          <div className="h-1.5 overflow-hidden rounded-full bg-[var(--city-warm-muted)]">
             <div
-              className={cn(
-                "h-full rounded-full transition-all duration-500",
-                level.status === "completed" && "bg-emerald-500",
-                level.status === "active" && "bg-sky-500",
-                level.status === "locked" && "bg-border",
-                level.status === "waiting" && "bg-amber-500",
-                level.status === "blocked" && "bg-rose-500"
-              )}
+              className={cn("h-full rounded-full transition-all duration-500", getProgressBarClass(level.status))}
               style={{ width: `${level.progress}%` }}
             />
           </div>
         </div>
 
-        <div className="mt-5 space-y-3">
+        {/* Nodes */}
+        <div className="mt-5 space-y-2.5">
           {level.nodes.map((node) => (
             <RoadmapNode key={node.id} node={node} />
           ))}
         </div>
 
+        {/* CTA */}
         {level.ctaLabel && level.status === "active" && (
-          <div className="mt-4 rounded-2xl border border-sky-200 bg-sky-50/70 px-4 py-4">
+          <div className="mt-4 rounded-2xl border border-amber-200/60 bg-amber-50/50 px-4 py-4">
             {level.ctaDescription && (
-              <p className="text-sm leading-relaxed text-sky-800">{level.ctaDescription}</p>
+              <p className="text-sm leading-relaxed text-amber-900">{level.ctaDescription}</p>
             )}
-            <Button disabled className="mt-3 h-11 w-full md:w-auto">
+            <Button disabled className="mt-3 h-10 w-full rounded-full md:w-auto">
               {level.ctaLabel}
             </Button>
           </div>
         )}
 
         {level.id === "prepare-documents" && level.status === "active" && (
-          <div className="mt-4 flex flex-col gap-3 md:flex-row">
+          <div className="mt-4 flex flex-col gap-2.5 md:flex-row">
             <Link href="/app/partner-review" className="inline-flex">
-              <Button className="h-11 w-full md:w-auto">
+              <Button className="h-10 w-full rounded-full md:w-auto">
                 Request partner review
               </Button>
             </Link>
             <Link href="/app/move-brief" className="inline-flex">
-              <Button variant="outline" className="h-11 w-full md:w-auto">
+              <Button variant="outline" className="h-10 w-full rounded-full md:w-auto border-[var(--city-border)]">
                 View Move Brief
               </Button>
             </Link>
           </div>
         )}
 
+        {/* Footer note */}
         <div
           className={cn(
             "mt-4 flex items-center gap-2 rounded-2xl px-4 py-3 text-xs",
-            level.status === "completed" && "border border-emerald-200 bg-emerald-50 text-emerald-700",
-            level.status === "active" && "border border-sky-200 bg-sky-50 text-sky-700",
+            level.status === "completed" && "border border-emerald-200/60 bg-emerald-50/60 text-emerald-800",
+            level.status === "active" && "border border-amber-200/60 bg-amber-50/50 text-amber-900",
             level.status !== "completed" &&
               level.status !== "active" &&
-              "border border-dashed border-border bg-background text-muted-foreground"
+              "border border-dashed border-[var(--city-border)] bg-[var(--city-warm-muted)]/50 text-[var(--city-muted-fg)]"
           )}
         >
           {level.status === "completed" ? (

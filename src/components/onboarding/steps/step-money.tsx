@@ -56,8 +56,8 @@ function OptionGrid<T extends string>({
           onClick={() => onSelect(opt.value)}
           className={`h-11 rounded-lg border text-sm font-medium transition-colors ${
             selected === opt.value
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border bg-card text-foreground hover:bg-muted"
+              ? "border-stone-800 bg-stone-100 text-stone-900"
+              : "border-[var(--city-border)] bg-[var(--city-card)] text-stone-700 hover:bg-[var(--city-warm-muted)]"
           }`}
         >
           {opt.label}
@@ -108,8 +108,8 @@ export function StepMoney({ monthlyIncome, savingsRange, incomeType, onChange, o
       </div>
 
       <div className="flex gap-3 mt-auto pt-4">
-        <Button variant="outline" onClick={onBack} className="flex-1 h-11">Back</Button>
-        <Button onClick={onNext} disabled={!canContinue} className="flex-1 h-11">Continue</Button>
+        <Button variant="outline" onClick={onBack} className="flex-1 h-11 rounded-full border-[var(--city-border)]">Back</Button>
+        <Button onClick={onNext} disabled={!canContinue} className="flex-1 h-11 rounded-full">Continue</Button>
       </div>
     </div>
   );

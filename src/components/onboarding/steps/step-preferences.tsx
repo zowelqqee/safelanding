@@ -56,10 +56,10 @@ export function StepPreferences({ selected, onChange, onNext, onBack }: Props) {
               onClick={() => toggle(pref.value)}
               className={`h-12 rounded-xl border text-sm font-medium transition-colors flex items-center gap-2 px-3 ${
                 isSelected
-                  ? "border-primary bg-primary/10 text-primary"
+                  ? "border-stone-800 bg-stone-100 text-stone-900"
                   : isDisabled
-                  ? "opacity-40 cursor-not-allowed border-border bg-card"
-                  : "border-border bg-card hover:bg-muted"
+                  ? "opacity-40 cursor-not-allowed border-[var(--city-border)] bg-[var(--city-card)]"
+                  : "border-[var(--city-border)] bg-[var(--city-card)] text-stone-700 hover:bg-[var(--city-warm-muted)]"
               }`}
             >
               <span>{pref.emoji}</span>
@@ -70,14 +70,14 @@ export function StepPreferences({ selected, onChange, onNext, onBack }: Props) {
       </div>
 
       {selected.length > 0 && (
-        <p className="text-xs text-muted-foreground text-center">
+        <p className="text-xs text-[var(--city-muted-fg)] text-center">
           {selected.length} of {MAX_SELECT} selected
         </p>
       )}
 
       <div className="flex gap-3 mt-auto pt-4">
-        <Button variant="outline" onClick={onBack} className="flex-1 h-11">Back</Button>
-        <Button onClick={onNext} disabled={selected.length === 0} className="flex-1 h-11">Continue</Button>
+        <Button variant="outline" onClick={onBack} className="flex-1 h-11 rounded-full border-[var(--city-border)]">Back</Button>
+        <Button onClick={onNext} disabled={selected.length === 0} className="flex-1 h-11 rounded-full">Continue</Button>
       </div>
     </div>
   );

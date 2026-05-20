@@ -16,18 +16,18 @@ export default async function PartnerReviewPage() {
   if (!user || !profile) {
     return (
       <div className="mx-auto max-w-xl px-4 py-8">
-        <div className="rounded-[28px] border bg-card p-6 text-center shadow-sm">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
-            <FileText className="h-6 w-6 text-primary" />
+        <div className="city-card rounded-[28px] p-8 text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]">
+            <FileText className="h-6 w-6 text-stone-600" />
           </div>
-          <h1 className="mt-5 text-2xl font-semibold tracking-tight">
+          <h1 className="mt-5 font-serif text-2xl font-medium text-stone-900">
             Build your Move Brief first
           </h1>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          <p className="mt-2 text-sm leading-relaxed text-[var(--city-muted-fg)]">
             Choose your destination, legal path, and roadmap details first, then you can request partner review here.
           </p>
           <Link href="/app/roadmap" className="mt-6 inline-flex">
-            <Button size="lg" className="gap-2">
+            <Button size="lg" className="gap-2 rounded-full">
               View roadmap
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -43,11 +43,11 @@ export default async function PartnerReviewPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-6 md:py-8">
       <div className="space-y-5">
-        <section className="surface-card-strong overflow-hidden rounded-[30px]">
-          <div className="border-b bg-[linear-gradient(135deg,rgba(15,23,42,0.98),rgba(30,41,59,0.96))] px-5 py-6 text-white md:px-7">
+        <section className="city-card overflow-hidden rounded-[28px]">
+          <div className="border-b border-[var(--city-border)] bg-[var(--city-warm-muted)] px-5 py-6 md:px-7">
             <Link
               href="/app/move-brief"
-              className="inline-flex items-center gap-2 text-sm text-white/75 transition-colors hover:text-white"
+              className="inline-flex items-center gap-2 text-sm text-[var(--city-muted-fg)] transition-colors hover:text-stone-900"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to Move Brief
@@ -55,26 +55,24 @@ export default async function PartnerReviewPage() {
 
             <div className="mt-5 flex flex-wrap items-start justify-between gap-4">
               <div className="min-w-0 space-y-3">
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-white/80">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[var(--city-border)] bg-[var(--city-card)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-stone-700">
                   <ShieldCheck className="h-3.5 w-3.5" />
                   Partner review
                 </span>
                 <div className="space-y-1">
-                  <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
+                  <h1 className="font-serif text-2xl font-medium text-stone-900 md:text-3xl">
                     Request partner review
                   </h1>
-                  <p className="max-w-2xl text-sm leading-relaxed text-white/75 md:text-base">
+                  <p className="max-w-2xl text-sm leading-relaxed text-[var(--city-muted-fg)] md:text-base">
                     We&apos;ll use your Move Brief to help a verified relocation partner understand your situation faster.
                   </p>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-right">
-                <p className="text-[11px] uppercase tracking-[0.14em] text-white/65">
-                  Move brief
-                </p>
-                <p className="mt-1 text-lg font-semibold">{brief.headline}</p>
-                <p className="text-xs text-white/75">{brief.destination.legalPath}</p>
+              <div className="city-card rounded-2xl px-4 py-3 text-right">
+                <p className="city-section-kicker">Move brief</p>
+                <p className="mt-1 text-base font-semibold text-stone-900">{brief.headline}</p>
+                <p className="text-xs text-[var(--city-muted-fg)]">{brief.destination.legalPath}</p>
               </div>
             </div>
           </div>
@@ -96,7 +94,7 @@ export default async function PartnerReviewPage() {
           existingRequest={existingRequest}
         />
 
-        <div className="rounded-2xl border border-dashed bg-background/75 px-4 py-4 text-sm text-muted-foreground">
+        <div className="rounded-2xl border border-dashed border-[var(--city-border)] bg-[var(--city-warm-muted)]/40 px-4 py-4 text-sm text-[var(--city-muted-fg)]">
           This request saves contact context only. No document checklist, file upload, payment, or real partner integration is active yet.
         </div>
       </div>
@@ -112,11 +110,9 @@ function SummaryCard({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border border-border/80 bg-background/88 px-4 py-4">
-      <p className="editorial-kicker text-muted-foreground">
-        {label}
-      </p>
-      <p className="mt-2 text-sm font-medium leading-relaxed text-foreground">{value}</p>
+    <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
+      <p className="city-section-kicker">{label}</p>
+      <p className="mt-2 text-sm font-medium leading-relaxed text-stone-900">{value}</p>
     </div>
   );
 }

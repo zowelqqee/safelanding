@@ -33,54 +33,39 @@ export default async function MoveBriefPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-6 md:py-8">
-      <div className="space-y-5">
-        <section className="surface-card-strong overflow-hidden rounded-[30px]">
-          <div className="border-b bg-[linear-gradient(135deg,rgba(15,23,42,0.98),rgba(30,41,59,0.96))] px-5 py-6 text-white md:px-7">
+      <div className="space-y-4">
+        <section className="city-card overflow-hidden rounded-[28px]">
+          <div className="border-b border-[var(--city-border)] bg-[var(--city-warm-muted)] px-5 py-6 md:px-7">
             <Link
               href="/app/roadmap"
-              className="inline-flex items-center gap-2 text-sm text-white/75 transition-colors hover:text-white"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--city-muted-fg)] transition-colors hover:text-stone-900"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-3.5 w-3.5" />
               Back to roadmap
             </Link>
 
             <div className="mt-5 flex flex-wrap items-start justify-between gap-4">
-              <div className="min-w-0 space-y-3">
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-white/80">
-                  <FileText className="h-3.5 w-3.5" />
-                  Move brief
-                </span>
-                <div className="space-y-1">
-                  <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
-                    Your Move Brief
-                  </h1>
-                  <p className="max-w-xl text-sm leading-relaxed text-white/75 md:text-base">
-                    A clear summary of your destination, legal path, blockers, and next step.
-                  </p>
-                </div>
+              <div className="min-w-0 space-y-2">
+                <p className="city-section-kicker">Move Brief</p>
+                <h1 className="font-serif text-2xl font-medium tracking-tight text-stone-900 md:text-3xl">
+                  Your Move Brief
+                </h1>
+                <p className="max-w-xl text-sm leading-relaxed text-[var(--city-muted-fg)] md:text-base">
+                  A clear summary of your destination, legal path, blockers, and next step.
+                </p>
               </div>
 
-              <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-right">
-                <p className="text-[11px] uppercase tracking-[0.14em] text-white/65">
-                  Current stage
-                </p>
-                <p className="mt-1 text-lg font-semibold">{brief.destination.currentStage}</p>
-                <p className="text-xs text-white/75">{brief.destination.legalPath}</p>
+              <div className="city-card rounded-2xl px-4 py-3 text-right">
+                <p className="city-section-kicker mb-1">Current stage</p>
+                <p className="font-serif text-lg font-medium text-stone-900">{brief.destination.currentStage}</p>
+                <p className="text-xs text-[var(--city-muted-fg)] mt-0.5">{brief.destination.legalPath}</p>
               </div>
             </div>
           </div>
 
           <div className="grid gap-3 px-5 py-5 md:grid-cols-2 md:px-7">
-            <SummaryCard
-              icon={MapPin}
-              label="Destination"
-              value={`${brief.headline}`}
-            />
-            <SummaryCard
-              icon={Route}
-              label="Move goal"
-              value={brief.destination.moveGoal}
-            />
+            <SummaryCard icon={MapPin} label="Destination" value={brief.headline} />
+            <SummaryCard icon={Route} label="Move goal" value={brief.destination.moveGoal} />
           </div>
         </section>
 
@@ -108,13 +93,9 @@ export default async function MoveBriefPage() {
                   <DetailCard label="Current stage" value={brief.destination.currentStage} />
                 </div>
 
-                <div className="rounded-2xl border border-border/80 bg-muted/35 px-4 py-4">
-                  <p className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
-                    Goal
-                  </p>
-                  <p className="mt-2 text-sm font-medium text-foreground">
-                    {brief.destination.moveGoal}
-                  </p>
+                <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/40 px-4 py-4">
+                  <p className="city-section-kicker mb-1.5">Goal</p>
+                  <p className="text-sm font-medium text-stone-900">{brief.destination.moveGoal}</p>
                 </div>
               </div>
             </Card>
@@ -182,21 +163,19 @@ export default async function MoveBriefPage() {
                 subtitle="The safest next move before any document-level work exists in product."
               />
               <div className="space-y-4 px-5 py-5">
-                <div className="rounded-2xl border border-sky-200 bg-sky-50/80 px-4 py-4">
-                  <p className="editorial-kicker text-sky-700">
-                    Primary next step
-                  </p>
-                  <p className="mt-2 text-sm font-medium text-sky-950">
+                <div className="rounded-2xl border border-amber-200/60 bg-amber-50/50 px-4 py-4">
+                  <p className="city-section-kicker mb-1.5">Primary next step</p>
+                  <p className="text-sm font-medium text-stone-900">
                     Request partner-reviewed document guidance
                   </p>
-                  <p className="mt-1 text-sm leading-relaxed text-sky-900">
+                  <p className="mt-1 text-sm leading-relaxed text-[var(--city-muted-fg)]">
                     Use this brief to prepare a cleaner handoff before document guidance is unlocked.
                   </p>
                 </div>
 
                 <div className="space-y-2">
                   <Link href="/app/partner-review" className="block">
-                    <Button className="h-11 w-full justify-between gap-2">
+                    <Button className="h-10 w-full justify-between gap-2 rounded-full">
                       Request partner review
                       <ArrowRight className="h-4 w-4" />
                     </Button>
@@ -258,20 +237,14 @@ export default async function MoveBriefPage() {
 }
 
 function Card({ children }: { children: React.ReactNode }) {
-  return <section className="surface-card overflow-hidden rounded-[26px]">{children}</section>;
+  return <section className="city-card overflow-hidden rounded-[24px]">{children}</section>;
 }
 
-function CardHeader({
-  title,
-  subtitle,
-}: {
-  title: string;
-  subtitle: string;
-}) {
+function CardHeader({ title, subtitle }: { title: string; subtitle: string }) {
   return (
-    <div className="paper-divider border-b px-5 py-4">
-      <h2 className="text-base font-semibold tracking-tight text-foreground">{title}</h2>
-      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{subtitle}</p>
+    <div className="border-b border-[var(--city-border)] px-5 py-4">
+      <h2 className="text-sm font-semibold tracking-tight text-stone-900">{title}</h2>
+      <p className="mt-1 text-xs leading-relaxed text-[var(--city-muted-fg)]">{subtitle}</p>
     </div>
   );
 }
@@ -286,29 +259,21 @@ function SummaryCard({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border border-border/80 bg-background/88 px-4 py-4">
-      <div className="flex items-center gap-2 editorial-kicker text-muted-foreground">
+    <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/50 px-4 py-4">
+      <div className="flex items-center gap-2 city-section-kicker mb-2">
         <Icon className="h-3.5 w-3.5" />
         {label}
       </div>
-      <p className="mt-2 text-sm font-medium leading-relaxed text-foreground">{value}</p>
+      <p className="text-sm font-medium leading-snug text-stone-900">{value}</p>
     </div>
   );
 }
 
-function DetailCard({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
+function DetailCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-border/80 bg-background/88 px-4 py-4">
-      <p className="editorial-kicker text-muted-foreground">
-        {label}
-      </p>
-      <p className="mt-2 text-sm font-medium leading-relaxed text-foreground">{value}</p>
+    <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/40 px-4 py-4">
+      <p className="city-section-kicker mb-1.5">{label}</p>
+      <p className="text-sm font-medium leading-snug text-stone-900">{value}</p>
     </div>
   );
 }
@@ -320,15 +285,18 @@ function FitCard({
   label: string;
   fit: { label: "Strong" | "Medium" | "Weak"; score?: number };
 }) {
+  const fitColor =
+    fit.label === "Strong" ? "text-emerald-700 border-emerald-200 bg-emerald-50" :
+    fit.label === "Weak" ? "text-rose-700 border-rose-200 bg-rose-50" :
+    "text-amber-700 border-amber-200 bg-amber-50";
+
   return (
-    <div className="rounded-2xl border border-border/80 bg-background/88 px-4 py-4">
-      <p className="editorial-kicker text-muted-foreground">
-        {label}
-      </p>
-      <div className="mt-2 flex items-center justify-between gap-3">
-        <span className="text-sm font-medium text-foreground">{fit.label}</span>
+    <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/40 px-4 py-4">
+      <p className="city-section-kicker mb-2">{label}</p>
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-sm font-medium text-stone-900">{fit.label}</span>
         {typeof fit.score === "number" && (
-          <span className="inline-flex items-center rounded-full border bg-muted px-2.5 py-1 text-xs font-medium text-foreground">
+          <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${fitColor}`}>
             {fit.score}%
           </span>
         )}
@@ -339,22 +307,22 @@ function FitCard({
 
 function EmptyState() {
   return (
-    <div className="w-full rounded-[28px] border bg-card p-6 text-center shadow-sm">
-      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
-        <CheckCircle2 className="h-6 w-6 text-primary" />
+    <div className="w-full city-card rounded-[28px] p-8 text-center">
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]">
+        <CheckCircle2 className="h-6 w-6 text-stone-600" />
       </div>
-      <h1 className="mt-5 text-2xl font-semibold tracking-tight">Build your move brief</h1>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+      <h1 className="mt-5 font-serif text-2xl font-medium text-stone-900">Build your move brief</h1>
+      <p className="mt-2 text-sm leading-relaxed text-[var(--city-muted-fg)]">
         Finish your destination, legal path, and roadmap choices first, then we&apos;ll summarize your plan here.
       </p>
       <Link href="/app/roadmap" className="mt-6 inline-flex">
-        <Button size="lg" className="gap-2">
+        <Button size="lg" className="gap-2 rounded-full">
           View roadmap
           <ArrowRight className="h-4 w-4" />
         </Button>
       </Link>
-      <Link href="/start" className="mt-3 inline-flex">
-        <Button variant="outline" size="lg" className="gap-2">
+      <Link href="/start" className="mt-3 inline-flex ml-3">
+        <Button variant="outline" size="lg" className="gap-2 rounded-full border-[var(--city-border)]">
           Start onboarding
           <Globe className="h-4 w-4" />
         </Button>

@@ -402,11 +402,11 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
   const progress = Math.round((state.step / CONTENT_STEPS) * 100);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="city-page-wrap min-h-screen flex flex-col">
       {showProgress && (
-        <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-border">
+        <div className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-[var(--city-border)]">
           <motion.div
-            className="h-full bg-primary"
+            className="h-full bg-stone-700"
             initial={false}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}
@@ -417,7 +417,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       <div className="flex-1 flex flex-col max-w-lg mx-auto w-full px-4 py-8">
         {!isPreview && (
           <div className="flex justify-end pb-3">
-            <SignOutButton variant="ghost" size="sm" className="text-muted-foreground" />
+            <SignOutButton variant="ghost" size="sm" className="text-[var(--city-muted-fg)]" />
           </div>
         )}
 

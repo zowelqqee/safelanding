@@ -36,12 +36,16 @@ function ScoreRail({ value, invert = false }: { value: number; invert?: boolean 
             key={index}
             className={cn(
               "h-2.5 w-4 rounded-full",
-              index < display ? "bg-primary" : "bg-muted"
+              index < display
+                ? (invert
+                  ? display <= 2 ? "bg-[var(--accent-sage)]" : display === 3 ? "bg-[var(--accent-gold)]" : "bg-[var(--accent-clay)]"
+                  : display >= 4 ? "bg-[var(--accent-sage)]" : display === 3 ? "bg-[var(--accent-gold)]" : "bg-[var(--accent-clay)]")
+                : "bg-[var(--city-border)]"
             )}
           />
         ))}
       </div>
-      <span className="text-xs text-muted-foreground">{display}/5</span>
+      <span className="text-xs text-[var(--city-muted-fg)]">{display}/5</span>
     </div>
   );
 }
@@ -121,7 +125,7 @@ function CompareToggle({
   onChange: (mode: CompareMode) => void;
 }) {
   return (
-    <div className="inline-flex rounded-full border bg-card p-1">
+    <div className="inline-flex rounded-full border border-[var(--city-border)] bg-[var(--city-card)] p-1">
       {(["country", "city"] as const).map((value) => (
         <button
           key={value}
@@ -130,8 +134,8 @@ function CompareToggle({
           className={cn(
             "rounded-full px-4 py-2 text-sm font-medium transition-colors",
             mode === value
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:text-foreground"
+              ? "bg-stone-800 text-white"
+              : "text-[var(--city-muted-fg)] hover:text-stone-900"
           )}
         >
           {value === "country" ? "Countries" : "Cities"}
@@ -154,7 +158,7 @@ function ChipSelector({
 }) {
   return (
     <div className="space-y-2">
-      <p className="text-sm font-medium text-foreground">{label}</p>
+      <p className="text-sm font-medium text-stone-900">{label}</p>
       <div className="flex flex-wrap gap-2">
         {options.map((option) => {
           const active = selected.includes(option.id);
@@ -167,8 +171,8 @@ function ChipSelector({
               className={cn(
                 "rounded-full border px-3 py-2 text-left text-sm transition-colors",
                 active
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-card hover:border-primary/40"
+                  ? "border-stone-800 bg-stone-800 text-white"
+                  : "border-[var(--city-border)] bg-[var(--city-card)] hover:border-stone-400 text-stone-700"
               )}
             >
               <span className="flex items-center gap-2">
@@ -176,7 +180,7 @@ function ChipSelector({
                 <span>{option.title}</span>
               </span>
               {option.subtitle && (
-                <span className={cn("mt-1 block text-xs", active ? "text-primary-foreground/80" : "text-muted-foreground")}>
+                <span className={cn("mt-1 block text-xs", active ? "text-white/80" : "text-[var(--city-muted-fg)]")}>
                   {option.subtitle}
                 </span>
               )}
@@ -197,7 +201,7 @@ function MetricList({
     <div className="space-y-3">
       {items.map((item) => (
         <div key={item.label} className="flex items-start justify-between gap-4">
-          <span className="text-sm text-muted-foreground">{item.label}</span>
+          <span className="text-sm text-[var(--city-muted-fg)]">{item.label}</span>
           <div className="text-right">{item.value}</div>
         </div>
       ))}
@@ -213,31 +217,31 @@ function CountryCompareCard({
   fit: ReturnType<typeof matchCountries>[number];
 }) {
   return (
-    <div className="surface-card-strong rounded-[28px] p-5">
+    <div className="city-card rounded-[22px] p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="text-3xl">{country.emoji}</div>
-          <h2 className="mt-3 text-lg font-semibold">{country.name}</h2>
-          <p className="text-sm text-muted-foreground">{country.region}</p>
+          <h2 className="mt-3 text-lg font-semibold text-stone-900">{country.name}</h2>
+          <p className="text-sm text-[var(--city-muted-fg)]">{country.region}</p>
         </div>
-        <span className="rounded-full border border-primary/15 bg-primary/8 px-3 py-1 text-sm font-semibold text-primary">
+        <span className="rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-sm font-semibold text-stone-700">
           {fit.overallFit}% overall
         </span>
       </div>
 
-      <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{country.summary}</p>
+      <p className="mt-4 text-sm leading-relaxed text-[var(--city-muted-fg)]">{country.summary}</p>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-border/70 bg-background/80 px-3 py-3">
-          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Lifestyle fit</p>
-          <p className="mt-1 text-2xl font-semibold">{fit.lifestyleFit}%</p>
+        <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-3 py-3">
+          <p className="city-section-kicker">Lifestyle fit</p>
+          <p className="mt-1 text-2xl font-semibold text-stone-900">{fit.lifestyleFit}%</p>
         </div>
-        <div className="rounded-2xl border border-border/70 bg-background/80 px-3 py-3">
-          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Legal fit</p>
-          <p className="mt-1 text-2xl font-semibold">{fit.legalFit}%</p>
+        <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-3 py-3">
+          <p className="city-section-kicker">Legal fit</p>
+          <p className="mt-1 text-2xl font-semibold text-stone-900">{fit.legalFit}%</p>
         </div>
         <div className="rounded-2xl border border-amber-200 bg-amber-50/90 px-3 py-3">
-          <p className="text-xs uppercase tracking-[0.14em] text-amber-700">Main blocker</p>
+          <p className="city-section-kicker text-amber-700">Main blocker</p>
           <p className="mt-1 text-sm font-medium leading-snug text-amber-950">{fit.mainBlocker}</p>
         </div>
       </div>
@@ -257,13 +261,13 @@ function CountryCompareCard({
       </div>
 
       <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
-        <p className="text-xs uppercase tracking-[0.14em] text-amber-700">Reality preview</p>
+        <p className="city-section-kicker text-amber-700">Reality preview</p>
         <p className="mt-1 text-sm text-amber-900">{country.main_legal_blocker}</p>
       </div>
 
       <div className="mt-5 flex gap-2">
         <Link href={`/explore/${country.slug}`} className="flex-1">
-          <Button variant="outline" className="h-11 w-full gap-2">
+          <Button variant="outline" className="h-11 w-full gap-2 rounded-full border-[var(--city-border)]">
             Choose this destination
             <ArrowRight className="h-4 w-4" />
           </Button>
@@ -272,7 +276,7 @@ function CountryCompareCard({
           href={`/compare?type=city&country=${country.id}&city=${country.city_ids.join(",")}`}
           className="flex-1"
         >
-          <Button className="h-11 w-full gap-2">
+          <Button className="h-11 w-full gap-2 rounded-full">
             Compare cities
             <MapPin className="h-4 w-4" />
           </Button>
@@ -292,18 +296,18 @@ function CityCompareCard({
   if (!city) return null;
 
   return (
-    <div className="surface-card-strong rounded-[28px] p-5">
+    <div className="city-card rounded-[22px] p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-sm text-muted-foreground">{city.country}</p>
-          <h2 className="text-lg font-semibold">{city.name}</h2>
+          <p className="text-sm text-[var(--city-muted-fg)]">{city.country}</p>
+          <h2 className="text-lg font-semibold text-stone-900">{city.name}</h2>
         </div>
-        <span className="rounded-full border border-primary/15 bg-primary/8 px-3 py-1 text-sm font-semibold text-primary">
+        <span className="rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-sm font-semibold text-stone-700">
           {levelLabel(city.first_90_days_difficulty)}
         </span>
       </div>
 
-      <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{city.summary}</p>
+      <p className="mt-4 text-sm leading-relaxed text-[var(--city-muted-fg)]">{city.summary}</p>
 
       <div className="mt-5">
         <MetricList
@@ -322,26 +326,26 @@ function CityCompareCard({
       </div>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-2xl bg-muted/50 px-4 py-3">
-          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Average rent</p>
-          <p className="mt-1 text-sm font-medium">{city.avg_rent_range}</p>
+        <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-3">
+          <p className="city-section-kicker">Average rent</p>
+          <p className="mt-1 text-sm font-medium text-stone-900">{city.avg_rent_range}</p>
         </div>
-        <div className="rounded-2xl bg-muted/50 px-4 py-3">
-          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Monthly budget</p>
-          <p className="mt-1 text-sm font-medium">{city.monthly_budget_range}</p>
+        <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-3">
+          <p className="city-section-kicker">Monthly budget</p>
+          <p className="mt-1 text-sm font-medium text-stone-900">{city.monthly_budget_range}</p>
         </div>
       </div>
 
       <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
-        <p className="text-xs uppercase tracking-[0.14em] text-amber-700">Main blocker</p>
+        <p className="city-section-kicker text-amber-700">Main blocker</p>
         <p className="mt-1 text-sm text-amber-900">{city.main_lifestyle_blocker}</p>
       </div>
 
       <div className="mt-5">
-        <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">First 90 days preview</p>
-        <ul className="mt-2 space-y-2">
+        <p className="city-section-kicker mb-2">First 90 days preview</p>
+        <ul className="space-y-1.5">
           {city.first_90_days_preview.map((item) => (
-            <li key={item} className="text-sm text-muted-foreground">
+            <li key={item} className="text-sm text-[var(--city-muted-fg)]">
               {item}
             </li>
           ))}
@@ -350,13 +354,13 @@ function CityCompareCard({
 
       <div className="mt-5 flex gap-2">
         <Link href={`/explore/${city.countryId}/${city.slug}`} className="flex-1">
-          <Button variant="outline" className="h-11 w-full gap-2">
+          <Button variant="outline" className="h-11 w-full gap-2 rounded-full border-[var(--city-border)]">
             Choose this destination
             <ArrowRight className="h-4 w-4" />
           </Button>
         </Link>
         <Link href="/start" className="flex-1">
-          <Button className="h-11 w-full gap-2">
+          <Button className="h-11 w-full gap-2 rounded-full">
             Start your move
             <Sparkles className="h-4 w-4" />
           </Button>
@@ -423,16 +427,16 @@ function CompareExperience({
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur">
+    <div className="city-page-wrap min-h-screen">
+      <header className="sticky top-0 z-50 border-b border-[var(--city-border)] bg-[var(--city-card)]/95 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4">
-          <Link href="/explore" className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+          <Link href="/explore" className="flex items-center gap-1.5 text-sm text-[var(--city-muted-fg)] hover:text-stone-900 transition-colors">
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
-          <span className="font-semibold">Compare destinations</span>
+          <span className="font-semibold text-stone-900">Compare destinations</span>
           <Link href="/start" className="ml-auto">
-            <Button size="sm">Start your move</Button>
+            <Button size="sm" className="rounded-full">Start your move</Button>
           </Link>
         </div>
       </header>
@@ -440,14 +444,14 @@ function CompareExperience({
       <main className="mx-auto max-w-6xl px-4 py-6">
         <div className="space-y-6">
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-stone-700">
               <Shield className="h-3.5 w-3.5" />
               Lifestyle fit vs legal fit
             </div>
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div className="space-y-1">
-                <h1 className="text-3xl font-semibold tracking-tight">Compare before you commit</h1>
-                <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                <h1 className="font-serif text-3xl font-medium text-stone-900">Compare before you commit</h1>
+                <p className="max-w-2xl text-sm leading-relaxed text-[var(--city-muted-fg)]">
                   Compare countries and cities side by side so you can see what fits,
                   what blocks you, and what deserves a deeper look next.
                 </p>
@@ -488,8 +492,8 @@ function CompareExperience({
           ) : (
             <>
               <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
-                <div className="surface-card rounded-[28px] p-5">
-                  <p className="text-sm font-medium">Choose a country</p>
+                <div className="city-card rounded-[22px] p-5">
+                  <p className="text-sm font-medium text-stone-900">Choose a country</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {COUNTRIES.map((country) => (
                       <button
@@ -502,8 +506,8 @@ function CompareExperience({
                         className={cn(
                           "rounded-full border px-3 py-2 text-sm transition-colors",
                           cityCountryId === country.id
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border hover:border-primary/40"
+                            ? "border-stone-800 bg-stone-800 text-white"
+                            : "border-[var(--city-border)] text-stone-700 hover:border-stone-400"
                         )}
                       >
                         {country.emoji} {country.name}
@@ -553,13 +557,13 @@ function CompareContent() {
 
 function CompareLoadingState() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="city-page-wrap min-h-screen">
       <div className="mx-auto max-w-6xl px-4 py-10">
-        <div className="rounded-[28px] border bg-card p-6 text-center shadow-sm">
-          <p className="text-lg font-semibold tracking-tight text-foreground">
+        <div className="city-card rounded-[28px] p-6 text-center">
+          <p className="text-lg font-semibold tracking-tight text-stone-900">
             Loading comparison
           </p>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-2 text-sm text-[var(--city-muted-fg)]">
             Preparing your side-by-side view...
           </p>
         </div>
