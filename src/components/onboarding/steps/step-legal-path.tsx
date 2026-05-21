@@ -7,30 +7,88 @@ import { scorePathsForCountry } from "@/lib/scoring/path-scorer";
 import { getLegalPathById } from "@/lib/data/legal-paths";
 import { getCountryById } from "@/lib/data/countries";
 import { getCityById } from "@/lib/data/cities";
+import { commonCopy, type UiLanguage } from "@/lib/i18n/onboarding";
 import type { OnboardingState, PathMatchResult } from "@/types";
 
-const COMPLEXITY_LABEL: Record<number, string> = {
-  1: "Simple",
-  2: "Moderate",
-  3: "Involved",
-  4: "Complex",
-  5: "Very complex",
+const COPY = {
+  en: {
+    title: "Choose your legal path",
+    subtitlePrefix: "These paths are available for",
+    subtitleFallback: "your destination",
+    subtitleSuffix: "Choose the one that fits your situation best.",
+    disclaimer:
+      "This is a fit assessment, not legal advice. Requirements vary, income thresholds must be verified before applying, and professional review is recommended for real cases.",
+    remoteIncome: "Remote income needed",
+    admission: "Admission needed",
+    sponsor: "Sponsor or employer needed",
+    comingSoon: "Full step-by-step journey for this path is coming soon.",
+    choose: "Choose this legal path",
+    differentCity: "← Choose a different city",
+    complexity: {
+      1: "Simple",
+      2: "Moderate",
+      3: "Involved",
+      4: "Complex",
+      5: "Very complex",
+    },
+  },
+  ru: {
+    title: "Выберите легальный путь",
+    subtitlePrefix: "Эти варианты доступны для",
+    subtitleFallback: "выбранного направления",
+    subtitleSuffix: "Выберите тот, который лучше подходит вашей ситуации.",
+    disclaimer:
+      "Это оценка соответствия, а не юридическая консультация. Требования меняются, пороги дохода нужно проверять перед подачей, а для реального кейса лучше делать профессиональную проверку.",
+    remoteIncome: "Нужен удалённый доход",
+    admission: "Нужно зачисление",
+    sponsor: "Нужен спонсор или работодатель",
+    comingSoon: "Пошаговый путь для этого сценария скоро появится.",
+    choose: "Выбрать этот путь",
+    differentCity: "← Выбрать другой город",
+    complexity: {
+      1: "Простой",
+      2: "Средний",
+      3: "Много шагов",
+      4: "Сложный",
+      5: "Очень сложный",
+    },
+  },
+} satisfies Record<UiLanguage, {
+  title: string;
+  subtitlePrefix: string;
+  subtitleFallback: string;
+  subtitleSuffix: string;
+  disclaimer: string;
+  remoteIncome: string;
+  admission: string;
+  sponsor: string;
+  comingSoon: string;
+  choose: string;
+  differentCity: string;
+  complexity: Record<number, string>;
+}>;
+
+const COMPLEXITY_LABEL: Record<UiLanguage, Record<number, string>> = {
+  en: COPY.en.complexity,
+  ru: COPY.ru.complexity,
 };
 
 interface Props {
   state: OnboardingState;
   onSelect: (pathId: string) => void;
   onBack: () => void;
+  language: UiLanguage;
 }
 
-function MatchScore({ score }: { score: number }) {
+function MatchScore({ score, language }: { score: number; language: UiLanguage }) {
+  const common = commonCopy[language];
   const color =
     score >= 70 ? "border-emerald-200 bg-emerald-50 text-emerald-700" :
     score >= 45 ? "border-[var(--city-border)] bg-[var(--city-warm-muted)] text-stone-700" :
     "border-[var(--city-border)] bg-[var(--city-warm-muted)] text-[var(--city-muted-fg)]";
   return (
     <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border shrink-0 ${color}`}>
-      {score}% fit
+      {score}% {common.fit}
     </span>
   );
 }
@@ -38,12 +96,15 @@ function MatchScore({ score }: { score: number }) {
 function PathCard({
   result,
   onSelect,
+  language,
 }: {
   result: PathMatchResult;
   onSelect: () => void;
+  language: UiLanguage;
 }) {
   const path = getLegalPathById(result.pathId);
   if (!path) return null;
+  const copy = COPY[language];
 
   return (
     <div className="city-card rounded-[18px] p-4 flex flex-col gap-3">
@@ -52,7 +113,7 @@ function PathCard({
           <h3 className="font-semibold text-sm leading-tight text-stone-900">{path.name}</h3>
           <p className="text-xs text-[var(--city-muted-fg)] mt-0.5 leading-relaxed">{path.summary}</p>
         </div>
-        <MatchScore score={result.score} />
+        <MatchScore score={result.score} language={language} />
       </div>
 
       <div className="flex items-center gap-3 text-xs text-[var(--city-muted-fg)]">
@@ -62,24 +123,24 @@ function PathCard({
         </span>
         <span className="flex items-center gap-1">
           <Shield className="h-3.5 w-3.5" />
-          {COMPLEXITY_LABEL[path.complexity]}
+          {COMPLEXITY_LABEL[language][path.complexity]}
         </span>
       </div>
 
       <div className="flex flex-wrap gap-1.5">
         {path.requires_remote_income && (
           <span className="text-[11px] font-medium px-2.5 py-0.5 rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] text-stone-700">
-            Remote income needed
+            {copy.remoteIncome}
           </span>
         )}
         {path.requires_admission && (
           <span className="text-[11px] font-medium px-2.5 py-0.5 rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] text-stone-700">
-            Admission needed
+            {copy.admission}
           </span>
         )}
         {(path.requires_local_employer || path.requires_sponsor) && (
           <span className="text-[11px] font-medium px-2.5 py-0.5 rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] text-stone-700">
-            Sponsor or employer needed
+            {copy.sponsor}
           </span>
         )}
       </div>
@@ -110,7 +171,7 @@ function PathCard({
 
       {!path.journeyAvailable && (
         <div className="text-xs text-[var(--city-muted-fg)] bg-[var(--city-warm-muted)] border border-[var(--city-border)] px-3 py-1.5 rounded-lg">
-          Full step-by-step journey for this path is coming soon.
+          {copy.comingSoon}
         </div>
       )}
 
@@ -119,16 +180,17 @@ function PathCard({
       </div>
 
       <Button size="sm" className="h-10 gap-1.5 rounded-full" onClick={onSelect}>
-        Choose this legal path
+        {copy.choose}
         <ArrowRight className="h-3.5 w-3.5" />
       </Button>
     </div>
   );
 }
 
-export function StepLegalPath({ state, onSelect, onBack }: Props) {
+export function StepLegalPath({ state, onSelect, onBack, language }: Props) {
   const country = getCountryById(state.selectedCountry);
   const city = getCityById(state.selectedCity);
+  const copy = COPY[language];
 
   const results = useMemo(
     () =>
@@ -154,25 +216,25 @@ export function StepLegalPath({ state, onSelect, onBack }: Props) {
             {country?.emoji} {country?.name}{city ? ` · ${city.name}` : ""}
           </span>
         </div>
-        <h2 className="font-serif text-2xl font-medium text-stone-900 mb-1">Choose your legal path</h2>
+        <h2 className="font-serif text-2xl font-medium text-stone-900 mb-1">{copy.title}</h2>
         <p className="text-sm text-[var(--city-muted-fg)]">
-          These paths are available for {country?.name ?? "your destination"}. Choose the one that fits your situation best.
+          {copy.subtitlePrefix} {country?.name ?? copy.subtitleFallback}. {copy.subtitleSuffix}
         </p>
       </div>
 
       <div className="text-xs text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 leading-relaxed">
-        This is a fit assessment, not legal advice. Requirements vary, income thresholds must be verified before applying, and professional review is recommended for real cases.
+        {copy.disclaimer}
       </div>
 
       <div className="flex flex-col gap-3">
         {results.map((result) => (
-          <PathCard key={result.pathId} result={result} onSelect={() => onSelect(result.pathId)} />
+          <PathCard key={result.pathId} result={result} onSelect={() => onSelect(result.pathId)} language={language} />
         ))}
       </div>
 
       <div className="pb-6">
         <Button variant="ghost" size="sm" onClick={onBack} className="text-[var(--city-muted-fg)]">
-          ← Choose a different city
+          {copy.differentCity}
         </Button>
       </div>
     </div>

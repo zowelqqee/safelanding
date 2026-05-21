@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { StepHeader } from "../step-header";
 import type { IncomeRange, SavingsRange, IncomeType } from "@/types";
+import { commonCopy, moneyCopy, type UiLanguage } from "@/lib/i18n/onboarding";
 
 const INCOME_RANGES: { value: IncomeRange; label: string }[] = [
   { value: "under_1000", label: "< €1,000 / mo" },
@@ -20,15 +21,6 @@ const SAVINGS_RANGES: { value: SavingsRange; label: string }[] = [
   { value: "30000_plus", label: "€30,000+" },
 ];
 
-const INCOME_TYPES: { value: IncomeType; label: string }[] = [
-  { value: "remote_employment", label: "Remote employment" },
-  { value: "freelance", label: "Freelance / clients" },
-  { value: "business_owner", label: "Business owner" },
-  { value: "savings_only", label: "Savings only" },
-  { value: "student_family", label: "Student / family support" },
-  { value: "no_stable_income", label: "No stable income yet" },
-];
-
 interface Props {
   monthlyIncome: IncomeRange | "";
   savingsRange: SavingsRange | "";
@@ -36,6 +28,7 @@ interface Props {
   onChange: (v: Partial<{ monthlyIncome: IncomeRange | ""; savingsRange: SavingsRange | ""; incomeType: IncomeType | "" }>) => void;
   onNext: () => void;
   onBack: () => void;
+  language: UiLanguage;
 }
 
 function OptionGrid<T extends string>({
@@ -67,20 +60,24 @@ function OptionGrid<T extends string>({
   );
 }
 
-export function StepMoney({ monthlyIncome, savingsRange, incomeType, onChange, onNext, onBack }: Props) {
+export function StepMoney({ monthlyIncome, savingsRange, incomeType, onChange, onNext, onBack, language }: Props) {
   const canContinue = monthlyIncome !== "" || savingsRange !== "";
+  const copy = moneyCopy[language];
+  const common = commonCopy[language];
 
   return (
     <div className="flex flex-col flex-1 gap-6 pt-4">
       <StepHeader
         step={3}
-        title="Money reality"
-        subtitle="We use ranges, not exact numbers. This helps match you to realistic paths."
+        title={copy.title}
+        subtitle={copy.subtitle}
+        stepLabel={common.step}
+        ofLabel={common.of}
       />
 
       <div className="flex flex-col gap-5">
         <div>
-          <div className="text-sm font-medium mb-2">Monthly income</div>
+          <div className="text-sm font-medium mb-2">{copy.monthlyIncome}</div>
           <OptionGrid
             options={INCOME_RANGES}
             selected={monthlyIncome}
@@ -89,7 +86,7 @@ export function StepMoney({ monthlyIncome, savingsRange, incomeType, onChange, o
         </div>
 
         <div>
-          <div className="text-sm font-medium mb-2">Savings available</div>
+          <div className="text-sm font-medium mb-2">{copy.savingsAvailable}</div>
           <OptionGrid
             options={SAVINGS_RANGES}
             selected={savingsRange}
@@ -98,9 +95,9 @@ export function StepMoney({ monthlyIncome, savingsRange, incomeType, onChange, o
         </div>
 
         <div>
-          <div className="text-sm font-medium mb-2">Income type</div>
+          <div className="text-sm font-medium mb-2">{copy.incomeType}</div>
           <OptionGrid
-            options={INCOME_TYPES}
+            options={copy.incomeTypes}
             selected={incomeType}
             onSelect={(v) => onChange({ incomeType: v })}
           />
@@ -108,8 +105,8 @@ export function StepMoney({ monthlyIncome, savingsRange, incomeType, onChange, o
       </div>
 
       <div className="flex gap-3 mt-auto pt-4">
-        <Button variant="outline" onClick={onBack} className="flex-1 h-11 rounded-full border-[var(--city-border)]">Back</Button>
-        <Button onClick={onNext} disabled={!canContinue} className="flex-1 h-11 rounded-full">Continue</Button>
+        <Button variant="outline" onClick={onBack} className="flex-1 h-11 rounded-full border-[var(--city-border)]">{common.back}</Button>
+        <Button onClick={onNext} disabled={!canContinue} className="flex-1 h-11 rounded-full">{common.continue}</Button>
       </div>
     </div>
   );

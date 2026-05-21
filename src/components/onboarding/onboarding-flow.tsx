@@ -33,11 +33,13 @@ import {
 } from "@/lib/profile/profileService";
 import { trackEvent } from "@/lib/analytics/trackEvent";
 import { SignOutButton } from "@/components/auth/sign-out-button";
+import type { UiLanguage } from "@/lib/i18n/onboarding";
 
 // Steps: 0-welcome 1-base 2-goal 3-money 4-prefs 5-fear 6-region 7-optimization
 //        8-countries 9-cities 10-paths 11-plan-ready
 const CONTENT_STEPS = 10;
 const TOTAL_STEPS = 12;
+const LANGUAGE_STORAGE_KEY = "sl_language";
 
 const ACTIVE_STEP_INDEX: Record<string, number> = {
   welcome: 0,
@@ -82,6 +84,19 @@ const initialState: OnboardingState = {
   shortlistedCountries: [],
   shortlistedCities: [],
 };
+
+function getInitialOnboardingState(): OnboardingState {
+  if (typeof window === "undefined") {
+    return initialState;
+  }
+
+  const savedLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  const language = savedLanguage === "ru" || savedLanguage === "en"
+    ? savedLanguage
+    : initialState.language;
+
+  return { ...initialState, language };
+}
 
 // ─── Persistence helpers ──────────────────────────────────────────────────────
 
@@ -137,7 +152,7 @@ interface OnboardingFlowProps {
 }
 
 export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
-  const [state, setState] = useState<OnboardingState>(initialState);
+  const [state, setState] = useState<OnboardingState>(() => getInitialOnboardingState());
   const [profileLoaded, setProfileLoaded] = useState(isPreview);
   const [resumeInfo, setResumeInfo] = useState<ResumeInfo | null>(null);
   const [showRoadmapCta, setShowRoadmapCta] = useState(false);
@@ -161,7 +176,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
           citizenship: profile.citizenship ?? "",
           currentCountry: profile.current_country ?? "",
           residenceCountry: profile.residence_country ?? "",
-          language: (profile.preferred_language as "ru" | "en") ?? "en",
+          language: (profile.preferred_language as UiLanguage) ?? "en",
           moveGoal: (profile.move_goal as MoveGoal) ?? "",
           monthlyIncome: (profile.monthly_income_range as IncomeRange) ?? "",
           savingsRange: (profile.savings_range as SavingsRange) ?? "",
@@ -220,6 +235,38 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
   // ── State helpers ──────────────────────────────────────────────────────────
   const update = (patch: Partial<OnboardingState>) =>
     setState((prev) => ({ ...prev, ...patch }));
+
+  const updateLanguage = (language: UiLanguage) => {
+    setState((prev) => ({ ...prev, language }));
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    }
+
+    if (!isPreview) {
+      updateMoveProfile({ preferred_language: language }).catch(console.error);
+    }
+  };
+
+  const handleBaseChange = (patch: Partial<{
+    citizenship: string;
+    currentCountry: string;
+    residenceCountry: string;
+    language: UiLanguage;
+  }>) => {
+    if (patch.language) {
+      updateLanguage(patch.language);
+    }
+
+    const rest: Partial<OnboardingState> = {};
+    if (patch.citizenship !== undefined) rest.citizenship = patch.citizenship;
+    if (patch.currentCountry !== undefined) rest.currentCountry = patch.currentCountry;
+    if (patch.residenceCountry !== undefined) rest.residenceCountry = patch.residenceCountry;
+
+    if (Object.keys(rest).length > 0) {
+      update(rest);
+    }
+  };
 
   const next = () =>
     setState((prev) => ({ ...prev, step: Math.min(prev.step + 1, TOTAL_STEPS - 1) }));
@@ -336,6 +383,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       onResume={handleResume}
       showRoadmapCta={showRoadmapCta}
       onOpenRoadmap={handleOpenRoadmap}
+      language={state.language}
     />,
     <StepBase
       key="base"
@@ -343,7 +391,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       currentCountry={state.currentCountry}
       residenceCountry={state.residenceCountry}
       language={state.language}
-      onChange={(v) => update(v)}
+      onChange={handleBaseChange}
       onNext={next}
       onBack={back}
     />,
@@ -353,6 +401,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       onChange={(v) => update({ moveGoal: v as MoveGoal })}
       onNext={next}
       onBack={back}
+      language={state.language}
     />,
     <StepMoney
       key="money"
@@ -362,6 +411,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       onChange={(v) => update(v)}
       onNext={next}
       onBack={back}
+      language={state.language}
     />,
     <StepPreferences
       key="prefs"
@@ -369,6 +419,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       onChange={(v) => update({ lifePreferences: v as LifePreference[] })}
       onNext={next}
       onBack={back}
+      language={state.language}
     />,
     <StepFear
       key="fear"
@@ -376,6 +427,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       onChange={(v) => update({ mainFear: v as MainFear })}
       onNext={next}
       onBack={back}
+      language={state.language}
     />,
     <StepRegion
       key="region"
@@ -383,6 +435,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       onChange={(v) => update({ regionPreferences: v as RegionPreference[] })}
       onNext={next}
       onBack={back}
+      language={state.language}
     />,
     <StepOptimization
       key="optimization"
@@ -390,6 +443,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       onChange={(v) => update({ moveOptimization: v as MoveOptimization })}
       onNext={next}
       onBack={back}
+      language={state.language}
     />,
     <StepCountryResults
       key="countries"
@@ -397,6 +451,7 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       onSelect={handleCountrySelected}
       onShortlistToggle={handleShortlistCountry}
       onBack={back}
+      language={state.language}
     />,
     <StepCityResults
       key="cities"
@@ -404,18 +459,21 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       onSelect={handleCitySelected}
       onShortlistToggle={handleShortlistCity}
       onBack={back}
+      language={state.language}
     />,
     <StepLegalPath
       key="paths"
       state={state}
       onSelect={handlePathSelected}
       onBack={back}
+      language={state.language}
     />,
     <StepPlanReady
       key="plan-ready"
       state={state}
       onConfirm={handleConfirmPlan}
       onBack={back}
+      language={state.language}
     />,
   ];
 

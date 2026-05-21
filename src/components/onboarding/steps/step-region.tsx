@@ -4,22 +4,15 @@ import { Button } from "@/components/ui/button";
 import { StepHeader } from "../step-header";
 import type { RegionPreference } from "@/types";
 import { cn } from "@/lib/utils";
+import { commonCopy, regionCopy, type UiLanguage } from "@/lib/i18n/onboarding";
 
 interface Props {
   selected: RegionPreference[];
   onChange: (v: RegionPreference[]) => void;
   onNext: () => void;
   onBack: () => void;
+  language: UiLanguage;
 }
-
-const REGIONS: { value: RegionPreference; label: string; emoji: string; note?: string }[] = [
-  { value: "europe", label: "Europe", emoji: "🌍", note: "Schengen travel, EU residency" },
-  { value: "north_america", label: "North America", emoji: "🌎", note: "US, Canada" },
-  { value: "asia", label: "Asia", emoji: "🌏", note: "SE Asia, Japan, South Korea" },
-  { value: "middle_east", label: "Middle East", emoji: "🏙️", note: "UAE, Qatar, Saudi Arabia" },
-  { value: "latin_america", label: "Latin America", emoji: "🌴", note: "Mexico, Colombia, Argentina" },
-  { value: "not_sure", label: "Open to anything", emoji: "🌐", note: "Show me all options" },
-];
 
 function toggle(current: RegionPreference[], value: RegionPreference): RegionPreference[] {
   if (value === "not_sure") return current.includes("not_sure") ? [] : ["not_sure"];
@@ -29,19 +22,23 @@ function toggle(current: RegionPreference[], value: RegionPreference): RegionPre
     : [...without, value];
 }
 
-export function StepRegion({ selected, onChange, onNext, onBack }: Props) {
+export function StepRegion({ selected, onChange, onNext, onBack, language }: Props) {
   const canContinue = selected.length > 0;
+  const copy = regionCopy[language];
+  const common = commonCopy[language];
 
   return (
     <div className="flex flex-col flex-1 gap-5 pt-4">
       <StepHeader
         step={6}
-        title="Which regions are you open to?"
-        subtitle="Select all that interest you. We'll prioritize those in your shortlist."
+        title={copy.title}
+        subtitle={copy.subtitle}
+        stepLabel={common.step}
+        ofLabel={common.of}
       />
 
       <div className="flex flex-col gap-2">
-        {REGIONS.map(({ value, label, emoji, note }) => {
+        {copy.options.map(({ value, label, emoji, note }) => {
           const active = selected.includes(value);
           return (
             <button
@@ -72,10 +69,10 @@ export function StepRegion({ selected, onChange, onNext, onBack }: Props) {
 
       <div className="flex flex-col gap-2 pb-6">
         <Button onClick={onNext} disabled={!canContinue} className="rounded-full">
-          Continue
+          {common.continue}
         </Button>
         <Button variant="ghost" size="sm" onClick={onBack} className="text-[var(--city-muted-fg)]">
-          ← Back
+          {common.backArrow}
         </Button>
       </div>
     </div>

@@ -3,34 +3,32 @@
 import { Button } from "@/components/ui/button";
 import { StepHeader } from "../step-header";
 import type { MoveGoal } from "@/types";
-
-const GOALS: { value: MoveGoal; label: string; description: string; available: boolean }[] = [
-  { value: "remote_work", label: "Move for remote work", description: "I work remotely and want to base myself abroad", available: true },
-  { value: "study", label: "Move for study", description: "I want to study abroad — university or language school", available: true },
-  { value: "explore_first", label: "Explore first, decide later", description: "I want to visit and figure things out on the ground", available: true },
-  { value: "not_sure", label: "Not sure yet", description: "Help me understand my options", available: true },
-  { value: "find_job", label: "Find a job abroad", description: "Looking for employment in another country", available: true },
-  { value: "family", label: "Move with family/partner", description: "Family reunification or partner visa route", available: false },
-];
+import { commonCopy, goalCopy, type UiLanguage } from "@/lib/i18n/onboarding";
 
 interface Props {
   value: MoveGoal | "";
   onChange: (v: string) => void;
   onNext: () => void;
   onBack: () => void;
+  language: UiLanguage;
 }
 
-export function StepGoal({ value, onChange, onNext, onBack }: Props) {
+export function StepGoal({ value, onChange, onNext, onBack, language }: Props) {
+  const copy = goalCopy[language];
+  const common = commonCopy[language];
+
   return (
     <div className="flex flex-col flex-1 gap-6 pt-4">
       <StepHeader
         step={2}
-        title="What are you trying to do?"
-        subtitle="We'll match you to the right path and city type."
+        title={copy.title}
+        subtitle={copy.subtitle}
+        stepLabel={common.step}
+        ofLabel={common.of}
       />
 
       <div className="flex flex-col gap-2">
-        {GOALS.map((goal) => (
+        {copy.options.map((goal) => (
           <button
             key={goal.value}
             type="button"
@@ -51,7 +49,7 @@ export function StepGoal({ value, onChange, onNext, onBack }: Props) {
               </div>
               {!goal.available && (
                 <span className="text-xs text-[var(--city-muted-fg)] bg-[var(--city-warm-muted)] border border-[var(--city-border)] px-2 py-0.5 rounded-full ml-2 shrink-0">
-                  Soon
+                  {common.soon}
                 </span>
               )}
             </div>
@@ -60,8 +58,8 @@ export function StepGoal({ value, onChange, onNext, onBack }: Props) {
       </div>
 
       <div className="flex gap-3 mt-auto pt-4">
-        <Button variant="outline" onClick={onBack} className="flex-1 h-11 rounded-full border-[var(--city-border)]">Back</Button>
-        <Button onClick={onNext} disabled={!value} className="flex-1 h-11 rounded-full">Continue</Button>
+        <Button variant="outline" onClick={onBack} className="flex-1 h-11 rounded-full border-[var(--city-border)]">{common.back}</Button>
+        <Button onClick={onNext} disabled={!value} className="flex-1 h-11 rounded-full">{common.continue}</Button>
       </div>
     </div>
   );

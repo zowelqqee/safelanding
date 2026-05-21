@@ -3,36 +3,32 @@
 import { Button } from "@/components/ui/button";
 import { StepHeader } from "../step-header";
 import type { MainFear } from "@/types";
-
-const FEARS: { value: MainFear; label: string; description: string }[] = [
-  { value: "documents", label: "Documents", description: "Paperwork, apostilles, translations" },
-  { value: "money", label: "Money", description: "Will I have enough to get through the process?" },
-  { value: "housing", label: "Housing", description: "Finding somewhere to live" },
-  { value: "language", label: "Language", description: "Not speaking the local language" },
-  { value: "finding_work", label: "Finding work", description: "Income stability after moving" },
-  { value: "being_alone", label: "Being alone", description: "Social life and connections" },
-  { value: "choosing_wrong_place", label: "Choosing wrong place", description: "What if it doesn't fit?" },
-  { value: "legal_status", label: "Legal status", description: "Visa denial or unclear status" },
-];
+import { commonCopy, fearCopy, type UiLanguage } from "@/lib/i18n/onboarding";
 
 interface Props {
   value: MainFear | "";
   onChange: (v: string) => void;
   onNext: () => void;
   onBack: () => void;
+  language: UiLanguage;
 }
 
-export function StepFear({ value, onChange, onNext, onBack }: Props) {
+export function StepFear({ value, onChange, onNext, onBack, language }: Props) {
+  const copy = fearCopy[language];
+  const common = commonCopy[language];
+
   return (
     <div className="flex flex-col flex-1 gap-6 pt-4">
       <StepHeader
         step={5}
-        title="What worries you most?"
-        subtitle="We'll make sure to address this throughout your journey."
+        title={copy.title}
+        subtitle={copy.subtitle}
+        stepLabel={common.step}
+        ofLabel={common.of}
       />
 
       <div className="flex flex-col gap-2">
-        {FEARS.map((fear) => (
+        {copy.options.map((fear) => (
           <button
             key={fear.value}
             type="button"
@@ -50,9 +46,9 @@ export function StepFear({ value, onChange, onNext, onBack }: Props) {
       </div>
 
       <div className="flex gap-3 mt-auto pt-4">
-        <Button variant="outline" onClick={onBack} className="flex-1 h-11 rounded-full border-[var(--city-border)]">Back</Button>
+        <Button variant="outline" onClick={onBack} className="flex-1 h-11 rounded-full border-[var(--city-border)]">{common.back}</Button>
         <Button onClick={onNext} className="flex-1 h-11 rounded-full">
-          {value ? "See my results" : "Skip & see results"}
+          {value ? copy.seeResults : copy.skipResults}
         </Button>
       </div>
     </div>

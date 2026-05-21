@@ -7,13 +7,52 @@ import { Button } from "@/components/ui/button";
 import { matchCitiesForCountry } from "@/lib/scoring/city-matcher";
 import { getCityById } from "@/lib/data/cities";
 import { getCountryById } from "@/lib/data/countries";
+import { commonCopy, type UiLanguage } from "@/lib/i18n/onboarding";
 import type { OnboardingState, CityMatchResult } from "@/types";
+
+const COPY = {
+  en: {
+    cities: "Cities",
+    title: "Choose your city",
+    subtitle:
+      "Matched to your preferences. Save, compare, then choose the city that feels most realistic.",
+    rentFrom: "Rent from",
+    budget: "Budget",
+    first90: "First 90 days",
+    difficulty: "difficulty",
+    mainBlocker: "Main blocker",
+    choose: "Choose this destination",
+    compare: "Compare",
+    shortlistedCities: "shortlisted cities",
+    noMatches: "No city matches are ready here yet",
+    noMatchesText: "Choose a different country and we'll keep the rest of your profile intact.",
+    differentCountry: "← Choose a different country",
+  },
+  ru: {
+    cities: "Города",
+    title: "Выберите город",
+    subtitle:
+      "Подобрано под ваши предпочтения. Сохраняйте, сравнивайте и выбирайте самый реалистичный город.",
+    rentFrom: "Аренда от",
+    budget: "Бюджет",
+    first90: "Первые 90 дней",
+    difficulty: "сложность",
+    mainBlocker: "Главный блокер",
+    choose: "Выбрать этот город",
+    compare: "Сравнить",
+    shortlistedCities: "сохранённые города",
+    noMatches: "Подходящие города для этой страны ещё не готовы",
+    noMatchesText: "Выберите другую страну, остальной профиль сохранится.",
+    differentCountry: "← Выбрать другую страну",
+  },
+} satisfies Record<UiLanguage, Record<string, string>>;
 
 interface Props {
   state: OnboardingState;
   onSelect: (cityId: string) => void;
   onShortlistToggle: (cityId: string) => void;
   onBack: () => void;
+  language: UiLanguage;
 }
 
 function buildCityCompareQuery(state: OnboardingState) {
@@ -24,14 +63,15 @@ function buildCityCompareQuery(state: OnboardingState) {
   return params.toString();
 }
 
-function MatchScore({ score }: { score: number }) {
+function MatchScore({ score, language }: { score: number; language: UiLanguage }) {
+  const common = commonCopy[language];
   const color =
     score >= 80 ? "border-emerald-200 bg-emerald-50 text-emerald-700" :
     score >= 65 ? "border-[var(--city-border)] bg-[var(--city-warm-muted)] text-stone-700" :
     "border-[var(--city-border)] bg-[var(--city-warm-muted)] text-[var(--city-muted-fg)]";
   return (
     <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border shrink-0 ${color}`}>
-      {score}% fit
+      {score}% {common.fit}
     </span>
   );
 }
@@ -42,15 +82,19 @@ function CityCard({
   shortlisted,
   onSelect,
   onShortlist,
+  language,
 }: {
   result: CityMatchResult;
   countrySlug: string;
   shortlisted: boolean;
   onSelect: () => void;
   onShortlist: () => void;
+  language: UiLanguage;
 }) {
   const city = getCityById(result.cityId);
   if (!city) return null;
+  const copy = COPY[language];
+  const common = commonCopy[language];
 
   return (
     <div className="city-card rounded-[18px] p-4 flex flex-col gap-3">
@@ -58,13 +102,13 @@ function CityCard({
         <div>
           <h3 className="font-semibold text-base leading-tight text-stone-900">{city.name}</h3>
           <div className="flex items-center gap-2 text-xs text-[var(--city-muted-fg)] mt-0.5">
-            {city.housingAvgRent && <span>Rent from {city.housingAvgRent}</span>}
+            {city.housingAvgRent && <span>{copy.rentFrom} {city.housingAvgRent}</span>}
             {city.housingAvgRent && city.monthlyBudgetMin && <span>·</span>}
-            {city.monthlyBudgetMin && <span>Budget {city.monthlyBudgetMin}</span>}
+            {city.monthlyBudgetMin && <span>{copy.budget} {city.monthlyBudgetMin}</span>}
           </div>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          <MatchScore score={result.score} />
+          <MatchScore score={result.score} language={language} />
           <button
             onClick={(e) => { e.stopPropagation(); onShortlist(); }}
             className="p-1.5 rounded-lg hover:bg-[var(--city-warm-muted)] transition-colors"
@@ -81,13 +125,13 @@ function CityCard({
 
       <div className="grid grid-cols-2 gap-2">
         <div className="rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-3 py-2">
-          <div className="city-section-kicker mb-1">First 90 days</div>
+          <div className="city-section-kicker mb-1">{copy.first90}</div>
           <div className="text-sm font-semibold text-stone-900">
-            {result.first90DaysDifficulty}/5 difficulty
+            {result.first90DaysDifficulty}/5 {copy.difficulty}
           </div>
         </div>
         <div className="rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-3 py-2">
-          <div className="city-section-kicker mb-1">Main blocker</div>
+          <div className="city-section-kicker mb-1">{copy.mainBlocker}</div>
           <div className="text-sm font-semibold leading-tight text-stone-900">
             {result.mainBlocker}
           </div>
@@ -116,12 +160,12 @@ function CityCard({
 
       <div className="flex flex-col gap-2 pt-0.5 sm:flex-row">
         <Button size="sm" className="h-10 flex-1 gap-1.5 rounded-full" onClick={onSelect}>
-          Choose this destination
+          {copy.choose}
           <ArrowRight className="h-3.5 w-3.5" />
         </Button>
         <Link href={`/explore/${countrySlug}/${city.slug}`} target="_blank">
           <Button variant="outline" size="sm" className="h-10 w-full rounded-full border-[var(--city-border)]">
-            Explore
+            {common.explore}
           </Button>
         </Link>
       </div>
@@ -129,8 +173,9 @@ function CityCard({
   );
 }
 
-export function StepCityResults({ state, onSelect, onShortlistToggle, onBack }: Props) {
+export function StepCityResults({ state, onSelect, onShortlistToggle, onBack, language }: Props) {
   const country = getCountryById(state.selectedCountry);
+  const copy = COPY[language];
 
   const results = useMemo(
     () =>
@@ -151,12 +196,12 @@ export function StepCityResults({ state, onSelect, onShortlistToggle, onBack }: 
         <div className="flex items-center gap-2 mb-2">
           <MapPin className="h-4 w-4 text-stone-600" />
           <span className="city-section-kicker">
-            {country ? `${country.emoji} ${country.name}` : "Cities"}
+            {country ? `${country.emoji} ${country.name}` : copy.cities}
           </span>
         </div>
-        <h2 className="font-serif text-2xl font-medium text-stone-900 mb-1">Choose your city</h2>
+        <h2 className="font-serif text-2xl font-medium text-stone-900 mb-1">{copy.title}</h2>
         <p className="text-sm text-[var(--city-muted-fg)]">
-          Matched to your preferences. Save, compare, then choose the city that feels most realistic.
+          {copy.subtitle}
         </p>
       </div>
 
@@ -167,7 +212,7 @@ export function StepCityResults({ state, onSelect, onShortlistToggle, onBack }: 
           className="flex items-center gap-2 rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-4 py-2.5 text-sm font-medium text-stone-700 hover:bg-[var(--city-warm-muted)]/70 transition-colors"
         >
           <BarChart3 className="h-4 w-4" />
-          Compare {shortlistedCount} shortlisted cities
+          {copy.compare} {shortlistedCount} {copy.shortlistedCities}
           <ArrowRight className="ml-auto h-3.5 w-3.5" />
         </Link>
       )}
@@ -175,10 +220,10 @@ export function StepCityResults({ state, onSelect, onShortlistToggle, onBack }: 
       {results.length === 0 ? (
         <div className="city-card rounded-2xl px-4 py-8 text-center border-dashed">
           <p className="text-sm font-medium text-stone-900">
-            No city matches are ready here yet
+            {copy.noMatches}
           </p>
           <p className="mt-2 text-sm text-[var(--city-muted-fg)]">
-            Choose a different country and we&apos;ll keep the rest of your profile intact.
+            {copy.noMatchesText}
           </p>
         </div>
       ) : (
@@ -191,6 +236,7 @@ export function StepCityResults({ state, onSelect, onShortlistToggle, onBack }: 
               shortlisted={state.shortlistedCities.includes(result.cityId)}
               onSelect={() => onSelect(result.cityId)}
               onShortlist={() => onShortlistToggle(result.cityId)}
+              language={language}
             />
           ))}
         </div>
@@ -198,7 +244,7 @@ export function StepCityResults({ state, onSelect, onShortlistToggle, onBack }: 
 
       <div className="pb-6">
         <Button variant="ghost" size="sm" onClick={onBack} className="text-[var(--city-muted-fg)]">
-          ← Choose a different country
+          {copy.differentCountry}
         </Button>
       </div>
     </div>
