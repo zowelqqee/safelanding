@@ -2,13 +2,28 @@ import { createClient } from "@/lib/supabase/client";
 
 const DEFAULT_POST_CONFIRM_PATH = "/start";
 
+function normalizeOrigin(origin: string | undefined) {
+  return origin?.replace(/\/$/, "");
+}
+
+function isLocalhostOrigin(origin: string) {
+  try {
+    const hostname = new URL(origin).hostname;
+    return ["localhost", "127.0.0.1", "0.0.0.0", "::1", "[::1]"].includes(hostname);
+  } catch {
+    return false;
+  }
+}
+
 function getAuthCallbackUrl(nextPath = DEFAULT_POST_CONFIRM_PATH) {
-  const configuredOrigin =
-    process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL;
+  const configuredOrigin = normalizeOrigin(
+    process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL
+  );
+  const safeConfiguredOrigin =
+    configuredOrigin && !isLocalhostOrigin(configuredOrigin) ? configuredOrigin : undefined;
+  const browserOrigin = typeof window !== "undefined" ? window.location.origin : undefined;
   const origin =
-    typeof window !== "undefined"
-      ? window.location.origin
-      : configuredOrigin?.replace(/\/$/, "");
+    safeConfiguredOrigin || (browserOrigin && !isLocalhostOrigin(browserOrigin) ? browserOrigin : undefined);
 
   if (!origin) {
     return undefined;
@@ -34,12 +49,12 @@ export async function getCurrentSession() {
 
 export async function signUpWithEmail(email: string, password: string) {
   const supabase = createClient();
+  const emailRedirectTo = getAuthCallbackUrl();
+
   return supabase.auth.signUp({
     email,
     password,
-    options: {
-      emailRedirectTo: getAuthCallbackUrl(),
-    },
+    options: emailRedirectTo ? { emailRedirectTo } : undefined,
   });
 }
 

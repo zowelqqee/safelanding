@@ -4,24 +4,100 @@ import { useEffect, useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import type { UiLanguage } from "@/lib/i18n/onboarding";
 import { getExistingFeedback, saveFeedback } from "@/lib/analytics/feedback";
 
 type FeedbackMode = "move_brief" | "partner_review_success";
+type FeedbackOptionValue = "yes" | "partial" | "maybe" | "no";
 
-const usefulnessOptions = ["Да", "Частично", "Нет"];
-const realHelpOptions = ["Да", "Возможно", "Нет"];
+const COPY = {
+  en: {
+    loading: "Loading feedback...",
+    savedKicker: "Feedback saved",
+    savedBody:
+      "Thanks, your feedback is already saved. This helps us see where the MVP is truly useful and where it still feels unclear.",
+    titleMoveBrief: "Did this make the move feel clearer?",
+    titlePartner: "Does this feel like something you would actually do in real life?",
+    usefulnessLabel: "How much more useful did this become?",
+    realHelpLabel: "Would you submit this to a real relocation partner?",
+    yourAnswer: "Your answer",
+    commentLabelMoveBrief: "What felt weak or unclear?",
+    commentLabelPartner: "What would stop you from submitting a real request?",
+    submit: "Send feedback",
+    submitting: "Sending...",
+    usefulnessOptions: [
+      { value: "yes", label: "Yes" },
+      { value: "partial", label: "Partly" },
+      { value: "no", label: "No" },
+    ],
+    realHelpOptions: [
+      { value: "yes", label: "Yes" },
+      { value: "maybe", label: "Maybe" },
+      { value: "no", label: "No" },
+    ],
+  },
+  ru: {
+    loading: "Загружаем форму отзыва...",
+    savedKicker: "Отзыв сохранён",
+    savedBody:
+      "Спасибо, отзыв уже сохранён. Это помогает понять, где MVP правда полезен, а где ещё остаётся неясность.",
+    titleMoveBrief: "Стало понятнее, как может выглядеть переезд?",
+    titlePartner:
+      "Это похоже на действие, которое вы бы действительно сделали в реальной жизни?",
+    usefulnessLabel: "Насколько это стало полезнее?",
+    realHelpLabel: "Оставили бы такую заявку реальному исполнителю?",
+    yourAnswer: "Ваш ответ",
+    commentLabelMoveBrief: "Что показалось слабым или непонятным?",
+    commentLabelPartner: "Что мешает оставить реальную заявку?",
+    submit: "Отправить отзыв",
+    submitting: "Отправляем...",
+    usefulnessOptions: [
+      { value: "yes", label: "Да" },
+      { value: "partial", label: "Частично" },
+      { value: "no", label: "Нет" },
+    ],
+    realHelpOptions: [
+      { value: "yes", label: "Да" },
+      { value: "maybe", label: "Возможно" },
+      { value: "no", label: "Нет" },
+    ],
+  },
+} satisfies Record<
+  UiLanguage,
+  {
+    loading: string;
+    savedKicker: string;
+    savedBody: string;
+    titleMoveBrief: string;
+    titlePartner: string;
+    usefulnessLabel: string;
+    realHelpLabel: string;
+    yourAnswer: string;
+    commentLabelMoveBrief: string;
+    commentLabelPartner: string;
+    submit: string;
+    submitting: string;
+    usefulnessOptions: Array<{ value: FeedbackOptionValue; label: string }>;
+    realHelpOptions: Array<{ value: FeedbackOptionValue; label: string }>;
+  }
+>;
 
 export function FeedbackCard({
   moveProfileId,
   source,
   mode,
+  language = "en",
 }: {
   moveProfileId: string;
   source: string;
   mode: FeedbackMode;
+  language?: UiLanguage;
 }) {
-  const [usefulness, setUsefulness] = useState("");
-  const [wouldRequestRealHelp, setWouldRequestRealHelp] = useState("");
+  const copy = COPY[language];
+  const [usefulness, setUsefulness] = useState<FeedbackOptionValue | "">("");
+  const [wouldRequestRealHelp, setWouldRequestRealHelp] = useState<
+    FeedbackOptionValue | ""
+  >("");
   const [comment, setComment] = useState("");
   const [loadingExisting, setLoadingExisting] = useState(true);
   const [submitted, setSubmitted] = useState(false);
@@ -65,6 +141,7 @@ export function FeedbackCard({
       usefulness: selectedUsefulness,
       wouldRequestRealHelp: wouldRequestRealHelp || null,
       comment,
+      language,
     });
 
     setSaving(false);
@@ -80,7 +157,7 @@ export function FeedbackCard({
   if (loadingExisting) {
     return (
       <section className="city-card rounded-[24px] px-5 py-5 text-sm text-[var(--city-muted-fg)]">
-        Loading feedback...
+        {copy.loading}
       </section>
     );
   }
@@ -93,9 +170,9 @@ export function FeedbackCard({
             <CheckCircle2 className="h-4 w-4" />
           </div>
           <div>
-            <p className="city-section-kicker text-emerald-700">Feedback saved</p>
+            <p className="city-section-kicker text-emerald-700">{copy.savedKicker}</p>
             <p className="mt-1 text-sm leading-relaxed text-[var(--city-muted-fg)]">
-              Спасибо, отзыв уже сохранён. Это поможет понять, где MVP правда полезен, а где ещё мутно.
+              {copy.savedBody}
             </p>
           </div>
         </div>
@@ -107,34 +184,33 @@ export function FeedbackCard({
     <section className="city-card overflow-hidden rounded-[24px]">
       <div className="border-b border-[var(--city-border)] px-5 py-4">
         <h2 className="text-base font-semibold tracking-tight text-stone-900">
-          {isPartnerMode
-            ? "Это похоже на действие, которое вы бы сделали в реальной жизни?"
-            : "Стало понятнее, как может выглядеть переезд?"}
+          {isPartnerMode ? copy.titlePartner : copy.titleMoveBrief}
         </h2>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5 px-5 py-5">
         {!isPartnerMode && (
           <OptionGroup
-            label="Насколько это стало полезнее?"
+            label={copy.usefulnessLabel}
             value={usefulness}
-            options={usefulnessOptions}
+            options={copy.usefulnessOptions}
             onChange={setUsefulness}
           />
         )}
 
         <OptionGroup
-          label={isPartnerMode ? "Ваш ответ" : "Оставили бы заявку реальному исполнителю?"}
+          label={isPartnerMode ? copy.yourAnswer : copy.realHelpLabel}
           value={wouldRequestRealHelp}
-          options={realHelpOptions}
+          options={copy.realHelpOptions}
           onChange={setWouldRequestRealHelp}
         />
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-stone-800" htmlFor={`${source}-feedback-comment`}>
-            {isPartnerMode
-              ? "Что мешает оставить реальную заявку?"
-              : "Что было слабым или непонятным?"}
+          <label
+            className="text-sm font-medium text-stone-800"
+            htmlFor={`${source}-feedback-comment`}
+          >
+            {isPartnerMode ? copy.commentLabelPartner : copy.commentLabelMoveBrief}
           </label>
           <Textarea
             id={`${source}-feedback-comment`}
@@ -150,14 +226,18 @@ export function FeedbackCard({
           </div>
         )}
 
-        <Button type="submit" disabled={!canSubmit || saving} className="h-11 w-full gap-2 rounded-full">
+        <Button
+          type="submit"
+          disabled={!canSubmit || saving}
+          className="h-11 w-full gap-2 rounded-full"
+        >
           {saving ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Отправляем...
+              {copy.submitting}
             </>
           ) : (
-            "Отправить отзыв"
+            copy.submit
           )}
         </Button>
       </form>
@@ -172,9 +252,9 @@ function OptionGroup({
   onChange,
 }: {
   label: string;
-  value: string;
-  options: string[];
-  onChange: (value: string) => void;
+  value: FeedbackOptionValue | "";
+  options: Array<{ value: FeedbackOptionValue; label: string }>;
+  onChange: (value: FeedbackOptionValue) => void;
 }) {
   return (
     <div className="space-y-2">
@@ -182,16 +262,16 @@ function OptionGroup({
       <div className="grid grid-cols-3 gap-2">
         {options.map((option) => (
           <button
-            key={option}
+            key={option.value}
             type="button"
-            onClick={() => onChange(option)}
+            onClick={() => onChange(option.value)}
             className={`rounded-full border px-3 py-2 text-sm font-medium transition-colors ${
-              value === option
+              value === option.value
                 ? "border-stone-800 bg-stone-900 text-white"
                 : "border-[var(--city-border)] bg-[var(--city-card)] text-stone-700 hover:bg-[var(--city-warm-muted)]"
             }`}
           >
-            {option}
+            {option.label}
           </button>
         ))}
       </div>

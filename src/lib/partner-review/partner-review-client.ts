@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
+import type { UiLanguage } from "@/lib/i18n/onboarding";
 import type { PartnerReviewRequest } from "@/types";
 import {
   normalizePartnerReviewRequest,
@@ -13,11 +14,26 @@ type SavePartnerReviewRequestInput = {
   email: string;
   message: string;
   consentGiven: boolean;
+  language?: UiLanguage;
 };
+
+const ERROR_COPY = {
+  en: {
+    signIn: "You need to sign in to request a partner review.",
+    save: "We couldn't save your review request. Please try again.",
+  },
+  ru: {
+    signIn: "Нужно войти, чтобы отправить запрос на partner review.",
+    save: "Не получилось сохранить запрос. Попробуйте ещё раз.",
+  },
+} satisfies Record<UiLanguage, Record<string, string>>;
 
 export async function savePartnerReviewRequest(
   input: SavePartnerReviewRequestInput
 ): Promise<{ request: PartnerReviewRequest | null; error: string | null }> {
+  const language = input.language ?? "en";
+  const copy = ERROR_COPY[language];
+
   try {
     const supabase = createClient();
     const {
@@ -25,7 +41,7 @@ export async function savePartnerReviewRequest(
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return { request: null, error: "You need to sign in to request a partner review." };
+      return { request: null, error: copy.signIn };
     }
 
     const { data: existingRows, error: selectError } = await supabase
@@ -95,7 +111,7 @@ export async function savePartnerReviewRequest(
     console.error("[Soft Landing] savePartnerReviewRequest error:", error);
     return {
       request: null,
-      error: "We couldn't save your review request. Please try again.",
+      error: copy.save,
     };
   }
 }

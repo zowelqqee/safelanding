@@ -169,6 +169,7 @@ Create `.env.local`:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SITE_URL=
 ```
 
 For Supabase, use the project base URL:
@@ -180,6 +181,15 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 Use the public / publishable key for the frontend.
 
 Do **not** put the Supabase secret key into any `NEXT_PUBLIC_` variable.
+
+Set `NEXT_PUBLIC_SITE_URL` to the production origin, without a trailing slash:
+
+```env
+NEXT_PUBLIC_SITE_URL=https://your-production-domain.com
+```
+
+This origin is used for Supabase email confirmation callbacks. Do not set it to
+`localhost` in environments where real confirmation emails are sent.
 
 ---
 
