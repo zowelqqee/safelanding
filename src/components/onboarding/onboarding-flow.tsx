@@ -10,6 +10,9 @@ import type {
   MainFear,
   RegionPreference,
   MoveOptimization,
+  SafetyImportance,
+  CostTolerance,
+  StudyPriority,
   IncomeRange,
   SavingsRange,
   IncomeType,
@@ -78,6 +81,9 @@ const initialState: OnboardingState = {
   mainFear: "",
   regionPreferences: [],
   moveOptimization: "",
+  safetyImportance: "medium",
+  costTolerance: "flexible",
+  studyPriority: "top_university",
   selectedCountry: "",
   selectedCity: "",
   selectedLegalPath: "",
@@ -365,6 +371,15 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
     });
   };
 
+  const handleOptimizationChange = (patch: Partial<{
+    moveOptimization: MoveOptimization;
+    safetyImportance: SafetyImportance;
+    costTolerance: CostTolerance;
+    studyPriority: StudyPriority;
+  }>) => {
+    update(patch);
+  };
+
   const handleConfirmPlan = () => {
     if (typeof window !== "undefined") {
       localStorage.setItem("sl_onboarding", JSON.stringify(state));
@@ -440,7 +455,11 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
     <StepOptimization
       key="optimization"
       value={state.moveOptimization}
-      onChange={(v) => update({ moveOptimization: v as MoveOptimization })}
+      moveGoal={state.moveGoal}
+      safetyImportance={state.safetyImportance}
+      costTolerance={state.costTolerance}
+      studyPriority={state.studyPriority}
+      onChange={handleOptimizationChange}
       onNext={next}
       onBack={back}
       language={state.language}

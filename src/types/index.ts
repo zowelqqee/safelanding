@@ -67,6 +67,9 @@ export type CountryMatchResult = {
   reasons: string[];
   challenges: string[];
   topPathId?: string;
+  modelTopCityId?: string;
+  modelTopCityName?: string;
+  modelRank?: number;
 };
 
 // ─── City / Region ────────────────────────────────────────────────────────────
@@ -484,6 +487,16 @@ export type MoveOptimization =
   | "best_study"
   | "safest_longterm";
 
+export type SafetyImportance = "low" | "medium" | "high";
+
+export type CostTolerance = "strict" | "flexible" | "grant_dependent";
+
+export type StudyPriority =
+  | "top_university"
+  | "scholarship_chance"
+  | "post_study_work"
+  | "affordable_degree";
+
 // ─── Onboarding state ─────────────────────────────────────────────────────────
 
 export type OnboardingState = {
@@ -507,6 +520,9 @@ export type OnboardingState = {
   regionPreferences: RegionPreference[];
   // Step 7 — what to optimize for
   moveOptimization: MoveOptimization | "";
+  safetyImportance: SafetyImportance;
+  costTolerance: CostTolerance;
+  studyPriority: StudyPriority;
   // Step 8 — country selection (set after user picks from country shortlist)
   selectedCountry: string;
   // Step 9 — city selection

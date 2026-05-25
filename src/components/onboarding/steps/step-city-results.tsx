@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AlertTriangle, CheckCircle, ArrowRight, MapPin, Bookmark, BookmarkCheck, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -54,6 +54,10 @@ interface Props {
   onBack: () => void;
   language: UiLanguage;
 }
+
+type CityPredictionResponse = {
+  results?: CityMatchResult[];
+};
 
 function buildCityCompareQuery(state: OnboardingState) {
   const params = new URLSearchParams();
@@ -176,17 +180,117 @@ function CityCard({
 export function StepCityResults({ state, onSelect, onShortlistToggle, onBack, language }: Props) {
   const country = getCountryById(state.selectedCountry);
   const copy = COPY[language];
+  const predictionRequest = useMemo(
+    () => ({
+      countryId: state.selectedCountry,
+      citizenship: state.citizenship,
+      currentCountry: state.currentCountry,
+      residenceCountry: state.residenceCountry,
+      language: state.language,
+      moveGoal: state.moveGoal,
+      monthlyIncome: state.monthlyIncome,
+      savingsRange: state.savingsRange,
+      incomeType: state.incomeType,
+      lifePreferences: state.lifePreferences,
+      mainFear: state.mainFear,
+      regionPreferences: state.regionPreferences,
+      moveOptimization: state.moveOptimization,
+      safetyImportance: state.safetyImportance,
+      costTolerance: state.costTolerance,
+      studyPriority: state.studyPriority,
+    }),
+    [
+      state.selectedCountry,
+      state.citizenship,
+      state.currentCountry,
+      state.residenceCountry,
+      state.language,
+      state.moveGoal,
+      state.monthlyIncome,
+      state.savingsRange,
+      state.incomeType,
+      state.lifePreferences,
+      state.mainFear,
+      state.regionPreferences,
+      state.moveOptimization,
+      state.safetyImportance,
+      state.costTolerance,
+      state.studyPriority,
+    ]
+  );
+  const predictionRequestKey = useMemo(
+    () => JSON.stringify(predictionRequest),
+    [predictionRequest]
+  );
 
-  const results = useMemo(
+  const fallbackResults = useMemo(
     () =>
       matchCitiesForCountry({
-        countryId: state.selectedCountry,
-        lifePreferences: state.lifePreferences,
-        moveGoal: state.moveGoal,
-        monthlyIncome: state.monthlyIncome,
+        countryId: predictionRequest.countryId,
+        lifePreferences: predictionRequest.lifePreferences,
+        moveGoal: predictionRequest.moveGoal,
+        monthlyIncome: predictionRequest.monthlyIncome,
       }),
-    [state]
+    [
+      predictionRequest.countryId,
+      predictionRequest.lifePreferences,
+      predictionRequest.moveGoal,
+      predictionRequest.monthlyIncome,
+    ]
   );
+  const [modelResults, setModelResults] = useState<{
+    key: string;
+    results: CityMatchResult[];
+  } | null>(null);
+
+  useEffect(() => {
+    if (!predictionRequest.countryId) {
+      return;
+    }
+
+    const controller = new AbortController();
+    let cancelled = false;
+
+    fetch("/api/city-predictions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(predictionRequest),
+      signal: controller.signal,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`City prediction request failed with ${response.status}`);
+        }
+        return response.json() as Promise<CityPredictionResponse>;
+      })
+      .then((payload) => {
+        if (!cancelled && Array.isArray(payload.results)) {
+          setModelResults({
+            key: predictionRequestKey,
+            results: payload.results,
+          });
+        }
+      })
+      .catch((error: Error) => {
+        if (!cancelled && error.name !== "AbortError") {
+          setModelResults((current) =>
+            current?.key === predictionRequestKey ? null : current
+          );
+        }
+      });
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [
+    predictionRequest,
+    predictionRequestKey,
+  ]);
+
+  const results = modelResults?.key === predictionRequestKey
+    ? modelResults.results
+    : fallbackResults;
 
   const shortlistedCount = state.shortlistedCities.length;
 

@@ -2,21 +2,80 @@
 
 import { Button } from "@/components/ui/button";
 import { StepHeader } from "../step-header";
-import type { MoveOptimization } from "@/types";
+import type { CostTolerance, MoveGoal, MoveOptimization, SafetyImportance, StudyPriority } from "@/types";
 import { cn } from "@/lib/utils";
 import { commonCopy, optimizationCopy, type UiLanguage } from "@/lib/i18n/onboarding";
 
 interface Props {
   value: MoveOptimization | "";
-  onChange: (v: MoveOptimization) => void;
+  moveGoal: MoveGoal | "";
+  safetyImportance: SafetyImportance;
+  costTolerance: CostTolerance;
+  studyPriority: StudyPriority;
+  onChange: (v: Partial<{
+    moveOptimization: MoveOptimization;
+    safetyImportance: SafetyImportance;
+    costTolerance: CostTolerance;
+    studyPriority: StudyPriority;
+  }>) => void;
   onNext: () => void;
   onBack: () => void;
   language: UiLanguage;
 }
 
-export function StepOptimization({ value, onChange, onNext, onBack, language }: Props) {
+function ChoiceGroup<T extends string>({
+  title,
+  options,
+  value,
+  onChange,
+}: {
+  title: string;
+  options: { value: T; label: string; description: string }[];
+  value: T;
+  onChange: (value: T) => void;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="city-section-kicker">{title}</div>
+      <div className="grid grid-cols-1 gap-2">
+        {options.map((option) => {
+          const active = value === option.value;
+          return (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => onChange(option.value)}
+              className={cn(
+                "rounded-xl border px-3 py-2.5 text-left transition-colors",
+                active
+                  ? "border-stone-800 bg-stone-100"
+                  : "border-[var(--city-border)] bg-[var(--city-card)] hover:bg-[var(--city-warm-muted)]"
+              )}
+            >
+              <div className="text-sm font-medium text-stone-900">{option.label}</div>
+              <div className="text-xs text-[var(--city-muted-fg)]">{option.description}</div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function StepOptimization({
+  value,
+  moveGoal,
+  safetyImportance,
+  costTolerance,
+  studyPriority,
+  onChange,
+  onNext,
+  onBack,
+  language,
+}: Props) {
   const copy = optimizationCopy[language];
   const common = commonCopy[language];
+  const showStudyPriority = moveGoal === "study" || value === "best_study";
 
   return (
     <div className="flex flex-col flex-1 gap-5 pt-4">
@@ -34,7 +93,7 @@ export function StepOptimization({ value, onChange, onNext, onBack, language }: 
           return (
             <button
               key={opt.value}
-              onClick={() => onChange(opt.value)}
+              onClick={() => onChange({ moveOptimization: opt.value })}
               className={cn(
                 "flex items-center gap-3 rounded-xl border px-4 py-3.5 text-left transition-colors",
                 active
@@ -57,6 +116,29 @@ export function StepOptimization({ value, onChange, onNext, onBack, language }: 
           );
         })}
       </div>
+
+      <ChoiceGroup
+        title={copy.safetyTitle}
+        options={copy.safetyOptions}
+        value={safetyImportance}
+        onChange={(nextValue) => onChange({ safetyImportance: nextValue })}
+      />
+
+      <ChoiceGroup
+        title={copy.costTitle}
+        options={copy.costOptions}
+        value={costTolerance}
+        onChange={(nextValue) => onChange({ costTolerance: nextValue })}
+      />
+
+      {showStudyPriority && (
+        <ChoiceGroup
+          title={copy.studyTitle}
+          options={copy.studyOptions}
+          value={studyPriority}
+          onChange={(nextValue) => onChange({ studyPriority: nextValue })}
+        />
+      )}
 
       <div className="flex flex-col gap-2 pb-6">
         <Button onClick={onNext} disabled={!value} className="rounded-full">

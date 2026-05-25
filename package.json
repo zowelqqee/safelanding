@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "city-model": "python3 -m ml.city_model_server --host 127.0.0.1 --port 8000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

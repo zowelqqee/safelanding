@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AlertTriangle, CheckCircle, ArrowRight, Globe, Bookmark, BookmarkCheck, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -63,6 +63,10 @@ interface Props {
   onBack: () => void;
   language: UiLanguage;
 }
+
+type CountryPredictionResponse = {
+  results?: CountryMatchResult[];
+};
 
 function MatchScore({ score, language }: { score: number; language: UiLanguage }) {
   const common = commonCopy[language];
@@ -176,17 +180,113 @@ function CountryCard({
 }
 
 export function StepCountryResults({ state, onSelect, onShortlistToggle, onBack, language }: Props) {
-  const results = useMemo(
+  const predictionRequest = useMemo(
+    () => ({
+      citizenship: state.citizenship,
+      currentCountry: state.currentCountry,
+      residenceCountry: state.residenceCountry,
+      language: state.language,
+      moveGoal: state.moveGoal,
+      monthlyIncome: state.monthlyIncome,
+      savingsRange: state.savingsRange,
+      incomeType: state.incomeType,
+      lifePreferences: state.lifePreferences,
+      mainFear: state.mainFear,
+      regionPreferences: state.regionPreferences,
+      moveOptimization: state.moveOptimization,
+      safetyImportance: state.safetyImportance,
+      costTolerance: state.costTolerance,
+      studyPriority: state.studyPriority,
+    }),
+    [
+      state.citizenship,
+      state.currentCountry,
+      state.residenceCountry,
+      state.language,
+      state.moveGoal,
+      state.monthlyIncome,
+      state.savingsRange,
+      state.incomeType,
+      state.lifePreferences,
+      state.mainFear,
+      state.regionPreferences,
+      state.moveOptimization,
+      state.safetyImportance,
+      state.costTolerance,
+      state.studyPriority,
+    ]
+  );
+  const predictionRequestKey = useMemo(
+    () => JSON.stringify(predictionRequest),
+    [predictionRequest]
+  );
+
+  const fallbackResults = useMemo(
     () =>
       matchCountries({
-        lifePreferences: state.lifePreferences,
-        moveGoal: state.moveGoal,
-        monthlyIncome: state.monthlyIncome,
-        regionPreferences: state.regionPreferences,
-        moveOptimization: state.moveOptimization,
+        lifePreferences: predictionRequest.lifePreferences,
+        moveGoal: predictionRequest.moveGoal,
+        monthlyIncome: predictionRequest.monthlyIncome,
+        regionPreferences: predictionRequest.regionPreferences,
+        moveOptimization: predictionRequest.moveOptimization,
       }),
-    [state]
+    [
+      predictionRequest.lifePreferences,
+      predictionRequest.moveGoal,
+      predictionRequest.monthlyIncome,
+      predictionRequest.regionPreferences,
+      predictionRequest.moveOptimization,
+    ]
   );
+  const [modelResults, setModelResults] = useState<{
+    key: string;
+    results: CountryMatchResult[];
+  } | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let cancelled = false;
+
+    fetch("/api/country-predictions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(predictionRequest),
+      signal: controller.signal,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Country prediction request failed with ${response.status}`);
+        }
+        return response.json() as Promise<CountryPredictionResponse>;
+      })
+      .then((payload) => {
+        if (!cancelled && Array.isArray(payload.results)) {
+          setModelResults({
+            key: predictionRequestKey,
+            results: payload.results,
+          });
+        }
+      })
+      .catch((error: Error) => {
+        if (!cancelled && error.name !== "AbortError") {
+          setModelResults((current) =>
+            current?.key === predictionRequestKey ? null : current
+          );
+        }
+      });
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [
+    predictionRequest,
+    predictionRequestKey,
+  ]);
+
+  const results = modelResults?.key === predictionRequestKey
+    ? modelResults.results
+    : fallbackResults;
 
   const shortlistedCount = state.shortlistedCountries.length;
   const copy = COPY[language];

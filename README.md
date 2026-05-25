@@ -213,6 +213,24 @@ Open:
 http://localhost:3000
 ```
 
+### Local city model
+
+The city shortlist can use the PyTorch model in `city_model.pt`. Start the
+model service in a second terminal before or alongside Next:
+
+```bash
+npm run city-model
+```
+
+By default Next calls:
+
+```env
+CITY_MODEL_URL=http://127.0.0.1:8000
+CITY_MODEL_ENABLED=true
+```
+
+If the service is not running, the app falls back to the TypeScript city matcher.
+
 For testing on a phone in the same Wi-Fi network:
 
 ```bash

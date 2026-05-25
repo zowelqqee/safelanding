@@ -295,6 +295,25 @@ export const optimizationCopy = {
       { value: "best_study", label: "Best study route", description: "Access top universities and student life", emoji: "🎓" },
       { value: "safest_longterm", label: "Safest long-term option", description: "Stable residency, clear PR path, strong institutions", emoji: "🛡️" },
     ],
+    safetyTitle: "How much should safety matter?",
+    safetyOptions: [
+      { value: "high", label: "A lot", description: "Penalize places where safety is uneven" },
+      { value: "medium", label: "Normal", description: "Balance safety with upside and lifestyle" },
+      { value: "low", label: "Flexible", description: "I can tolerate some risk for the right upside" },
+    ],
+    costTitle: "How flexible is the budget?",
+    costOptions: [
+      { value: "strict", label: "Strict", description: "High costs should push places down" },
+      { value: "flexible", label: "Flexible", description: "I can pay more for a strong fit" },
+      { value: "grant_dependent", label: "Grant-dependent", description: "Expensive study can work if funding is realistic" },
+    ],
+    studyTitle: "For study, what matters most?",
+    studyOptions: [
+      { value: "top_university", label: "Top university", description: "Prestige, research strength, and global signal" },
+      { value: "scholarship_chance", label: "Scholarships", description: "Funding, grants, and assistantship odds" },
+      { value: "post_study_work", label: "Post-study work", description: "Career pathway after graduation" },
+      { value: "affordable_degree", label: "Affordable degree", description: "Lower tuition and living pressure" },
+    ],
   },
   ru: {
     title: "Что важнее всего оптимизировать?",
@@ -307,10 +326,34 @@ export const optimizationCopy = {
       { value: "best_study", label: "Лучший учебный путь", description: "Университеты и студенческая среда", emoji: "🎓" },
       { value: "safest_longterm", label: "Самый надёжный долгосрок", description: "Стабильный статус, понятный PR/ПМЖ, институты", emoji: "🛡️" },
     ],
+    safetyTitle: "Насколько важна безопасность?",
+    safetyOptions: [
+      { value: "high", label: "Очень", description: "Сильно понижать места с неровной безопасностью" },
+      { value: "medium", label: "Обычно", description: "Балансировать безопасность, перспективы и образ жизни" },
+      { value: "low", label: "Гибко", description: "Готов терпеть часть риска ради сильного upside" },
+    ],
+    costTitle: "Насколько гибкий бюджет?",
+    costOptions: [
+      { value: "strict", label: "Строгий", description: "Дорогие места должны падать ниже" },
+      { value: "flexible", label: "Гибкий", description: "Готов платить больше за сильное совпадение" },
+      { value: "grant_dependent", label: "Нужны гранты", description: "Дорогая учёба подходит, если есть реалистичное финансирование" },
+    ],
+    studyTitle: "Для учёбы что важнее?",
+    studyOptions: [
+      { value: "top_university", label: "Топ-университет", description: "Престиж, research и глобальный сигнал" },
+      { value: "scholarship_chance", label: "Гранты", description: "Шансы на funding, scholarships и assistantships" },
+      { value: "post_study_work", label: "Работа после учёбы", description: "Карьерный путь после выпуска" },
+      { value: "affordable_degree", label: "Доступный диплом", description: "Ниже tuition и давление бюджета" },
+    ],
   },
 } satisfies Record<UiLanguage, {
   title: string;
   subtitle: string;
   options: { value: MoveOptimization; label: string; description: string; emoji: string }[];
+  safetyTitle: string;
+  safetyOptions: { value: "low" | "medium" | "high"; label: string; description: string }[];
+  costTitle: string;
+  costOptions: { value: "strict" | "flexible" | "grant_dependent"; label: string; description: string }[];
+  studyTitle: string;
+  studyOptions: { value: "top_university" | "scholarship_chance" | "post_study_work" | "affordable_degree"; label: string; description: string }[];
 }>;
-
