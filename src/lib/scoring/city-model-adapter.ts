@@ -253,6 +253,10 @@ function cityListModelScore(modelScore: number, heuristicScore: number) {
   return clampScore(modelScore * 0.75 + heuristicScore * 0.25);
 }
 
+function looksRussian(text?: string) {
+  return Boolean(text && /[А-Яа-яЁё]/.test(text));
+}
+
 export function getAppCityIdForModelCityId(cityModelId: number) {
   return MODEL_CITY_ID_TO_APP_CITY_ID[cityModelId];
 }
@@ -368,7 +372,9 @@ export function mergeCountryModelResults(
       const overallFit = clampScore(
         modelSignal.signal * 0.5 + result.legalFit * 0.3 + result.lifestyleFit * 0.2
       );
-      const cityReason = `Top city match: ${modelSignal.cityName}`;
+      const cityReason = looksRussian(result.reasons[0])
+        ? `Лучшее совпадение по городам: ${modelSignal.cityName}`
+        : `Top city match: ${modelSignal.cityName}`;
 
       return {
         ...result,

@@ -6,6 +6,7 @@ import type {
   LifePreference,
   MoveGoal,
   MoveOptimization,
+  MainFear,
   PathFinderAnswers,
   MoveProfile,
   RegionPreference,
@@ -46,18 +47,37 @@ function isMoveOptimization(value: string | null): value is MoveOptimization {
     value === "safest_longterm";
 }
 
+function isMainFear(value: string | undefined): value is MainFear {
+  return value === "documents" ||
+    value === "money" ||
+    value === "housing" ||
+    value === "language" ||
+    value === "finding_work" ||
+    value === "being_alone" ||
+    value === "choosing_wrong_place" ||
+    value === "legal_status";
+}
+
 export function buildCountryMatchInputFromMoveProfile(
   profile: MoveProfile
 ): CountryMatchInput {
   const lifePreferences = profile.life_preferences.filter(Boolean) as LifePreference[];
   const regionPreferences = profile.open_regions.filter(isRegionPreference);
+  const mainFear = profile.worries.find(isMainFear) ?? "";
 
   return {
+    language: profile.preferred_language === "ru" ? "ru" : "en",
+    citizenship: profile.citizenship ?? "",
+    currentCountry: profile.current_country ?? "",
+    residenceCountry: profile.residence_country ?? "",
     lifePreferences,
     moveGoal: isMoveGoal(profile.move_goal) ? profile.move_goal : "",
     monthlyIncome: isIncomeRange(profile.monthly_income_range)
       ? profile.monthly_income_range
       : "",
+    savingsRange: profile.savings_range as CountryMatchInput["savingsRange"],
+    incomeType: profile.income_type as CountryMatchInput["incomeType"],
+    mainFear,
     regionPreferences,
     moveOptimization: isMoveOptimization(profile.optimization_goal)
       ? profile.optimization_goal

@@ -3,8 +3,10 @@ import Link from "next/link";
 import { Compass, Globe, LayoutGrid, LogIn, Menu, Shield, Sparkles, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LandingHeaderActions } from "@/components/landing/landing-header-actions";
+import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { HeaderUser } from "@/app/(app)/header-user";
 import { SignOutButton } from "@/components/auth/sign-out-button";
+import type { UiLanguage } from "@/lib/i18n/onboarding";
 import { cn } from "@/lib/utils";
 
 type HeaderVariant = "public" | "app";
@@ -107,11 +109,13 @@ export function SiteHeader({
   variant = "public",
   action = "default",
   userEmail,
+  initialLanguage = "en",
   className,
 }: {
   variant?: HeaderVariant;
   action?: HeaderAction;
   userEmail?: string;
+  initialLanguage?: UiLanguage;
   className?: string;
 }) {
   const desktopItems = variant === "app" ? APP_NAV_ITEMS : PUBLIC_NAV_ITEMS;
@@ -152,6 +156,7 @@ export function SiteHeader({
         </nav>
 
         <div className="ml-auto hidden md:flex items-center gap-2">
+          <LanguageSwitcher initialLanguage={initialLanguage} />
           <DesktopActions action={action} variant={variant} userEmail={userEmail} />
         </div>
 
@@ -163,6 +168,13 @@ export function SiteHeader({
             </summary>
             <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-[min(24rem,calc(100vw-2rem))] rounded-[24px] border border-[var(--city-border)] bg-[var(--city-bg)] p-4 shadow-[0_18px_60px_rgba(55,44,34,0.14)]">
               <div className="space-y-4">
+                <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-card)] px-4 py-3">
+                  <LanguageSwitcher
+                    initialLanguage={initialLanguage}
+                    display="full"
+                  />
+                </div>
+
                 {variant === "app" && (
                   <MobileMenuGroup title="Your app" items={mobileAppItems} icon={LayoutGrid} />
                 )}

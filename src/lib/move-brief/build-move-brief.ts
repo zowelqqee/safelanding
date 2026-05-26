@@ -135,6 +135,8 @@ export type MoveBriefFit = {
 };
 
 export type MoveBriefData = {
+  caseReference: string;
+  preparedAt: string;
   headline: string;
   destination: {
     country: string;
@@ -151,6 +153,14 @@ export type MoveBriefData = {
   profileSummary: Array<{ label: string; value: string }>;
   blockers: string[];
 };
+
+function formatPreparedAt(language: UiLanguage) {
+  return new Intl.DateTimeFormat(language === "ru" ? "ru-RU" : "en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date());
+}
 
 function fitToneFromScore(score: number): FitTone {
   if (score >= 70) return "strong";
@@ -316,6 +326,8 @@ export function buildMoveBrief(
       : countryMatch?.overallFit;
 
   return {
+    caseReference: `SL-${profile.id.slice(0, 8).toUpperCase()}`,
+    preparedAt: formatPreparedAt(language),
     headline:
       city && country
         ? `${city.name}, ${country.name}`

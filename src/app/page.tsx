@@ -200,9 +200,11 @@ function DestinationsSection() {
     <section className="px-4 sm:px-6 py-14 max-w-5xl mx-auto">
       <div className="text-center mb-8">
         <p className="city-section-kicker mb-2">Available destinations</p>
-        <h2 className="font-serif text-2xl sm:text-3xl font-medium text-stone-900">12 countries, expanding</h2>
+        <h2 className="font-serif text-2xl sm:text-3xl font-medium text-stone-900">
+          {COUNTRIES.length} countries, expanding
+        </h2>
         <p className="text-[var(--city-muted-fg)] mt-2 text-sm max-w-md mx-auto">
-          Southern Europe, Central Europe, North America, the Gulf, and Asia —
+          Southern Europe, Central Europe, North America, the Gulf, Central Asia, and Asia —
           with country, city, and legal-path fit layers built in.
         </p>
       </div>

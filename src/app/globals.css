@@ -56,6 +56,23 @@
   --color-readiness-ready: var(--readiness-ready);
 }
 
+@media print {
+  body {
+    background: white !important;
+  }
+
+  header,
+  nav,
+  [data-print-hidden="true"] {
+    display: none !important;
+  }
+
+  .city-card,
+  .surface-card {
+    box-shadow: none !important;
+  }
+}
+
 :root {
   /* Warm base — off-white paper tones replace cold blue-grey */
   --background: oklch(0.978 0.010 75);

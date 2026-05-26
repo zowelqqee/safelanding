@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle, MapPin, Route, AlertTriangle, ArrowRight, Clock } from "lucide-react";
+import { CheckCircle, MapPin, Route, AlertTriangle, ArrowRight, Clock, FileText, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCountryById } from "@/lib/data/countries";
 import { getCityById } from "@/lib/data/cities";
@@ -17,6 +17,12 @@ const COPY = {
     preparationTime: "Preparation time",
     blockers: "Top blockers to watch",
     firstStep: "Your first step",
+    planSnapshot: "Plan snapshot",
+    moveBrief: "Move Brief",
+    moveBriefText:
+      "Next we'll turn this into a roadmap and a brief you can use to discuss the plan clearly.",
+    verificationNote:
+      "Legal requirements still need source-level verification before you treat this as a document plan.",
     createRoadmap: "Create my roadmap",
     changePath: "← Change legal path",
     nextStep: {
@@ -39,6 +45,12 @@ const COPY = {
     preparationTime: "Время подготовки",
     blockers: "Главные блокеры",
     firstStep: "Первый шаг",
+    planSnapshot: "Снимок плана",
+    moveBrief: "Move Brief",
+    moveBriefText:
+      "Дальше мы превратим это в роадмап и brief, с которым план проще обсуждать.",
+    verificationNote:
+      "Юридические требования всё равно нужно проверять по источникам, прежде чем считать это документным планом.",
     createRoadmap: "Создать роадмап",
     changePath: "← Изменить легальный путь",
     nextStep: {
@@ -61,6 +73,10 @@ const COPY = {
   preparationTime: string;
   blockers: string;
   firstStep: string;
+  planSnapshot: string;
+  moveBrief: string;
+  moveBriefText: string;
+  verificationNote: string;
   createRoadmap: string;
   changePath: string;
   nextStep: Record<string, string>;
@@ -96,7 +112,9 @@ export function StepPlanReady({ state, onConfirm, onBack, language }: Props) {
         </p>
       </div>
 
-      <div className="city-card rounded-[18px] divide-y divide-[var(--city-border)]">
+      <div>
+        <div className="city-section-kicker mb-2">{copy.planSnapshot}</div>
+        <div className="city-card rounded-[18px] divide-y divide-[var(--city-border)]">
         <div className="flex items-center gap-3 px-4 py-3">
           <span className="text-2xl">{country.emoji}</span>
           <div className="flex-1 min-w-0">
@@ -123,6 +141,7 @@ export function StepPlanReady({ state, onConfirm, onBack, language }: Props) {
             <div className="text-sm font-semibold text-stone-900 mt-0.5">{path.estimatedPreparationTime}</div>
           </div>
         </div>
+        </div>
       </div>
 
       {blockers.length > 0 && (
@@ -145,6 +164,23 @@ export function StepPlanReady({ state, onConfirm, onBack, language }: Props) {
       <div className="rounded-xl bg-[var(--city-warm-muted)] border border-[var(--city-border)] px-4 py-3">
         <div className="city-section-kicker mb-1">{copy.firstStep}</div>
         <p className="text-sm text-stone-800 leading-relaxed">{nextStep}</p>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-card)] px-4 py-4">
+          <div className="mb-2 flex items-center gap-2 city-section-kicker">
+            <FileText className="h-3.5 w-3.5" />
+            {copy.moveBrief}
+          </div>
+          <p className="text-sm leading-relaxed text-stone-800">{copy.moveBriefText}</p>
+        </div>
+        <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
+          <div className="mb-2 flex items-center gap-2 city-section-kicker">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            {language === "ru" ? "Проверка" : "Verification"}
+          </div>
+          <p className="text-sm leading-relaxed text-[var(--city-muted-fg)]">{copy.verificationNote}</p>
+        </div>
       </div>
 
       <div className="flex flex-col gap-2 pb-6">

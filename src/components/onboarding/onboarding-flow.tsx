@@ -37,12 +37,18 @@ import {
 import { trackEvent } from "@/lib/analytics/trackEvent";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import type { UiLanguage } from "@/lib/i18n/onboarding";
+import {
+  LANGUAGE_CHANGE_EVENT,
+  getStoredUiLanguage,
+  isUiLanguage,
+  notifyUiLanguageChanged,
+  setStoredUiLanguage,
+} from "@/lib/i18n/ui-language";
 
 // Steps: 0-welcome 1-base 2-goal 3-money 4-prefs 5-fear 6-region 7-optimization
 //        8-countries 9-cities 10-paths 11-plan-ready
 const CONTENT_STEPS = 10;
 const TOTAL_STEPS = 12;
-const LANGUAGE_STORAGE_KEY = "sl_language";
 
 const ACTIVE_STEP_INDEX: Record<string, number> = {
   welcome: 0,
@@ -96,12 +102,10 @@ function getInitialOnboardingState(): OnboardingState {
     return initialState;
   }
 
-  const savedLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
-  const language = savedLanguage === "ru" || savedLanguage === "en"
-    ? savedLanguage
-    : initialState.language;
-
-  return { ...initialState, language };
+  return {
+    ...initialState,
+    language: getStoredUiLanguage(initialState.language),
+  };
 }
 
 // ─── Persistence helpers ──────────────────────────────────────────────────────
@@ -177,12 +181,19 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       .then((profile) => {
         if (cancelled || !profile) return;
 
+        const profileLanguage = isUiLanguage(profile.preferred_language)
+          ? profile.preferred_language
+          : getStoredUiLanguage("en");
+
+        setStoredUiLanguage(profileLanguage);
+        notifyUiLanguageChanged(profileLanguage);
+
         setState((prev) => ({
           ...prev,
           citizenship: profile.citizenship ?? "",
           currentCountry: profile.current_country ?? "",
           residenceCountry: profile.residence_country ?? "",
-          language: (profile.preferred_language as UiLanguage) ?? "en",
+          language: profileLanguage,
           moveGoal: (profile.move_goal as MoveGoal) ?? "",
           monthlyIncome: (profile.monthly_income_range as IncomeRange) ?? "",
           savingsRange: (profile.savings_range as SavingsRange) ?? "",
@@ -226,6 +237,23 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
     };
   }, [isPreview]);
 
+  useEffect(() => {
+    const handleLanguageChange = (event: Event) => {
+      if (
+        event instanceof CustomEvent &&
+        isUiLanguage(event.detail?.language)
+      ) {
+        setState((prev) => ({ ...prev, language: event.detail.language }));
+      }
+    };
+
+    window.addEventListener(LANGUAGE_CHANGE_EVENT, handleLanguageChange);
+
+    return () => {
+      window.removeEventListener(LANGUAGE_CHANGE_EVENT, handleLanguageChange);
+    };
+  }, []);
+
   // ── Persist step data when step advances ───────────────────────────────────
   useEffect(() => {
     if (!profileLoaded) return;
@@ -245,9 +273,8 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
   const updateLanguage = (language: UiLanguage) => {
     setState((prev) => ({ ...prev, language }));
 
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
-    }
+    setStoredUiLanguage(language);
+    notifyUiLanguageChanged(language);
 
     if (!isPreview) {
       updateMoveProfile({ preferred_language: language }).catch(console.error);
@@ -384,9 +411,16 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
     if (typeof window !== "undefined") {
       localStorage.setItem("sl_onboarding", JSON.stringify(state));
     }
-    router.push(
-      `/explore/${state.selectedCountry}/${state.selectedCity}?path=${state.selectedLegalPath}`
-    );
+    if (!isPreview) {
+      updateMoveProfile({
+        selected_country_id: state.selectedCountry || null,
+        selected_city_id: state.selectedCity || null,
+        selected_legal_path_id: state.selectedLegalPath || null,
+        active_step: "move_plan_ready",
+        onboarding_completed: true,
+      }).catch(console.error);
+    }
+    router.push("/app/roadmap");
   };
 
   // ── Step tree ──────────────────────────────────────────────────────────────

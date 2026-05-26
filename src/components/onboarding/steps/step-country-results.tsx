@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, CheckCircle, ArrowRight, Globe, Bookmark, BookmarkCheck, BarChart3 } from "lucide-react";
+import { AlertTriangle, CheckCircle, ArrowRight, Globe, Bookmark, BookmarkCheck, BarChart3, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { matchCountries } from "@/lib/scoring/country-matcher";
 import { getCountryById } from "@/lib/data/countries";
@@ -15,12 +15,20 @@ const COPY = {
     title: "Your landing shortlist",
     subtitle:
       "Ranked by fit with your preferences. Save, compare, then choose the destination you want to pressure-test next.",
+    recommendation: "Recommended starting point",
+    recommendationText:
+      "This is the strongest current match across legal fit, lifestyle fit, and the tradeoffs you asked us to consider.",
+    whyFirst: "Why this is first",
+    tradeoff: "Main tradeoff",
+    showing: "Showing your strongest matches",
     compare: "Compare",
     shortlistedCountries: "shortlisted countries",
     overall: "Overall",
     lifestyle: "Lifestyle",
     legal: "Legal",
     mainBlocker: "Main blocker",
+    pros: "Pros for you",
+    cons: "Cons to check",
     choose: "Choose this destination",
     removeTitle: "Remove from shortlist",
     saveTitle: "Save to shortlist",
@@ -31,12 +39,20 @@ const COPY = {
     title: "Подборка стран для переезда",
     subtitle:
       "Отсортировано по совпадению с вашим профилем. Сохраняйте, сравнивайте и выбирайте направление для проверки.",
+    recommendation: "Рекомендуемая отправная точка",
+    recommendationText:
+      "Это самое сильное текущее совпадение по легальному пути, качеству жизни и тем компромиссам, которые вы указали.",
+    whyFirst: "Почему это первое",
+    tradeoff: "Главный компромисс",
+    showing: "Показываем самые сильные совпадения",
     compare: "Сравнить",
     shortlistedCountries: "сохранённые страны",
     overall: "Общее",
     lifestyle: "Жизнь",
     legal: "Легальный путь",
     mainBlocker: "Главный блокер",
+    pros: "Плюсы для вас",
+    cons: "Что проверить",
     choose: "Выбрать это направление",
     removeTitle: "Убрать из сохранённых",
     saveTitle: "Сохранить",
@@ -143,6 +159,7 @@ function CountryCard({
 
       {result.reasons.length > 0 && (
         <div className="flex flex-col gap-1.5">
+          <div className="city-section-kicker">{copy.pros}</div>
           {result.reasons.map((r, i) => (
             <div key={i} className="flex items-start gap-1.5 text-xs">
               <CheckCircle className="h-3.5 w-3.5 text-emerald-600 mt-0.5 shrink-0" />
@@ -155,11 +172,15 @@ function CountryCard({
       {result.challenges.length > 0 && (
         <div className="rounded-xl border border-amber-200/60 bg-amber-50/60 px-3 py-2.5">
           <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-700">
-            {copy.mainBlocker}
+            {result.challenges.length > 1 ? copy.cons : copy.mainBlocker}
           </div>
-          <div className="flex items-start gap-1.5 text-xs">
-            <AlertTriangle className="h-3.5 w-3.5 text-amber-500 mt-0.5 shrink-0" />
-            <span className="text-amber-900">{result.mainBlocker}</span>
+          <div className="flex flex-col gap-1.5">
+            {result.challenges.map((challenge, i) => (
+              <div key={i} className="flex items-start gap-1.5 text-xs">
+                <AlertTriangle className="h-3.5 w-3.5 text-amber-500 mt-0.5 shrink-0" />
+                <span className="text-amber-900">{challenge}</span>
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -176,6 +197,55 @@ function CountryCard({
         </Link>
       </div>
     </div>
+  );
+}
+
+function RecommendationPanel({
+  result,
+  language,
+}: {
+  result: CountryMatchResult;
+  language: UiLanguage;
+}) {
+  const country = getCountryById(result.countryId);
+  if (!country) return null;
+  const copy = COPY[language];
+  const firstReason = result.reasons[0] ?? country.summary;
+  const firstChallenge = result.challenges[0] ?? result.mainBlocker;
+
+  return (
+    <section className="city-card overflow-hidden rounded-[22px]">
+      <div className="border-b border-[var(--city-border)] bg-[var(--city-warm-muted)] px-4 py-4">
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--city-border)] bg-[var(--city-card)]">
+            <Sparkles className="h-4 w-4 text-stone-700" />
+          </div>
+          <div className="min-w-0">
+            <p className="city-section-kicker">{copy.recommendation}</p>
+            <h3 className="mt-1 text-lg font-semibold leading-tight text-stone-900">
+              {country.emoji} {country.name}
+            </h3>
+            <p className="mt-1 text-sm leading-relaxed text-[var(--city-muted-fg)]">
+              {copy.recommendationText}
+            </p>
+          </div>
+          <div className="ml-auto shrink-0">
+            <MatchScore score={result.score} language={language} />
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-3 px-4 py-4 sm:grid-cols-2">
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 px-4 py-3">
+          <p className="city-section-kicker text-emerald-700">{copy.whyFirst}</p>
+          <p className="mt-1 text-sm leading-relaxed text-emerald-950">{firstReason}</p>
+        </div>
+        <div className="rounded-2xl border border-amber-200 bg-amber-50/70 px-4 py-3">
+          <p className="city-section-kicker text-amber-700">{copy.tradeoff}</p>
+          <p className="mt-1 text-sm leading-relaxed text-amber-950">{firstChallenge}</p>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -224,18 +294,38 @@ export function StepCountryResults({ state, onSelect, onShortlistToggle, onBack,
   const fallbackResults = useMemo(
     () =>
       matchCountries({
+        language: predictionRequest.language,
+        citizenship: predictionRequest.citizenship,
+        currentCountry: predictionRequest.currentCountry,
+        residenceCountry: predictionRequest.residenceCountry,
         lifePreferences: predictionRequest.lifePreferences,
         moveGoal: predictionRequest.moveGoal,
         monthlyIncome: predictionRequest.monthlyIncome,
+        savingsRange: predictionRequest.savingsRange,
+        incomeType: predictionRequest.incomeType,
+        mainFear: predictionRequest.mainFear,
         regionPreferences: predictionRequest.regionPreferences,
         moveOptimization: predictionRequest.moveOptimization,
+        safetyImportance: predictionRequest.safetyImportance,
+        costTolerance: predictionRequest.costTolerance,
+        studyPriority: predictionRequest.studyPriority,
       }),
     [
       predictionRequest.lifePreferences,
+      predictionRequest.language,
+      predictionRequest.citizenship,
+      predictionRequest.currentCountry,
+      predictionRequest.residenceCountry,
       predictionRequest.moveGoal,
       predictionRequest.monthlyIncome,
+      predictionRequest.savingsRange,
+      predictionRequest.incomeType,
+      predictionRequest.mainFear,
       predictionRequest.regionPreferences,
       predictionRequest.moveOptimization,
+      predictionRequest.safetyImportance,
+      predictionRequest.costTolerance,
+      predictionRequest.studyPriority,
     ]
   );
   const [modelResults, setModelResults] = useState<{
@@ -287,6 +377,7 @@ export function StepCountryResults({ state, onSelect, onShortlistToggle, onBack,
   const results = modelResults?.key === predictionRequestKey
     ? modelResults.results
     : fallbackResults;
+  const visibleResults = results.slice(0, 5);
 
   const shortlistedCount = state.shortlistedCountries.length;
   const copy = COPY[language];
@@ -304,6 +395,10 @@ export function StepCountryResults({ state, onSelect, onShortlistToggle, onBack,
         </p>
       </div>
 
+      {visibleResults[0] && (
+        <RecommendationPanel result={visibleResults[0]} language={language} />
+      )}
+
       {shortlistedCount >= 2 && (
         <Link
           href={`/compare?${buildCompareQuery(state)}`}
@@ -317,16 +412,17 @@ export function StepCountryResults({ state, onSelect, onShortlistToggle, onBack,
       )}
 
       <div className="flex flex-col gap-3">
-        {results.map((result) => (
-          <CountryCard
-            key={result.countryId}
-            result={result}
-            shortlisted={state.shortlistedCountries.includes(result.countryId)}
-            onSelect={() => onSelect(result.countryId)}
-            onShortlist={() => onShortlistToggle(result.countryId)}
-            language={language}
-          />
-        ))}
+        <div className="city-section-kicker">{copy.showing}</div>
+        {visibleResults.map((result) => (
+            <CountryCard
+              key={result.countryId}
+              result={result}
+              shortlisted={state.shortlistedCountries.includes(result.countryId)}
+              onSelect={() => onSelect(result.countryId)}
+              onShortlist={() => onShortlistToggle(result.countryId)}
+              language={language}
+            />
+          ))}
       </div>
 
       <div className="pb-6">

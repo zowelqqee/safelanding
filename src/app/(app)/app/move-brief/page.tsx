@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { TrackPageEvent } from "@/components/analytics/track-page-event";
 import { FeedbackCard } from "@/components/feedback/feedback-card";
+import { PrintMoveBriefButton } from "@/components/move-brief/print-move-brief-button";
 import type { UiLanguage } from "@/lib/i18n/onboarding";
 import { buildMoveBrief } from "@/lib/move-brief/build-move-brief";
 import { getCurrentMoveProfileServer } from "@/lib/profile/profileServer";
@@ -29,6 +30,9 @@ const COPY = {
     intro:
       "A clear summary of your destination, legal path, blockers, and next step.",
     currentStage: "Current stage",
+    prepared: "Prepared",
+    reference: "Reference",
+    print: "Print / save PDF",
     destination: "Destination",
     moveGoal: "Move goal",
     destinationSummary: "Destination summary",
@@ -70,7 +74,7 @@ const COPY = {
     noSubmission:
       "No submission, payment, upload, or external integration is active yet.",
     legalDisclaimer:
-      "This brief is a planning summary, not legal advice. Requirements vary and should be verified before applying.",
+      "Planning summary only. Before applications or documents, requirements should be verified against current official or partner-reviewed guidance.",
     emptyTitle: "Build your move brief",
     emptyBody:
       "Finish your destination, legal path, and roadmap choices first, then we'll summarize your plan here.",
@@ -84,6 +88,9 @@ const COPY = {
     intro:
       "Короткая сводка по направлению, легальному пути, главным блокерам и следующему шагу.",
     currentStage: "Текущий этап",
+    prepared: "Дата",
+    reference: "Номер brief",
+    print: "Печать / PDF",
     destination: "Направление",
     moveGoal: "Цель переезда",
     destinationSummary: "Сводка по направлению",
@@ -126,7 +133,7 @@ const COPY = {
     noSubmission:
       "Отправка, оплата, загрузка файлов и внешние интеграции пока не активны.",
     legalDisclaimer:
-      "Этот brief нужен для планирования и не является юридической консультацией. Требования отличаются и должны быть перепроверены до подачи.",
+      "Это планировочная сводка. Перед подачей и документами требования нужно сверять с актуальными официальными или партнёрски проверенными источниками.",
     emptyTitle: "Сначала соберите Move Brief",
     emptyBody:
       "Сначала завершите выбор направления, легального пути и ключевых шагов роадмапа, а потом здесь появится сводка плана.",
@@ -181,16 +188,27 @@ export default async function MoveBriefPage() {
                 <p className="max-w-xl text-sm leading-relaxed text-[var(--city-muted-fg)] md:text-base">
                   {copy.intro}
                 </p>
+                <div className="flex flex-wrap gap-2 pt-2">
+                  <span className="inline-flex rounded-full border border-[var(--city-border)] bg-[var(--city-card)] px-3 py-1 text-xs font-medium text-stone-700">
+                    {copy.reference}: {brief.caseReference}
+                  </span>
+                  <span className="inline-flex rounded-full border border-[var(--city-border)] bg-[var(--city-card)] px-3 py-1 text-xs font-medium text-stone-700">
+                    {copy.prepared}: {brief.preparedAt}
+                  </span>
+                </div>
               </div>
 
-              <div className="city-card rounded-2xl px-4 py-3 text-right">
-                <p className="city-section-kicker mb-1">{copy.currentStage}</p>
-                <p className="font-serif text-lg font-medium text-stone-900">
-                  {brief.destination.currentStage}
-                </p>
-                <p className="mt-0.5 text-xs text-[var(--city-muted-fg)]">
-                  {brief.destination.legalPath}
-                </p>
+              <div className="flex flex-col items-stretch gap-2 sm:items-end">
+                <PrintMoveBriefButton label={copy.print} />
+                <div className="city-card rounded-2xl px-4 py-3 text-right">
+                  <p className="city-section-kicker mb-1">{copy.currentStage}</p>
+                  <p className="font-serif text-lg font-medium text-stone-900">
+                    {brief.destination.currentStage}
+                  </p>
+                  <p className="mt-0.5 text-xs text-[var(--city-muted-fg)]">
+                    {brief.destination.legalPath}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

@@ -154,11 +154,21 @@ function parseInput(body: unknown): CityModelInput | null {
 
 function getHeuristicResults(input: CityModelInput) {
   return matchCountries({
+    language: input.language,
+    citizenship: input.citizenship,
+    currentCountry: input.currentCountry,
+    residenceCountry: input.residenceCountry,
     lifePreferences: input.lifePreferences,
     moveGoal: input.moveGoal,
     monthlyIncome: input.monthlyIncome,
+    savingsRange: input.savingsRange,
+    incomeType: input.incomeType,
+    mainFear: input.mainFear,
     regionPreferences: input.regionPreferences,
     moveOptimization: input.moveOptimization,
+    safetyImportance: input.safetyImportance,
+    costTolerance: input.costTolerance,
+    studyPriority: input.studyPriority,
   });
 }
 
