@@ -1,78 +1,68 @@
 # Soft Landing
 
-Soft Landing is a mobile-first relocation planning app that helps people move countries without getting lost.
+**Soft Landing** — это mobile-first relocation operating system: приложение, которое помогает человеку переехать в другую страну без хаоса из 40 вкладок, Telegram-чатов, PDF-ок и тревожного “а что теперь?”.
 
-It guides users from country discovery to city selection, legal path assessment, move profile building, and a personal roadmap. The product is designed to feel less like a visa wiki and more like a step-by-step relocation journey.
+Это не тревел-гайд.  
+Это не визовое агентство.  
+Это не блог “10 лучших стран для фрилансеров”.
 
-The core idea is simple:
-
-> Moving countries should not feel like 40 tabs, Telegram chats, PDFs, and panic.
-
-Soft Landing turns relocation into a structured path:
-where to go, which legal route may fit, what the main blockers are, what to compare, and what to do next.
-
----
-
-## Product vision
-
-Soft Landing is not a travel app, not a legal firm, and not a generic immigration blog.
-
-It is a consumer relocation operating system.
-
-The app helps users:
-
-- compare countries by lifestyle fit and legal fit;
-- choose cities/regions based on real constraints;
-- understand high-level legal paths without diving into legal chaos;
-- build a personal move profile;
-- follow a Duolingo-like relocation roadmap;
-- save countries, cities, and legal routes;
-- prepare for verified document guidance later through partners or agencies.
-
-The product intentionally stops before giving unverified document checklists.
-
-Document requirements, application packages, and legal review must be verified with local experts or partner agencies before becoming part of the product.
-
----
-
-## Current MVP scope
-
-The current MVP focuses on the pre-document relocation layer:
-
-1. User authentication
-2. Persistent move profile
-3. Global country discovery
-4. Country and city matching
-5. Legal path fit assessment
-6. Personal relocation roadmap
-7. Interactive “Build your move profile” level
-8. Saved country/city/path state
-9. Profile-based restore after login
-10. Mobile-first app shell
-
-The product currently does **not** provide legal advice, verified document checklists, file uploads, or visa guarantees.
-
----
-
-## Core flow
-
-The main user flow:
+Soft Landing превращает релокацию в понятный путь:
 
 ```txt
-Start
-→ Create profile / sign in
-→ Onboarding
-→ Country shortlist
-→ City shortlist
-→ Legal path options
-→ Move plan
-→ Roadmap
-→ Build move profile
-→ Prepare documents placeholder
+кто ты → куда тебе реально подходит → какой город выдержит твою жизнь
+→ какой legal path выглядит правдоподобно → что делать дальше
 ```
 
-The roadmap currently includes:
+Главная идея:
 
+> Переезд не должен ощущаться как паника с красивой обложкой.
+
+---
+
+## Что это за продукт
+
+Soft Landing помогает пользователю пройти ранний, самый мутный слой релокации:
+
+- понять, какие страны подходят по lifestyle fit и legal fit;
+- выбрать город не “по вайбу”, а по реальным ограничениям;
+- увидеть главный blocker до того, как он станет дорогой ошибкой;
+- сохранить страну, город и legal path;
+- собрать move profile;
+- получить персональный roadmap;
+- подготовить Move Brief для будущего partner review;
+- оставить feedback и поведенческие сигналы для аналитики MVP.
+
+Продукт сознательно **не обещает визу**, **не дает юридическое заключение** и **не выдает непроверенные document checklists**. Документы, требования, thresholds и application packages должны проходить проверку через партнеров, агентства или квалифицированных экспертов.
+
+---
+
+## Core Flow
+
+```txt
+Landing
+  ↓
+Sign up / sign in
+  ↓
+Onboarding
+  ↓
+Country shortlist
+  ↓
+City shortlist
+  ↓
+Legal path selection
+  ↓
+Personal roadmap
+  ↓
+Build move profile
+  ↓
+Move Brief
+  ↓
+Partner review request
+```
+
+Внутри roadmap сейчас живет 8 уровней:
+
+```txt
 1. Find your place
 2. Choose legal path
 3. Build your move profile
@@ -81,230 +71,248 @@ The roadmap currently includes:
 6. Submit / appointment
 7. Prepare arrival
 8. First 30 days
+```
 
-Only the first three levels are implemented as active product logic.
-
-The `Prepare documents` level is intentionally blocked from showing unverified requirements until partner/agency validation exists.
+Активная логика MVP покрывает первые уровни и build-profile слой. Документный слой намеренно закрыт до верификации.
 
 ---
 
-## Key product principles
+## Главные принципы
 
-### Mobile-first
+### Mobile-first, правда mobile-first
 
-Soft Landing is designed primarily for phone-sized screens.
+Телефон — основной экран. Desktop — просто более широкий способ смотреть тот же путь.
 
-The app should feel usable on an iPhone-sized viewport first. Desktop is a wider companion layout, not the primary design target.
+Правила:
 
-Rules:
+- один основной поток за раз;
+- короткие формы;
+- крупные touch targets;
+- bottom navigation в app-зоне;
+- карточки вместо табличного шума;
+- понятное next action на каждом шаге;
+- никакой “desktop SaaS dashboard, сжатый до iPhone”.
 
-* single-column mobile layouts;
-* bottom navigation for logged-in app screens;
-* large touch targets;
-* cards instead of dense tables;
-* short forms;
-* clear next action;
-* no desktop-first dashboards squeezed into mobile.
-
-If a screen is uncomfortable on mobile, the screen is wrong.
+Если экран больно использовать на телефоне, экран неправильный.
 
 ### Personal, not generic
 
-The app should always answer:
+Каждый экран должен отвечать:
 
-* Does this destination fit me?
-* What is the blocker?
-* What can I compare?
-* What comes next?
+- подходит ли это мне;
+- что меня остановит;
+- с чем сравнить;
+- какой следующий шаг.
 
-Soft Landing should not feel like a wiki.
+Soft Landing не должен ощущаться как wiki. Он должен ощущаться как спокойный навигатор.
 
 ### Honest fit assessment
 
-Country and legal route matching should separate:
+Подбор разделяет:
 
-* lifestyle fit;
-* legal fit;
-* overall fit.
+- `lifestyle fit` — насколько место подходит жизни пользователя;
+- `legal fit` — насколько реалистичен путь легализации;
+- `overall fit` — общий сигнал, но не магический рейтинг судьбы.
 
-A destination can be attractive but legally difficult.
+Страна может быть прекрасной, но юридически слабой для конкретного человека. И наоборот.
 
-Example: the United States may have strong career upside, but low legal fit if the user has no sponsor, no admission, and no extraordinary ability profile.
+### No fake certainty
 
-### No unverified legal claims
-
-Soft Landing must avoid promising:
-
-* guaranteed visa approval;
-* exact document requirements without verification;
-* fixed income thresholds without source/date;
-* legal certainty.
-
-Use cautious language:
-
-* “requirements vary”;
-* “verify before applying”;
-* “professional review recommended”;
-* “this is a fit assessment, not legal advice.”
-
----
-
-## Tech stack
-
-* Next.js App Router
-* TypeScript
-* Tailwind CSS
-* Supabase
-* Supabase Auth
-* Supabase PostgreSQL
-* Vercel-ready deployment
-* Mobile-first responsive UI
-
----
-
-## Environment variables
-
-Create `.env.local`:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-NEXT_PUBLIC_SITE_URL=
-```
-
-For Supabase, use the project base URL:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
-```
-
-Use the public / publishable key for the frontend.
-
-Do **not** put the Supabase secret key into any `NEXT_PUBLIC_` variable.
-
-Set `NEXT_PUBLIC_SITE_URL` to the production origin, without a trailing slash:
-
-```env
-NEXT_PUBLIC_SITE_URL=https://your-production-domain.com
-```
-
-This origin is used for Supabase email confirmation callbacks. Do not set it to
-`localhost` in environments where real confirmation emails are sent.
-
----
-
-## Local development
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Run the development server:
-
-```bash
-npm run dev
-```
-
-Open:
+Запрещенный вайб:
 
 ```txt
-http://localhost:3000
+Guaranteed approval
+Exact visa checklist
+100% match
+You qualify
+Move safely in 30 days
 ```
 
-### Local city model
-
-The city shortlist can use the PyTorch model in `city_model.pt`. Start the
-model service in a second terminal before or alongside Next:
-
-```bash
-npm run city-model
-```
-
-By default Next calls:
-
-```env
-CITY_MODEL_URL=http://127.0.0.1:8000
-CITY_MODEL_ENABLED=true
-```
-
-If the service is not running, the app falls back to the TypeScript city matcher.
-
-For testing on a phone in the same Wi-Fi network:
-
-```bash
-npm run dev -- --host 0.0.0.0
-```
-
-Then find the local IP address:
-
-```bash
-ipconfig getifaddr en0
-```
-
-Open on the phone:
+Правильный язык:
 
 ```txt
-http://YOUR_LOCAL_IP:3000
+Fit assessment only
+Requirements vary
+Verify before applying
+Professional review recommended
+Main blocker
+Likely friction
 ```
 
 ---
 
-## Supabase setup
+## Tech Stack
 
-The app uses Supabase Auth and a `move_profiles` table as the main source of truth for the user’s relocation state.
+- **Next.js 16 App Router**
+- **React 19**
+- **TypeScript**
+- **Tailwind CSS 4**
+- **Supabase Auth**
+- **Supabase PostgreSQL**
+- **Supabase RLS**
+- **Framer Motion**
+- **Lucide React**
+- **Local Python city model service**
+- **Vercel-ready deployment**
 
-### Required Supabase settings
-
-In Supabase:
+Важно: в проекте есть `AGENTS.md` с правилом для Next.js:
 
 ```txt
-Authentication → Sign In / Providers → Email
+This is NOT the Next.js you know.
+Read node_modules/next/dist/docs before writing Next code.
 ```
 
-Enable email/password auth.
+Next здесь свежий, с измененными соглашениями. Перед серьезными изменениями в App Router лучше смотреть локальные docs в `node_modules/next/dist/docs/`.
 
-For local development, email confirmation can be disabled.
+---
 
-### Main table
-
-The core table is:
+## Project Map
 
 ```txt
+.
+├── src
+│   ├── app                         # Next App Router routes
+│   │   ├── (app)/app               # authenticated product area
+│   │   ├── api                     # prediction APIs
+│   │   ├── auth                    # sign-in, sign-up, callback
+│   │   ├── compare                 # country/city comparison
+│   │   ├── explore                 # public country/city guides
+│   │   ├── internal/metrics        # admin-only MVP dashboard
+│   │   └── start                   # onboarding entry
+│   ├── components
+│   │   ├── analytics               # page/event components
+│   │   ├── city                    # city reality/video layers
+│   │   ├── feedback                # feedback capture
+│   │   ├── onboarding              # onboarding flow and steps
+│   │   ├── partner-review          # partner review request UI
+│   │   ├── roadmap                 # roadmap forms and cards
+│   │   ├── site                    # headers/navigation
+│   │   └── ui                      # shared UI primitives
+│   ├── hooks
+│   ├── lib
+│   │   ├── analytics               # app_events + behavioral analytics
+│   │   ├── auth                    # auth helpers
+│   │   ├── data                    # countries, cities, legal paths, docs
+│   │   ├── i18n                    # EN/RU UI language helpers
+│   │   ├── move-brief              # Move Brief builder
+│   │   ├── partner-review          # partner review persistence
+│   │   ├── profile                 # move_profiles service layer
+│   │   ├── roadmap                 # generated roadmap logic
+│   │   ├── scoring                 # country/city/path matching
+│   │   └── supabase                # browser/server/admin clients
+│   └── types                       # product and DB-facing types
+├── supabase
+│   ├── migrations                  # actual Supabase migrations
+│   ├── schema.sql                  # base snapshot / starter schema
+│   └── schema_auth_later.sql       # future/older auth-heavy schema draft
+├── ml                              # local city model HTTP server
+├── relocation_dataset              # dataset generation and encoders
+├── public                          # images, manifest, static assets
+├── city_model.pt                   # trained local city model artifact
+├── dataset.csv / dataset.json      # model data artifacts
+├── train.py / predict.py           # model training/inference scripts
+└── package.json
+```
+
+---
+
+## Routes
+
+Public:
+
+```txt
+/
+/start
+/explore
+/explore/[country]
+/explore/[country]/[city]
+/compare
+/auth/sign-in
+/auth/sign-up
+/auth/callback
+```
+
+Authenticated app:
+
+```txt
+/app
+/app/roadmap
+/app/roadmap/personal-details
+/app/roadmap/timeline
+/app/roadmap/work-study
+/app/roadmap/budget
+/app/roadmap/family
+/app/tasks
+/app/vault
+/app/explore
+/app/profile
+/app/move-brief
+/app/partner-review
+```
+
+Internal:
+
+```txt
+/internal/metrics
+```
+
+API:
+
+```txt
+/api/country-predictions
+/api/city-predictions
+```
+
+---
+
+## Data Model
+
+### What lives in Supabase
+
+Supabase is used for user-owned product state and MVP analytics:
+
+```txt
+auth.users
 move_profiles
+app_events
+user_feedback
 ```
+
+There is also app code for:
+
+```txt
+partner_review_requests
+```
+
+If you need that table in a fresh Supabase project, add a migration for it before using the partner review flow.
+
+### What lives in code
+
+Reference/product data currently lives in TypeScript files, not in Postgres:
+
+```txt
+src/lib/data/countries.ts
+src/lib/data/cities.ts
+src/lib/data/legal-paths.ts
+src/lib/data/document-types.ts
+src/lib/data/city-reality-reports.ts
+src/lib/data/relocation-video-stories.ts
+```
+
+This keeps MVP iteration fast: countries, cities and legal paths can be tuned in code without a CMS/admin panel.
+
+---
+
+## Main Table: move_profiles
+
+`move_profiles` is the source of truth for a user's relocation state.
 
 It stores:
 
-* authenticated user id;
-* onboarding answers;
-* selected country;
-* selected city;
-* selected legal path;
-* saved countries;
-* saved cities;
-* roadmap progress flags;
-* move profile details.
-
-The user profile is linked through:
-
-```txt
-move_profiles.user_id → auth.users.id
-```
-
-Row Level Security should allow users to read and update only their own profile.
-
----
-
-## Current data model
-
-The main persisted object is `MoveProfile`.
-
-Important fields:
-
 ```txt
 user_id
+anonymous_id
+
 citizenship
 current_country
 residence_country
@@ -341,6 +349,7 @@ urgency_level
 must_arrive_before
 flexible_dates
 
+moving_with
 work_status_detail
 study_status_detail
 has_job_offer
@@ -351,47 +360,107 @@ expected_monthly_budget_range
 emergency_fund_range
 budget_notes
 
-moving_with
 dependents_count
 family_notes
+
+created_at
+updated_at
+```
+
+Relationship:
+
+```txt
+move_profiles.user_id → auth.users.id
+```
+
+RLS policy:
+
+```txt
+authenticated users can read/update only their own profile
 ```
 
 ---
 
-## Roadmap logic
+## Analytics
 
-The roadmap is currently generated from `move_profiles` in code.
-
-No separate roadmap tables are used yet.
-
-This is intentional.
-
-The roadmap should remain lightweight until the UX is validated.
-
-The current generator decides:
-
-* which level is completed;
-* which level is active;
-* which nodes are completed/current/queued/locked;
-* the current task;
-* the move preparation percentage.
-
-### Current roadmap stages
+Behavioral analytics is stored in:
 
 ```txt
-Find your place
-Choose legal path
-Build your move profile
-Prepare documents
-Review risks
-Submit / appointment
-Prepare arrival
-First 30 days
+app_events
 ```
 
-### Implemented interactive nodes
+Shape:
 
-Inside `Build your move profile`:
+```txt
+id
+user_id
+move_profile_id
+event_name
+event_payload JSONB
+created_at
+```
+
+Example event:
+
+```json
+{
+  "event_name": "city_card_view",
+  "event_payload": {
+    "city_id": 21,
+    "app_city_id": "amsterdam",
+    "duration_ms": 4200,
+    "position": 1,
+    "scrolled_to_details": true,
+    "session_id": "uuid"
+  }
+}
+```
+
+Current event examples:
+
+```txt
+onboarding_started
+onboarding_completed
+country_selected
+city_selected
+legal_path_selected
+city_reality_viewed
+video_story_clicked
+move_brief_viewed
+partner_review_requested
+city_card_view
+```
+
+Feedback is stored in:
+
+```txt
+user_feedback
+```
+
+It captures usefulness, willingness to request real help, comments and source surface.
+
+---
+
+## Roadmap Logic
+
+Roadmap is generated from `move_profiles` in code:
+
+```txt
+src/lib/roadmap/roadmapGenerator.ts
+```
+
+There are no separate `roadmap`, `journey_stages` or `tasks` tables in the active MVP path yet. That is intentional. The roadmap is still product-learning territory, so the data model stays lightweight.
+
+The generator decides:
+
+- completed levels;
+- active level;
+- locked levels;
+- current task;
+- readiness percentage;
+- when `Prepare documents` becomes the next stage.
+
+Interactive build-profile nodes:
 
 ```txt
 Confirm personal details
@@ -401,105 +470,296 @@ Add budget reality
 Add family/partner info
 ```
 
-Each node opens a mobile-first form, saves into `move_profiles`, and unlocks the next node.
-
-When all five are completed, `Prepare documents` becomes the current stage.
+Each node writes back into `move_profiles`.
 
 ---
 
-## What is intentionally not implemented yet
+## City Recommendation Model
 
-### Document checklist
+City recommendations have two layers:
 
-Not implemented yet.
+1. TypeScript heuristic matcher in `src/lib/scoring/city-matcher.ts`
+2. Optional local Python model served from `ml/city_model_server.py`
 
-Reason: document guidance must be verified with partner agencies or qualified experts.
+The Next API calls the model service if it is available:
 
-The app should not generate country/path-specific document requirements until they are reviewed.
+```txt
+CITY_MODEL_URL=http://127.0.0.1:8000
+CITY_MODEL_ENABLED=true
+```
 
-### File upload
+If the model service is down, the app falls back to the TypeScript matcher.
 
-Not implemented yet.
+Run the model server:
 
-Supabase Storage may be added later for:
+```bash
+npm run city-model
+```
 
-* passport scans;
-* bank statements;
-* certificates;
-* translations;
-* insurance files;
-* application forms.
+Health endpoint:
+
+```txt
+http://127.0.0.1:8000/health
+```
+
+Prediction endpoint:
+
+```txt
+POST http://127.0.0.1:8000/predict
+```
+
+---
+
+## Supabase Setup
+
+Create `.env.local`:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SITE_URL=
+
+SUPABASE_SERVICE_ROLE_KEY=
+
+CITY_MODEL_URL=http://127.0.0.1:8000
+CITY_MODEL_ENABLED=true
+CITY_MODEL_TIMEOUT_MS=3500
+```
+
+Required for the browser:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+```
+
+Required for production email confirmation redirects:
+
+```env
+NEXT_PUBLIC_SITE_URL=https://your-production-domain.com
+```
+
+Required only for internal aggregate metrics:
+
+```env
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+Never put the service role key into a `NEXT_PUBLIC_` variable.
+
+### Auth
+
+In Supabase:
+
+```txt
+Authentication → Sign In / Providers → Email
+```
+
+Enable email/password auth.
+
+For local MVP testing, email confirmation can be disabled.
+
+### Tables
+
+Apply migrations from:
+
+```txt
+supabase/migrations
+```
+
+At minimum, the current active schema needs:
+
+```txt
+20260519085041_create_move_profiles.sql
+20260519120000_auth_user_id.sql
+20260519133000_move_profile_roadmap_fields.sql
+20260519143000_build_profile_step_fields.sql
+20260520190000_analytics_feedback.sql
+```
+
+If your Supabase shows only `move_profiles`, you probably ran only the base schema or the first migration. Run the analytics migration to create `app_events` and `user_feedback`.
+
+---
+
+## Local Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run Next:
+
+```bash
+npm run dev
+```
+
+Open:
+
+```txt
+http://localhost:3000
+```
+
+Run the city model in another terminal:
+
+```bash
+npm run city-model
+```
+
+Run lint:
+
+```bash
+npm run lint
+```
+
+Run production build:
+
+```bash
+npm run build
+```
+
+Test on a phone in the same Wi-Fi network:
+
+```bash
+npm run dev -- --host 0.0.0.0
+```
+
+Find local IP:
+
+```bash
+ipconfig getifaddr en0
+```
+
+Open:
+
+```txt
+http://YOUR_LOCAL_IP:3000
+```
+
+---
+
+## MVP Screens Worth Testing
+
+For product QA, test these flows:
+
+```txt
+/start
+```
+
+- sign in;
+- complete onboarding;
+- select country;
+- select city;
+- select legal path;
+- land on roadmap.
+
+```txt
+/app/roadmap
+```
+
+- complete personal details;
+- complete timeline;
+- complete work/study;
+- complete budget;
+- complete family/partner info.
+
+```txt
+/app/move-brief
+```
+
+- verify summary content;
+- submit feedback;
+- click partner review CTA.
+
+```txt
+/app/partner-review
+```
+
+- submit request;
+- verify `partner_review_requested` event.
+
+```txt
+/compare?type=city
+```
+
+- view city cards;
+- verify `city_card_view` events.
+
+---
+
+## What Is Intentionally Not Done Yet
+
+### Verified document checklists
+
+Not shipped as product truth yet. The app can prepare the surface and partner-review handoff, but should not claim exact document requirements without verification.
+
+### File vault uploads
+
+The `/app/vault` surface exists conceptually, but file upload/storage is not the active MVP layer yet.
+
+Likely future storage:
+
+```txt
+Supabase Storage bucket: documents
+```
+
+Potential files:
+
+```txt
+passport scans
+bank statements
+certificates
+translations
+insurance files
+application forms
+```
+
+### Full journey/task tables
+
+`schema_auth_later.sql` contains an older/future draft for:
+
+```txt
+user_profiles
+user_journeys
+journey_stages
+tasks
+user_documents
+```
+
+Those are not the current active product model. Do not assume those tables exist unless you deliberately apply that schema.
 
 ### Legal risk engine
 
-Not implemented yet.
-
-Any risk scoring must be carefully designed and must not imply legal certainty.
-
-### Partner review
-
-Not implemented yet.
-
-Future premium layer:
-
-* expert review;
-* agency handoff;
-* verified document checklist;
-* human consultation;
-* partner services.
+Risk language must be designed carefully. Anything that smells like legal certainty needs human review, source dates and conservative copy.
 
 ---
 
-## App routes
+## Design Direction
 
-Main public routes:
-
-```txt
-/
-/start
-/auth/sign-up
-/auth/sign-in
-```
-
-Main app routes:
+Soft Landing should feel:
 
 ```txt
-/app
-/app/roadmap
-/app/tasks
-/app/vault
-/app/explore
-/app/profile
+calm
+premium
+practical
+adult
+trustworthy
+clear
 ```
-
-Roadmap forms:
-
-```txt
-/app/roadmap/personal-details
-/app/roadmap/timeline
-/app/roadmap/work-study
-/app/roadmap/budget
-/app/roadmap/family
-```
-
----
-
-## UX direction
-
-Soft Landing should feel calm, premium, and practical.
 
 It should not feel like:
 
-* a government website;
-* a visa agency landing page;
-* a travel blog;
-* a Notion template;
-* a corporate SaaS dashboard;
-* a childish gamified app.
+```txt
+government portal
+visa agency sales funnel
+travel blog
+Notion template
+enterprise dashboard
+childish gamified app
+```
 
-The roadmap can borrow progression logic from Duolingo, but the tone must stay adult and trustworthy.
-
-Good language:
+Good product words:
 
 ```txt
 Move preparation
@@ -510,129 +770,28 @@ Active
 Queued
 Locked
 Main blocker
-Legal fit
 Lifestyle fit
+Legal fit
+Fit assessment
+Reality layer
+Move Brief
+Partner review
 ```
 
-Avoid:
+---
+
+## Product North Star
+
+The user should leave each session thinking:
 
 ```txt
-Guaranteed
-Easy visa
-Approval chance
-No risk
-Clear node
-Magic plan
+I know what fits me better.
+I know what might block me.
+I know what to compare next.
+I know the next concrete step.
 ```
 
----
+That is the product.
 
-## Product positioning
+Everything else is furniture.
 
-Short version:
-
-```txt
-Soft Landing helps people move countries without getting lost.
-```
-
-Longer version:
-
-```txt
-Soft Landing helps people choose where to move, understand realistic legal paths, build a personal move profile, and follow a step-by-step relocation roadmap.
-```
-
-More emotional version:
-
-```txt
-Moving should not feel like 40 tabs, Telegram chats, PDFs, and panic.
-Soft Landing turns relocation into a clear path.
-```
-
----
-
-## Development rules
-
-When adding new features:
-
-1. Keep the app mobile-first.
-2. Do not add legal claims without verification.
-3. Do not expand into document requirements without partner/expert review.
-4. Prefer generated logic from `move_profiles` before adding new tables.
-5. Do not overbuild.
-6. Preserve the main user path.
-7. Every screen needs a clear next action.
-
----
-
-## Near-term roadmap
-
-### Phase 1 — Universal pre-document layer
-
-* Expand country database
-* Expand city/region database
-* Expand high-level legal path database
-* Add lifestyle fit vs legal fit
-* Add country compare
-* Add city compare
-* Improve country/city pages with reality previews
-* Improve saved countries/cities UX
-
-### Phase 2 — Partner-verified document layer
-
-* Verified document checklist templates
-* Partner/agency review model
-* Document status tracking
-* Vault without upload first
-* File upload later
-* Human review CTA
-
-### Phase 3 — Services and affiliate layer
-
-* Insurance
-* Housing
-* Flights
-* eSIM
-* Banking
-* Tax consultation
-* Translation partners
-* Legal partners
-* Relocation agencies
-
-### Phase 4 — Community/reality layer
-
-* Structured relocation stories
-* City reality reports
-* “First 90 days” reports
-* Common mistakes
-* Cost reality vs expectation
-
----
-
-## Current acceptance checklist
-
-The current app should support:
-
-* user sign up with email/password;
-* user sign in;
-* persistent `move_profiles` row;
-* onboarding restore after refresh;
-* country selection persistence;
-* city selection persistence;
-* legal path selection persistence;
-* roadmap generated from user profile;
-* interactive build-profile nodes;
-* progress after each node;
-* roadmap restore after refresh;
-* sign out / sign in profile recovery.
-
----
-
-## Legal disclaimer
-
-Soft Landing provides structured relocation planning and general fit assessment.
-
-It is not a law firm and does not provide legal advice.
-
-Immigration requirements change and vary by country, consulate, personal situation, and legal route.
-
-Before making legal or immigration decisions, users should consult qualified immigration professionals or verified partner agencies.
