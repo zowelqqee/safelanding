@@ -1,42 +1,42 @@
-# Soft Landing
+# Soft Landing 🌍
 
-**Soft Landing** — это mobile-first relocation operating system: приложение, которое помогает человеку переехать в другую страну без хаоса из 40 вкладок, Telegram-чатов, PDF-ок и тревожного “а что теперь?”.
+**Soft Landing** is a mobile-first relocation operating system for people who want to move countries without drowning in 40 browser tabs, Telegram chats, PDFs, and the quiet panic of “what now?”.
 
-Это не тревел-гайд.  
-Это не визовое агентство.  
-Это не блог “10 лучших стран для фрилансеров”.
+It is not a travel guide.  
+It is not a visa agency.  
+It is not another “10 best countries for freelancers” blog post.
 
-Soft Landing превращает релокацию в понятный путь:
+Soft Landing turns relocation into a clear path:
 
 ```txt
-кто ты → куда тебе реально подходит → какой город выдержит твою жизнь
-→ какой legal path выглядит правдоподобно → что делать дальше
+who you are → where you realistically fit → which city can handle your life
+→ which legal path looks plausible → what to do next
 ```
 
-Главная идея:
+The core idea:
 
-> Переезд не должен ощущаться как паника с красивой обложкой.
-
----
-
-## Что это за продукт
-
-Soft Landing помогает пользователю пройти ранний, самый мутный слой релокации:
-
-- понять, какие страны подходят по lifestyle fit и legal fit;
-- выбрать город не “по вайбу”, а по реальным ограничениям;
-- увидеть главный blocker до того, как он станет дорогой ошибкой;
-- сохранить страну, город и legal path;
-- собрать move profile;
-- получить персональный roadmap;
-- подготовить Move Brief для будущего partner review;
-- оставить feedback и поведенческие сигналы для аналитики MVP.
-
-Продукт сознательно **не обещает визу**, **не дает юридическое заключение** и **не выдает непроверенные document checklists**. Документы, требования, thresholds и application packages должны проходить проверку через партнеров, агентства или квалифицированных экспертов.
+> Moving countries should not feel like panic wearing a nice landing page.
 
 ---
 
-## Core Flow
+## What This Product Is ✨
+
+Soft Landing helps users navigate the early, messy, pre-document layer of relocation:
+
+- understand which countries fit them by lifestyle fit and legal fit;
+- choose cities based on real constraints, not just vibes;
+- see the main blocker before it becomes an expensive mistake;
+- save a country, city, and legal path;
+- build a personal move profile;
+- follow a personalized roadmap;
+- prepare a Move Brief for future partner review;
+- capture feedback and behavioral analytics for MVP learning.
+
+The product intentionally **does not promise visas**, **does not provide legal advice**, and **does not generate unverified document checklists**. Document requirements, thresholds, application packages, and legal review must be validated by partners, agencies, or qualified experts.
+
+---
+
+## Core Flow 🧭
 
 ```txt
 Landing
@@ -60,7 +60,7 @@ Move Brief
 Partner review request
 ```
 
-Внутри roadmap сейчас живет 8 уровней:
+The roadmap currently has 8 levels:
 
 ```txt
 1. Find your place
@@ -73,52 +73,52 @@ Partner review request
 8. First 30 days
 ```
 
-Активная логика MVP покрывает первые уровни и build-profile слой. Документный слой намеренно закрыт до верификации.
+The active MVP logic covers the early levels and the build-profile layer. The document layer is intentionally blocked until verification exists.
 
 ---
 
-## Главные принципы
+## Product Principles 💡
 
-### Mobile-first, правда mobile-first
+### Mobile-first, Actually Mobile-first
 
-Телефон — основной экран. Desktop — просто более широкий способ смотреть тот же путь.
+The phone is the primary screen. Desktop is just a wider way to use the same journey.
 
-Правила:
+Rules:
 
-- один основной поток за раз;
-- короткие формы;
-- крупные touch targets;
-- bottom navigation в app-зоне;
-- карточки вместо табличного шума;
-- понятное next action на каждом шаге;
-- никакой “desktop SaaS dashboard, сжатый до iPhone”.
+- one main flow at a time;
+- short forms;
+- large touch targets;
+- bottom navigation in the authenticated app;
+- cards instead of noisy tables;
+- a clear next action on every screen;
+- no “desktop SaaS dashboard squeezed into an iPhone”.
 
-Если экран больно использовать на телефоне, экран неправильный.
+If a screen hurts on mobile, the screen is wrong.
 
-### Personal, not generic
+### Personal, Not Generic
 
-Каждый экран должен отвечать:
+Every screen should answer:
 
-- подходит ли это мне;
-- что меня остановит;
-- с чем сравнить;
-- какой следующий шаг.
+- does this fit me;
+- what could block me;
+- what should I compare;
+- what is the next step.
 
-Soft Landing не должен ощущаться как wiki. Он должен ощущаться как спокойный навигатор.
+Soft Landing should not feel like a wiki. It should feel like a calm navigator.
 
-### Honest fit assessment
+### Honest Fit Assessment
 
-Подбор разделяет:
+Matching separates:
 
-- `lifestyle fit` — насколько место подходит жизни пользователя;
-- `legal fit` — насколько реалистичен путь легализации;
-- `overall fit` — общий сигнал, но не магический рейтинг судьбы.
+- `lifestyle fit` — how well a place fits the user's life;
+- `legal fit` — how realistic the legal route looks;
+- `overall fit` — a helpful signal, not a magical destiny score.
 
-Страна может быть прекрасной, но юридически слабой для конкретного человека. И наоборот.
+A country can be beautiful but legally weak for a specific person. The reverse can also be true.
 
-### No fake certainty
+### No Fake Certainty
 
-Запрещенный вайб:
+Forbidden vibe:
 
 ```txt
 Guaranteed approval
@@ -128,7 +128,7 @@ You qualify
 Move safely in 30 days
 ```
 
-Правильный язык:
+Good language:
 
 ```txt
 Fit assessment only
@@ -141,7 +141,7 @@ Likely friction
 
 ---
 
-## Tech Stack
+## Tech Stack 🛠️
 
 - **Next.js 16 App Router**
 - **React 19**
@@ -155,18 +155,18 @@ Likely friction
 - **Local Python city model service**
 - **Vercel-ready deployment**
 
-Важно: в проекте есть `AGENTS.md` с правилом для Next.js:
+Important: this repo has an `AGENTS.md` rule for Next.js:
 
 ```txt
 This is NOT the Next.js you know.
 Read node_modules/next/dist/docs before writing Next code.
 ```
 
-Next здесь свежий, с измененными соглашениями. Перед серьезными изменениями в App Router лучше смотреть локальные docs в `node_modules/next/dist/docs/`.
+This project uses a fresh Next.js version with changed conventions. Before major App Router changes, check the local docs in `node_modules/next/dist/docs/`.
 
 ---
 
-## Project Map
+## Project Map 🗺️
 
 ```txt
 .
@@ -216,7 +216,7 @@ Next здесь свежий, с измененными соглашениями
 
 ---
 
-## Routes
+## Routes 🚦
 
 Public:
 
@@ -265,11 +265,11 @@ API:
 
 ---
 
-## Data Model
+## Data Model 🧱
 
-### What lives in Supabase
+### What Lives in Supabase
 
-Supabase is used for user-owned product state and MVP analytics:
+Supabase stores user-owned product state and MVP analytics:
 
 ```txt
 auth.users
@@ -286,7 +286,7 @@ partner_review_requests
 
 If you need that table in a fresh Supabase project, add a migration for it before using the partner review flow.
 
-### What lives in code
+### What Lives in Code
 
 Reference/product data currently lives in TypeScript files, not in Postgres:
 
@@ -299,11 +299,11 @@ src/lib/data/city-reality-reports.ts
 src/lib/data/relocation-video-stories.ts
 ```
 
-This keeps MVP iteration fast: countries, cities and legal paths can be tuned in code without a CMS/admin panel.
+This keeps MVP iteration fast: countries, cities, and legal paths can be tuned in code without a CMS or admin panel.
 
 ---
 
-## Main Table: move_profiles
+## Main Table: move_profiles 🧬
 
 `move_profiles` is the source of truth for a user's relocation state.
 
@@ -381,7 +381,7 @@ authenticated users can read/update only their own profile
 
 ---
 
-## Analytics
+## Analytics 📈
 
 Behavioral analytics is stored in:
 
@@ -437,11 +437,11 @@ Feedback is stored in:
 user_feedback
 ```
 
-It captures usefulness, willingness to request real help, comments and source surface.
+It captures usefulness, willingness to request real help, comments, and the source surface.
 
 ---
 
-## Roadmap Logic
+## Roadmap Logic 🧩
 
 Roadmap is generated from `move_profiles` in code:
 
@@ -449,7 +449,7 @@ Roadmap is generated from `move_profiles` in code:
 src/lib/roadmap/roadmapGenerator.ts
 ```
 
-There are no separate `roadmap`, `journey_stages` or `tasks` tables in the active MVP path yet. That is intentional. The roadmap is still product-learning territory, so the data model stays lightweight.
+There are no separate `roadmap`, `journey_stages`, or `tasks` tables in the active MVP path yet. That is intentional. The roadmap is still product-learning territory, so the data model stays lightweight.
 
 The generator decides:
 
@@ -474,7 +474,7 @@ Each node writes back into `move_profiles`.
 
 ---
 
-## City Recommendation Model
+## City Recommendation Model 🤖
 
 City recommendations have two layers:
 
@@ -510,7 +510,7 @@ POST http://127.0.0.1:8000/predict
 
 ---
 
-## Supabase Setup
+## Supabase Setup ⚙️
 
 Create `.env.local`:
 
@@ -581,7 +581,7 @@ If your Supabase shows only `move_profiles`, you probably ran only the base sche
 
 ---
 
-## Local Development
+## Local Development 🚀
 
 Install dependencies:
 
@@ -639,7 +639,7 @@ http://YOUR_LOCAL_IP:3000
 
 ---
 
-## MVP Screens Worth Testing
+## MVP Screens Worth Testing 🧪
 
 For product QA, test these flows:
 
@@ -688,13 +688,13 @@ For product QA, test these flows:
 
 ---
 
-## What Is Intentionally Not Done Yet
+## What Is Intentionally Not Done Yet 🚧
 
-### Verified document checklists
+### Verified Document Checklists
 
 Not shipped as product truth yet. The app can prepare the surface and partner-review handoff, but should not claim exact document requirements without verification.
 
-### File vault uploads
+### File Vault Uploads
 
 The `/app/vault` surface exists conceptually, but file upload/storage is not the active MVP layer yet.
 
@@ -715,7 +715,7 @@ insurance files
 application forms
 ```
 
-### Full journey/task tables
+### Full Journey/Task Tables
 
 `schema_auth_later.sql` contains an older/future draft for:
 
@@ -729,13 +729,13 @@ user_documents
 
 Those are not the current active product model. Do not assume those tables exist unless you deliberately apply that schema.
 
-### Legal risk engine
+### Legal Risk Engine
 
-Risk language must be designed carefully. Anything that smells like legal certainty needs human review, source dates and conservative copy.
+Risk language must be designed carefully. Anything that smells like legal certainty needs human review, source dates, and conservative copy.
 
 ---
 
-## Design Direction
+## Design Direction 🎨
 
 Soft Landing should feel:
 
@@ -780,7 +780,7 @@ Partner review
 
 ---
 
-## Product North Star
+## Product North Star ⭐
 
 The user should leave each session thinking:
 
