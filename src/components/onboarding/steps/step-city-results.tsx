@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { matchCitiesForCountry } from "@/lib/scoring/city-matcher";
 import { getCityById } from "@/lib/data/cities";
 import { getCountryById } from "@/lib/data/countries";
+import { useCityCardViewTracking } from "@/lib/analytics/cityCardView";
 import { commonCopy, type UiLanguage } from "@/lib/i18n/onboarding";
 import type { OnboardingState, CityMatchResult } from "@/types";
 
@@ -83,6 +84,7 @@ function MatchScore({ score, language }: { score: number; language: UiLanguage }
 function CityCard({
   result,
   countrySlug,
+  position,
   shortlisted,
   onSelect,
   onShortlist,
@@ -90,18 +92,24 @@ function CityCard({
 }: {
   result: CityMatchResult;
   countrySlug: string;
+  position: number;
   shortlisted: boolean;
   onSelect: () => void;
   onShortlist: () => void;
   language: UiLanguage;
 }) {
   const city = getCityById(result.cityId);
+  const cardRef = useCityCardViewTracking({
+    cityId: result.cityId,
+    position,
+  });
+
   if (!city) return null;
   const copy = COPY[language];
   const common = commonCopy[language];
 
   return (
-    <div className="city-card rounded-[18px] p-4 flex flex-col gap-3">
+    <div ref={cardRef} className="city-card rounded-[18px] p-4 flex flex-col gap-3">
       <div className="flex items-start justify-between gap-2">
         <div>
           <h3 className="font-semibold text-base leading-tight text-stone-900">{city.name}</h3>
@@ -332,10 +340,11 @@ export function StepCityResults({ state, onSelect, onShortlistToggle, onBack, la
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-          {results.map((result) => (
+          {results.map((result, index) => (
             <CityCard
               key={result.cityId}
               result={result}
+              position={index + 1}
               countrySlug={country?.slug ?? state.selectedCountry}
               shortlisted={state.shortlistedCities.includes(result.cityId)}
               onSelect={() => onSelect(result.cityId)}

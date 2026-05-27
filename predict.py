@@ -12,6 +12,8 @@ from relocation_dataset import encode_profile, get_feature_names, city_profiles,
 input_size = len(get_feature_names())
 output_size = len(city_profiles)
 
+
+#import model
 model = nn.Sequential(
     nn.Linear(input_size, 64),
     nn.ReLU(), 
@@ -23,6 +25,8 @@ model = nn.Sequential(
 model.load_state_dict(torch.load('city_model.pt'))
 model.eval()
 
+
+#test profiles
 profile = {
     "citizenship": "Russia",
     "current_country": "Russia",
@@ -298,10 +302,10 @@ def print_prediction(name, user_profile):
         temperature = 1.0
         probs = torch.softmax(logits / temperature, dim=1)[0]
 
-        top5 = probs.topk(5)
+        top10 = probs.topk(10)
 
-    city_ids = top5.indices.tolist()
-    raw_probs = top5.values.tolist()
+    city_ids = top10.indices.tolist()
+    raw_probs = top10.values.tolist()
     num_cities = len(city_id_to_name)
 
     print(name)

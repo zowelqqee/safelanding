@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, MapPin, Shield, Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { Button } from "@/components/ui/button";
+import { useCityCardViewTracking } from "@/lib/analytics/cityCardView";
 import { getCitiesForCountry, getCityById } from "@/lib/data/cities";
 import { COUNTRIES, getCountryById } from "@/lib/data/countries";
 import { matchCountries, type CountryMatchInput } from "@/lib/scoring/country-matcher";
@@ -289,15 +290,21 @@ function CountryCompareCard({
 
 function CityCompareCard({
   cityId,
+  position,
 }: {
   cityId: string;
+  position: number;
 }) {
   const city = getCityById(cityId);
+  const cardRef = useCityCardViewTracking({
+    cityId,
+    position,
+  });
 
   if (!city) return null;
 
   return (
-    <div className="city-card rounded-[22px] p-5">
+    <div ref={cardRef} className="city-card rounded-[22px] p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm text-[var(--city-muted-fg)]">{city.country}</p>
@@ -519,8 +526,8 @@ function CompareExperience({
               </div>
 
               <div className="grid gap-4 lg:grid-cols-2">
-                {selectedCityIds.map((cityId) => (
-                  <CityCompareCard key={cityId} cityId={cityId} />
+                {selectedCityIds.map((cityId, index) => (
+                  <CityCompareCard key={cityId} cityId={cityId} position={index + 1} />
                 ))}
               </div>
             </>

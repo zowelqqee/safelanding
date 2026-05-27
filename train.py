@@ -4,6 +4,8 @@ import torch.optim as optim
 
 from relocation_dataset import generate_dataset, get_feature_names, city_id_to_name
 
+
+#dataset routine
 samples = generate_dataset(n=5000,seed=42)
 
 X = torch.tensor([s['x'] for s in samples], dtype=torch.float32)
@@ -19,6 +21,7 @@ y_train, y_test = y[:split], y[split:]
 y_index_test = y_index[split:]
 
 
+#creating model
 model = nn.Sequential(
     nn.Linear(input_size, 64),
     nn.ReLU(), 
@@ -32,6 +35,7 @@ optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 batch_size = 64
 
+#start train
 for epoch in range(150):
     perm = torch.randperm(len(X_train))
 
@@ -44,24 +48,27 @@ for epoch in range(150):
         log_probs = torch.log_softmax(logits, dim=1)
         loss = loss_fn(log_probs, yb)
 
+        #backprop
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
-    if epoch % 5 == 0:
+    #extract data
+    if epoch % 10 == 0:
         with torch.no_grad():
             logits = model(X_test)
             pred = logits.argmax(dim=1)
             acc = (pred == y_index_test).float().mean().item()
 
-            top5 = logits.topk(5, dim=1).indices
-            top5_acc = (top5 == y_index_test.unsqueeze(1)).any(dim=1).float().mean().item()
+            top10 = logits.topk(10, dim=1).indices
+            top10_acc = (top10 == y_index_test.unsqueeze(1)).any(dim=1).float().mean().item()
 
         print(
             'epoch', epoch,
             'loss', round(loss.item(), 4),
             'acc', round(acc, 4),
-            'top5', round(top5_acc, 4)
+            'top10', round(top10_acc, 4)
         )
 
+#save model
 torch.save(model.state_dict(), 'city_model.pt')

@@ -261,6 +261,14 @@ export function getAppCityIdForModelCityId(cityModelId: number) {
   return MODEL_CITY_ID_TO_APP_CITY_ID[cityModelId];
 }
 
+export function getModelCityIdForAppCityId(appCityId: string) {
+  const entry = Object.entries(MODEL_CITY_ID_TO_APP_CITY_ID).find(
+    ([, cityId]) => cityId === appCityId
+  );
+
+  return entry ? Number(entry[0]) : null;
+}
+
 export function buildCityModelProfile(input: CityModelInput): CityModelProfile {
   const currentCountry = input.currentCountry || input.residenceCountry;
 
