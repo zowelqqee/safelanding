@@ -43,6 +43,7 @@ export function LanguageSwitcher({
     () => initialLanguage
   );
   const router = useRouter();
+  const label = language === "ru" ? "Язык" : "Language";
 
   useEffect(() => {
     document.documentElement.lang = language === "ru" ? "ru-RU" : "en";
@@ -74,14 +75,14 @@ export function LanguageSwitcher({
       {display === "full" && (
         <div className="flex min-w-0 items-center gap-2 text-sm font-medium text-stone-800">
           <Languages className="h-4 w-4 shrink-0 text-[var(--city-muted-fg)]" />
-          <span className="truncate">Language</span>
+          <span className="truncate">{label}</span>
         </div>
       )}
 
       <div
         className="inline-flex h-9 shrink-0 items-center rounded-full border border-[var(--city-border)] bg-[var(--city-card)] p-1"
         role="group"
-        aria-label="Language"
+        aria-label={label}
       >
         {display === "compact" && (
           <Languages

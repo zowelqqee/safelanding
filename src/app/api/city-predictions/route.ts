@@ -173,6 +173,17 @@ function getTimeoutMs() {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_TIMEOUT_MS;
 }
 
+function getModelHeaders() {
+  const headers: Record<string, string> = { "content-type": "application/json" };
+  const apiKey = process.env.CITY_MODEL_API_KEY;
+
+  if (apiKey) {
+    headers.authorization = `Bearer ${apiKey}`;
+  }
+
+  return headers;
+}
+
 function parsePredictions(value: unknown): CityModelPrediction[] {
   if (!Array.isArray(value)) return [];
 
@@ -211,7 +222,7 @@ async function fetchModelPredictions(input: CityModelInput) {
   try {
     const response = await fetch(`${getModelUrl()}/predict`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: getModelHeaders(),
       body: JSON.stringify({
         profile: buildCityModelProfile(input),
         top_k: MODEL_TOP_K,

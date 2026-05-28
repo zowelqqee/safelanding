@@ -1,0 +1,12 @@
+.git
+.next
+node_modules
+__pycache__
+*.pyc
+.env
+.env.*
+!.env.example
+dataset.csv
+dataset.json
+city_model_*.pt
+tsconfig.tsbuildinfo

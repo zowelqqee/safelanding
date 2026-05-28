@@ -4,9 +4,15 @@ import { SignOutButton } from "@/components/auth/sign-out-button";
 
 interface Props {
   email: string;
+  signOutLabel?: string;
+  signOutPendingLabel?: string;
 }
 
-export function HeaderUser({ email }: Props) {
+export function HeaderUser({
+  email,
+  signOutLabel,
+  signOutPendingLabel,
+}: Props) {
   return (
     <div className="ml-auto flex items-center gap-3">
       <span className="text-xs text-muted-foreground hidden lg:block truncate max-w-[200px]">
@@ -16,6 +22,8 @@ export function HeaderUser({ email }: Props) {
         variant="ghost"
         size="sm"
         className="text-muted-foreground"
+        label={signOutLabel}
+        pendingLabel={signOutPendingLabel}
       />
     </div>
   );

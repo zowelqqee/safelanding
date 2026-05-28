@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: safelanding-city-model
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile.model
+    healthCheckPath: /health
+    envVars:
+      - key: CITY_MODEL_API_KEY
+        sync: false
+      - key: CITY_MODEL_PATH
+        value: /app/city_model.pt

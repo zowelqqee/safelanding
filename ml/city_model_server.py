@@ -7,12 +7,14 @@ Run:
 from __future__ import annotations
 
 import argparse
+import hmac
 import json
+import os
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
-from .city_inference import predict_cities
+from .city_inference import get_model_metadata, predict_cities, warm_model
 
 
 class CityModelHandler(BaseHTTPRequestHandler):
@@ -20,7 +22,17 @@ class CityModelHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         if self.path == "/health":
-            self._send_json({"ok": True})
+            try:
+                self._send_json({"ok": True, **warm_model()})
+            except Exception as error:  # noqa: BLE001 - health should expose startup failures
+                self._send_json(
+                    {"ok": False, "error": "City model health check failed", "detail": str(error)},
+                    status=HTTPStatus.INTERNAL_SERVER_ERROR,
+                )
+            return
+
+        if self.path == "/version":
+            self._send_json(get_model_metadata())
             return
 
         self._send_json({"error": "Not found"}, status=HTTPStatus.NOT_FOUND)
@@ -28,6 +40,10 @@ class CityModelHandler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:
         if self.path != "/predict":
             self._send_json({"error": "Not found"}, status=HTTPStatus.NOT_FOUND)
+            return
+
+        if not self._is_authorized():
+            self._send_json({"error": "Unauthorized"}, status=HTTPStatus.UNAUTHORIZED)
             return
 
         try:
@@ -48,6 +64,25 @@ class CityModelHandler(BaseHTTPRequestHandler):
             return
 
         self._send_json(result)
+
+    def _is_authorized(self) -> bool:
+        expected = os.environ.get("CITY_MODEL_API_KEY", "").strip()
+        if not expected:
+            return True
+
+        auth_header = self.headers.get("authorization", "")
+        bearer_prefix = "Bearer "
+        bearer_token = (
+            auth_header[len(bearer_prefix):].strip()
+            if auth_header.startswith(bearer_prefix)
+            else ""
+        )
+        header_token = self.headers.get("x-city-model-key", "").strip()
+
+        return hmac.compare_digest(bearer_token, expected) or hmac.compare_digest(
+            header_token,
+            expected,
+        )
 
     def _read_json_body(self) -> dict[str, Any]:
         content_length = int(self.headers.get("content-length", "0"))
@@ -72,7 +107,7 @@ class CityModelHandler(BaseHTTPRequestHandler):
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run the local city model server")
     parser.add_argument("--host", default="127.0.0.1")
-    parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8000")))
     args = parser.parse_args()
 
     server = ThreadingHTTPServer((args.host, args.port), CityModelHandler)

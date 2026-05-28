@@ -8,8 +8,8 @@ from __future__ import annotations
 
 import math
 import os
-from functools import lru_cache
 from pathlib import Path
+from threading import RLock
 from typing import Any, Mapping
 
 import torch
@@ -21,6 +21,8 @@ from relocation_dataset.encoders import encode_profile, get_feature_names
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_MODEL_PATH = ROOT_DIR / "city_model.pt"
+_MODEL_CACHE: tuple[Path, float, nn.Sequential] | None = None
+_MODEL_CACHE_LOCK = RLock()
 
 
 def _resolve_model_path() -> Path:
@@ -43,21 +45,49 @@ def _build_model() -> nn.Sequential:
     )
 
 
-@lru_cache(maxsize=1)
 def _load_model() -> nn.Sequential:
+    global _MODEL_CACHE
+
     model_path = _resolve_model_path()
     if not model_path.exists():
         raise FileNotFoundError(f"City model file was not found: {model_path}")
 
-    model = _build_model()
-    try:
-        state_dict = torch.load(model_path, map_location="cpu", weights_only=True)
-    except TypeError:
-        state_dict = torch.load(model_path, map_location="cpu")
+    model_mtime = model_path.stat().st_mtime
+    with _MODEL_CACHE_LOCK:
+        if _MODEL_CACHE is not None:
+            cached_path, cached_mtime, cached_model = _MODEL_CACHE
+            if cached_path == model_path and cached_mtime == model_mtime:
+                return cached_model
 
-    model.load_state_dict(state_dict)
-    model.eval()
-    return model
+        model = _build_model()
+        try:
+            state_dict = torch.load(model_path, map_location="cpu", weights_only=True)
+        except TypeError:
+            state_dict = torch.load(model_path, map_location="cpu")
+
+        model.load_state_dict(state_dict)
+        model.eval()
+        _MODEL_CACHE = (model_path, model_mtime, model)
+        return model
+
+
+def get_model_metadata() -> dict[str, Any]:
+    """Return lightweight metadata for health checks and deploy verification."""
+
+    model_path = _resolve_model_path()
+    return {
+        "model_version": model_path.name,
+        "feature_count": len(get_feature_names()),
+        "city_count": len(city_id_to_name),
+        "loaded": _MODEL_CACHE is not None and _MODEL_CACHE[0] == model_path,
+    }
+
+
+def warm_model() -> dict[str, Any]:
+    """Load the model once and return metadata if the artifact is usable."""
+
+    _load_model()
+    return get_model_metadata()
 
 
 def _sigmoid(value: float) -> float:
