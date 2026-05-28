@@ -373,11 +373,10 @@ def _profile_to_model_profile(row: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def _get_supabase_client():
-    url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL") or os.environ.get("SUPABASE_URL")
+    url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
     service_key = (
         os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
         or os.environ.get("SUPABASE_SERVICE_KEY")
-        or os.environ.get("NEXT_PUBLIC_SUPABASE_SERVICE_KEY")
     )
 
     if not url:

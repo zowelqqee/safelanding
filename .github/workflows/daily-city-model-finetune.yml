@@ -1,0 +1,59 @@
+name: Daily city model fine-tune
+
+"on":
+  schedule:
+    # Runs daily at 05:17 Europe/Moscow time while Moscow is UTC+3.
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-city-model-finetune
+  cancel-in-progress: false
+
+jobs:
+  finetune:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      CITY_MODEL_MIN_FINETUNE_SAMPLES: ${{ vars.CITY_MODEL_MIN_FINETUNE_SAMPLES }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: requirements-training.txt
+
+      - name: Install training dependencies
+        run: python -m pip install -r requirements-training.txt
+
+      - name: Validate training data
+        run: python -m ml.finetune --dry-run
+
+      - name: Fine-tune city model
+        run: |
+          python -m ml.finetune \
+            --min-samples "${CITY_MODEL_MIN_FINETUNE_SAMPLES:-10}"
+
+      - name: Commit updated model
+        run: |
+          if git diff --quiet -- city_model.pt; then
+            echo "No city_model.pt changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add city_model.pt
+          git commit -m "chore: fine-tune city model"
+          git push
