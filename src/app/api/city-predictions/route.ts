@@ -187,6 +187,11 @@ function getModelHeaders() {
 function parsePredictions(value: unknown): CityModelPrediction[] {
   if (!Array.isArray(value)) return [];
 
+  const stringArray = (candidate: unknown) =>
+    Array.isArray(candidate)
+      ? candidate.filter((item): item is string => typeof item === "string")
+      : undefined;
+
   return value.flatMap((item) => {
     if (!isRecord(item)) return [];
     const cityModelId = item.city_model_id;
@@ -194,6 +199,7 @@ function parsePredictions(value: unknown): CityModelPrediction[] {
     const rawProbability = item.raw_probability;
     const rank = item.rank;
     const score = item.score;
+    const blockerId = item.blocker_id;
 
     if (
       typeof cityModelId !== "number" ||
@@ -211,6 +217,9 @@ function parsePredictions(value: unknown): CityModelPrediction[] {
       raw_probability: rawProbability,
       rank,
       score,
+      reason_ids: stringArray(item.reason_ids),
+      risk_ids: stringArray(item.risk_ids),
+      blocker_id: typeof blockerId === "string" ? blockerId : undefined,
     }];
   });
 }
@@ -265,7 +274,7 @@ export async function POST(request: Request) {
 
   try {
     const model = await fetchModelPredictions(input);
-    const results = mergeCityModelResults(model.predictions, heuristicResults);
+    const results = mergeCityModelResults(model.predictions, heuristicResults, input.language);
 
     return Response.json({
       source: model.predictions.length > 0 ? "model" : "heuristic",

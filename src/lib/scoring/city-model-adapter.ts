@@ -14,6 +14,15 @@ import type {
   StudyPriority,
 } from "@/types";
 import { getCityById } from "@/lib/data/cities";
+import {
+  getExplanationText,
+  MODEL_BLOCKER_IDS,
+  MODEL_REASON_IDS,
+  MODEL_RISK_IDS,
+  type BlockerId,
+  type ReasonId,
+  type RiskId,
+} from "@/lib/explanations/explanation-taxonomy";
 
 export type CityModelInput = {
   countryId: string;
@@ -57,6 +66,9 @@ export type CityModelPrediction = {
   raw_probability: number;
   rank: number;
   score: number;
+  reason_ids?: string[];
+  risk_ids?: string[];
+  blocker_id?: string;
 };
 
 const MODEL_CITY_ID_TO_APP_CITY_ID: Record<number, string> = {
@@ -276,6 +288,28 @@ function cityListModelScore(modelScore: number, heuristicScore: number) {
   return clampScore(modelScore * 0.75 + heuristicScore * 0.25);
 }
 
+function isReasonId(value: string): value is ReasonId {
+  return MODEL_REASON_IDS.includes(value as ReasonId);
+}
+
+function isRiskId(value: string): value is RiskId {
+  return MODEL_RISK_IDS.includes(value as RiskId);
+}
+
+function isBlockerId(value: string): value is BlockerId {
+  return MODEL_BLOCKER_IDS.includes(value as BlockerId);
+}
+
+function explanationTexts<T extends string>(
+  ids: string[] | undefined,
+  isValidId: (value: string) => value is T,
+  language: "ru" | "en"
+) {
+  return (ids ?? [])
+    .filter(isValidId)
+    .map((id) => getExplanationText(id as ReasonId | RiskId | BlockerId, language));
+}
+
 function looksRussian(text?: string) {
   return Boolean(text && /[А-Яа-яЁё]/.test(text));
 }
@@ -325,7 +359,8 @@ export function buildCityModelProfile(input: CityModelInput): CityModelProfile {
 
 export function mergeCityModelResults(
   predictions: CityModelPrediction[],
-  heuristicResults: CityMatchResult[]
+  heuristicResults: CityMatchResult[],
+  language: "ru" | "en" = "en"
 ): CityMatchResult[] {
   const heuristicByCityId = new Map(
     heuristicResults.map((result) => [result.cityId, result])
@@ -338,9 +373,18 @@ export function mergeCityModelResults(
     const heuristic = cityId ? heuristicByCityId.get(cityId) : undefined;
     if (!heuristic || seenCityIds.has(cityId)) continue;
 
+    const reasons = explanationTexts(prediction.reason_ids, isReasonId, language);
+    const risks = explanationTexts(prediction.risk_ids, isRiskId, language);
+    const mainBlocker = prediction.blocker_id && isBlockerId(prediction.blocker_id)
+      ? getExplanationText(prediction.blocker_id, language)
+      : heuristic.mainBlocker;
+
     modelResults.push({
       ...heuristic,
       score: cityListModelScore(prediction.score, heuristic.score),
+      reasons: reasons.length > 0 ? reasons : heuristic.reasons,
+      risks: risks.length > 0 ? risks : heuristic.risks,
+      mainBlocker,
     });
     seenCityIds.add(cityId);
   }

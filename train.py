@@ -30,7 +30,7 @@ model = nn.Sequential(
     nn.Linear(64, output_size)
 )
 
-loss_fn = nn.KLDivLoss(reduction="batchmean")
+loss_fn = nn.BCEWithLogitsLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 batch_size = 64

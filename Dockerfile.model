@@ -2,7 +2,8 @@ FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    CITY_MODEL_PATH=/app/city_model.pt
+    CITY_MODEL_PATH=/app/city_model.pt \
+    CITY_EXPLANATION_MODEL_PATH=/app/city_explanations.pt
 
 WORKDIR /app
 
@@ -10,6 +11,7 @@ COPY requirements-model.txt ./
 RUN pip install --no-cache-dir -r requirements-model.txt
 
 COPY city_model.pt ./
+COPY city_explanations.pt ./
 COPY ml ./ml
 COPY relocation_dataset ./relocation_dataset
 
