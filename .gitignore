@@ -16,6 +16,26 @@
 # python
 __pycache__/
 *.py[cod]
+.venv/
+venv/
+env/
+
+# ML generated artifacts
+city_model_*.pt
+*.ckpt
+checkpoints/
+runs/
+outputs/
+artifacts/
+mlruns/
+wandb/
+
+# local db/cache/logs
+*.sqlite
+*.sqlite3
+*.db
+*.log
+logs/
 
 # next.js
 /.next/
@@ -27,6 +47,10 @@ __pycache__/
 # misc
 .DS_Store
 *.pem
+
+# IDE
+.vscode/
+.idea/
 
 # debug
 npm-debug.log*
