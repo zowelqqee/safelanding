@@ -5,10 +5,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import shutil
 import sys
 from dataclasses import dataclass, field
-from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
@@ -765,11 +763,6 @@ def finetune(
     if best_state is None:
         print("No model update was produced")
         return
-
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    backup_path = model_path.parent / f"{model_path.stem}_{timestamp}{model_path.suffix}"
-    shutil.copy(model_path, backup_path)
-    print(f"Backed up current model to {backup_path}")
 
     torch.save(best_state, model_path)
     print(f"Saved fine-tuned model to {model_path}")
