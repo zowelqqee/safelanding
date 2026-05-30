@@ -1,15 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { MapPin, ArrowRight, Loader2, Mail, RotateCcw } from "lucide-react";
+import { ArrowRight, ArrowLeft, Loader2, Mail, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/site/site-header";
-import { signUpWithEmail, resendConfirmation } from "@/lib/auth/authService";
-import { trackEvent } from "@/lib/analytics/trackEvent";
+import { resetPasswordForEmail } from "@/lib/auth/authService";
 import { useUiLanguage } from "@/hooks/useUiLanguage";
 import { translateAuthError } from "@/lib/auth/authErrors";
 import type { UiLanguage } from "@/lib/i18n/onboarding";
@@ -19,47 +17,33 @@ const RESEND_COOLDOWN = 60;
 const COPY = {
   en: {
     kicker: "Soft Landing",
-    title: "Create your profile",
-    subtitle: "Save your relocation progress, shortlist, and legal path.",
+    title: "Reset your password",
+    subtitle: "Enter your email and we'll send you a link to create a new password.",
     email: "Email",
-    password: "Password",
-    passwordPlaceholder: "At least 8 characters",
-    confirm: "Confirm password",
-    confirmPlaceholder: "Repeat your password",
-    submit: "Create profile",
-    hasAccount: "Already have an account?",
-    signIn: "Sign in",
-    errorShort: "Password must be at least 8 characters.",
-    errorMatch: "Passwords don't match.",
-    // check-email view
-    checkTitle: "Check your inbox",
-    checkSubtitle: (email: string) =>
-      `We sent a confirmation link to ${email}. Click it to activate your account.`,
-    checkNote: "The link expires in 24 hours. Check spam if you don't see it.",
-    resend: "Resend email",
+    submit: "Send reset link",
+    backToSignIn: "Back to sign in",
+    // sent view
+    sentTitle: "Check your inbox",
+    sentSubtitle: (email: string) =>
+      `We sent a password reset link to ${email}. Click it to create a new password.`,
+    sentNote: "The link expires in 1 hour. Check spam if you don't see it.",
+    resend: "Resend link",
     resendCooldown: (s: number) => `Resend in ${s}s`,
-    resendDone: "Sent! Check your inbox.",
+    resendDone: "Sent again! Check your inbox.",
     wrongEmail: "Wrong email? Go back",
   },
   ru: {
     kicker: "Soft Landing",
-    title: "Создайте профиль",
-    subtitle: "Сохраните прогресс, список стран и выбранный путь.",
+    title: "Сброс пароля",
+    subtitle: "Укажите email — мы отправим ссылку для создания нового пароля.",
     email: "Электронная почта",
-    password: "Пароль",
-    passwordPlaceholder: "Минимум 8 символов",
-    confirm: "Повторите пароль",
-    confirmPlaceholder: "Введите пароль ещё раз",
-    submit: "Создать профиль",
-    hasAccount: "Уже есть аккаунт?",
-    signIn: "Войти",
-    errorShort: "Пароль должен содержать минимум 8 символов.",
-    errorMatch: "Пароли не совпадают.",
-    // экран «проверьте почту»
-    checkTitle: "Проверьте почту",
-    checkSubtitle: (email: string) =>
-      `Мы отправили ссылку для подтверждения на ${email}. Перейдите по ней, чтобы активировать аккаунт.`,
-    checkNote: "Ссылка действует 24 часа. Если письма нет — проверьте папку «Спам».",
+    submit: "Отправить ссылку",
+    backToSignIn: "Назад ко входу",
+    // экран «отправлено»
+    sentTitle: "Проверьте почту",
+    sentSubtitle: (email: string) =>
+      `Мы отправили ссылку для сброса пароля на ${email}. Перейдите по ней, чтобы создать новый пароль.`,
+    sentNote: "Ссылка действует 1 час. Если письма нет — проверьте папку «Спам».",
     resend: "Отправить повторно",
     resendCooldown: (s: number) => `Повторная отправка через ${s} с`,
     resendDone: "Отправлено! Проверьте почту.",
@@ -67,29 +51,22 @@ const COPY = {
   },
 } satisfies Record<UiLanguage, {
   kicker: string; title: string; subtitle: string; email: string;
-  password: string; passwordPlaceholder: string; confirm: string;
-  confirmPlaceholder: string; submit: string; hasAccount: string; signIn: string;
-  errorShort: string; errorMatch: string;
-  checkTitle: string; checkSubtitle: (email: string) => string;
-  checkNote: string; resend: string; resendCooldown: (s: number) => string;
+  submit: string; backToSignIn: string;
+  sentTitle: string; sentSubtitle: (email: string) => string;
+  sentNote: string; resend: string; resendCooldown: (s: number) => string;
   resendDone: string; wrongEmail: string;
 }>;
 
-type View = "form" | "check-email";
+type View = "form" | "sent";
 
-export default function SignUpPage() {
-  const router = useRouter();
+export default function ForgotPasswordPage() {
   const language = useUiLanguage();
   const copy = COPY[language];
 
   const [view, setView] = useState<View>("form");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  // Resend cooldown
   const [cooldown, setCooldown] = useState(0);
   const [resendInfo, setResendInfo] = useState<"" | "sent">("");
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -116,18 +93,8 @@ export default function SignUpPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-
-    if (password.length < 8) {
-      setError(copy.errorShort);
-      return;
-    }
-    if (password !== confirm) {
-      setError(copy.errorMatch);
-      return;
-    }
-
     setLoading(true);
-    const { data, error: authError } = await signUpWithEmail(email, password);
+    const { error: authError } = await resetPasswordForEmail(email);
     setLoading(false);
 
     if (authError) {
@@ -135,25 +102,15 @@ export default function SignUpPage() {
       return;
     }
 
-    void trackEvent("signup_completed");
-
-    // Auto-confirmed (email confirmation disabled in Supabase settings)
-    if (data.session) {
-      router.push("/start");
-      router.refresh();
-      return;
-    }
-
-    // Needs email confirmation
-    setView("check-email");
+    setView("sent");
     startCooldown();
   }
 
   async function handleResend() {
     if (cooldown > 0) return;
     setResendInfo("");
-    const { error: resendError } = await resendConfirmation(email);
-    if (!resendError) {
+    const { error: authError } = await resetPasswordForEmail(email);
+    if (!authError) {
       setResendInfo("sent");
       startCooldown();
     }
@@ -161,7 +118,7 @@ export default function SignUpPage() {
 
   return (
     <div className="city-page-wrap min-h-screen flex flex-col">
-      <SiteHeader variant="public" action="sign-up" />
+      <SiteHeader variant="public" action="sign-in" />
 
       <main className="flex flex-1 items-center justify-center px-4 py-10">
         <div className="w-full max-w-sm">
@@ -171,7 +128,7 @@ export default function SignUpPage() {
               <>
                 <div className="flex flex-col items-center text-center space-y-3">
                   <div className="w-10 h-10 rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)] flex items-center justify-center">
-                    <MapPin className="h-5 w-5 text-stone-700" />
+                    <Mail className="h-5 w-5 text-stone-700" />
                   </div>
                   <div>
                     <p className="city-section-kicker mb-1">{copy.kicker}</p>
@@ -195,34 +152,6 @@ export default function SignUpPage() {
                     />
                   </div>
 
-                  <div className="space-y-1.5">
-                    <Label htmlFor="password" className="text-sm font-medium text-stone-800">{copy.password}</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      autoComplete="new-password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder={copy.passwordPlaceholder}
-                      className="border-[var(--city-border)] bg-[var(--city-card)] focus-visible:ring-stone-400"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <Label htmlFor="confirm" className="text-sm font-medium text-stone-800">{copy.confirm}</Label>
-                    <Input
-                      id="confirm"
-                      type="password"
-                      autoComplete="new-password"
-                      required
-                      value={confirm}
-                      onChange={(e) => setConfirm(e.target.value)}
-                      placeholder={copy.confirmPlaceholder}
-                      className="border-[var(--city-border)] bg-[var(--city-card)] focus-visible:ring-stone-400"
-                    />
-                  </div>
-
                   {error && (
                     <p className="text-sm text-destructive rounded-xl border border-destructive/30 bg-destructive/5 px-3 py-2.5">
                       {error}
@@ -241,15 +170,18 @@ export default function SignUpPage() {
                   </Button>
                 </form>
 
-                <p className="text-center text-sm text-[var(--city-muted-fg)]">
-                  {copy.hasAccount}{" "}
-                  <Link href="/auth/sign-in" className="text-stone-900 hover:underline font-medium">
-                    {copy.signIn}
+                <p className="text-center">
+                  <Link
+                    href="/auth/sign-in"
+                    className="inline-flex items-center gap-1.5 text-sm text-[var(--city-muted-fg)] hover:text-stone-900 transition-colors"
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                    {copy.backToSignIn}
                   </Link>
                 </p>
               </>
             ) : (
-              /* ── Check email view ── */
+              /* ── Sent view ── */
               <div className="flex flex-col items-center text-center space-y-5">
                 <div className="w-12 h-12 rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)] flex items-center justify-center">
                   <Mail className="h-6 w-6 text-stone-700" />
@@ -257,13 +189,13 @@ export default function SignUpPage() {
 
                 <div className="space-y-2">
                   <h1 className="font-serif text-2xl font-medium tracking-tight text-stone-900">
-                    {copy.checkTitle}
+                    {copy.sentTitle}
                   </h1>
                   <p className="text-sm text-[var(--city-muted-fg)] leading-relaxed">
-                    {copy.checkSubtitle(email)}
+                    {copy.sentSubtitle(email)}
                   </p>
                   <p className="text-xs text-[var(--city-muted-fg)]">
-                    {copy.checkNote}
+                    {copy.sentNote}
                   </p>
                 </div>
 

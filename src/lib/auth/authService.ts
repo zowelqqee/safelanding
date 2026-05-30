@@ -63,6 +63,22 @@ export async function signInWithEmail(email: string, password: string) {
   return supabase.auth.signInWithPassword({ email, password });
 }
 
+export async function resendConfirmation(email: string) {
+  const supabase = createClient();
+  return supabase.auth.resend({ type: "signup", email });
+}
+
+export async function resetPasswordForEmail(email: string) {
+  const supabase = createClient();
+  const redirectTo = getAuthCallbackUrl("/auth/reset-password");
+  return supabase.auth.resetPasswordForEmail(email, redirectTo ? { redirectTo } : undefined);
+}
+
+export async function updatePassword(password: string) {
+  const supabase = createClient();
+  return supabase.auth.updateUser({ password });
+}
+
 export async function signOut() {
   const supabase = createClient();
   return supabase.auth.signOut();
