@@ -50,10 +50,24 @@ except ImportError:
     from city_inference import _build_model, _resolve_model_path
 
 
-LR = float(os.environ.get("CITY_MODEL_FINETUNE_LR", "0.0001"))
-EPOCHS = int(os.environ.get("CITY_MODEL_FINETUNE_EPOCHS", "30"))
-MIN_SAMPLES = int(os.environ.get("CITY_MODEL_MIN_FINETUNE_SAMPLES", "1"))
-PAGE_SIZE = int(os.environ.get("CITY_MODEL_FINETUNE_PAGE_SIZE", "1000"))
+def _env_float(name: str, default: float) -> float:
+    raw_value = os.environ.get(name)
+    if raw_value is None or raw_value.strip() == "":
+        return default
+    return float(raw_value)
+
+
+def _env_int(name: str, default: int) -> int:
+    raw_value = os.environ.get(name)
+    if raw_value is None or raw_value.strip() == "":
+        return default
+    return int(raw_value)
+
+
+LR = _env_float("CITY_MODEL_FINETUNE_LR", 0.0001)
+EPOCHS = _env_int("CITY_MODEL_FINETUNE_EPOCHS", 30)
+MIN_SAMPLES = _env_int("CITY_MODEL_MIN_FINETUNE_SAMPLES", 1)
+PAGE_SIZE = _env_int("CITY_MODEL_FINETUNE_PAGE_SIZE", 1000)
 
 PROFILE_SELECTED_WEIGHT = 1.0
 EVENT_SELECTED_WEIGHT = 1.0
