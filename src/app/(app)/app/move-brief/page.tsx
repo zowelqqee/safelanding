@@ -16,7 +16,7 @@ import { PrintMoveBriefButton } from "@/components/move-brief/print-move-brief-b
 import type { UiLanguage } from "@/lib/i18n/onboarding";
 import { buildMoveBrief } from "@/lib/move-brief/build-move-brief";
 import { getCurrentMoveProfileServer } from "@/lib/profile/profileServer";
-import { getProfileLanguage } from "@/lib/profile/profile-labels";
+import { getServerLanguage } from "@/lib/i18n/server";
 
 export const metadata = {
   title: "Move Brief — Soft Landing",
@@ -153,7 +153,7 @@ export default async function MoveBriefPage() {
     );
   }
 
-  const language = getProfileLanguage(profile);
+  const language = await getServerLanguage(profile.preferred_language);
   const copy = COPY[language];
   const brief = buildMoveBrief(profile, language);
 

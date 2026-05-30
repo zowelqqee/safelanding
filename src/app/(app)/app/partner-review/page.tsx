@@ -7,7 +7,7 @@ import { buildMoveBrief } from "@/lib/move-brief/build-move-brief";
 import {
   getCurrentUserWithMoveProfile,
 } from "@/lib/profile/profileServer";
-import { getProfileLanguage } from "@/lib/profile/profile-labels";
+import { getServerLanguage } from "@/lib/i18n/server";
 import { getPartnerReviewRequestServer } from "@/lib/partner-review/partner-review-server";
 
 export const metadata = {
@@ -51,7 +51,7 @@ const COPY = {
 
 export default async function PartnerReviewPage() {
   const { user, profile } = await getCurrentUserWithMoveProfile();
-  const language = getProfileLanguage(profile);
+  const language = await getServerLanguage(profile?.preferred_language);
   const copy = COPY[language];
 
   if (!user || !profile) {

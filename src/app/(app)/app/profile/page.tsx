@@ -17,8 +17,8 @@ import { getLegalPathById } from "@/lib/data/legal-paths";
 import {
   formatPreferredLanguage,
   getNotSetLabel,
-  getProfileLanguage,
 } from "@/lib/profile/profile-labels";
+import { getServerLanguage } from "@/lib/i18n/server";
 import { getCurrentUserWithMoveProfile } from "@/lib/profile/profileServer";
 import { buildCountryMatchInputFromMoveProfile } from "@/lib/scoring/move-profile-match";
 import { matchCountries } from "@/lib/scoring/country-matcher";
@@ -130,7 +130,7 @@ function Row({
 
 export default async function ProfilePage() {
   const { user, profile } = await getCurrentUserWithMoveProfile();
-  const language = getProfileLanguage(profile);
+  const language = await getServerLanguage(profile?.preferred_language);
   const copy = COPY[language];
   const notSet = getNotSetLabel(language);
 

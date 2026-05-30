@@ -39,6 +39,7 @@ import { SignOutButton } from "@/components/auth/sign-out-button";
 import type { UiLanguage } from "@/lib/i18n/onboarding";
 import {
   LANGUAGE_CHANGE_EVENT,
+  LANGUAGE_STORAGE_KEY,
   getStoredUiLanguage,
   isUiLanguage,
   notifyUiLanguageChanged,
@@ -181,12 +182,21 @@ export function OnboardingFlow({ isPreview = false }: OnboardingFlowProps) {
       .then((profile) => {
         if (cancelled || !profile) return;
 
-        const profileLanguage = isUiLanguage(profile.preferred_language)
+        const dbLanguage = isUiLanguage(profile.preferred_language)
           ? profile.preferred_language
-          : getStoredUiLanguage("en");
+          : null;
 
-        setStoredUiLanguage(profileLanguage);
-        notifyUiLanguageChanged(profileLanguage);
+        // Prefer user's explicit localStorage choice over DB value to avoid
+        // overwriting a language switch that happened before this fetch resolved.
+        const existingStoredLang = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+        const profileLanguage = isUiLanguage(existingStoredLang)
+          ? existingStoredLang
+          : (dbLanguage ?? "en");
+
+        if (!isUiLanguage(existingStoredLang) && dbLanguage) {
+          setStoredUiLanguage(dbLanguage);
+          notifyUiLanguageChanged(dbLanguage);
+        }
 
         setState((prev) => ({
           ...prev,

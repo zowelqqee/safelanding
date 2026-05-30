@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AppBottomNav } from "./bottom-nav";
 import { SiteHeader } from "@/components/site/site-header";
-import { resolveUiLanguage } from "@/lib/i18n/ui-language";
+import { getServerLanguage } from "@/lib/i18n/server";
 
 export default async function AppLayout({
   children,
@@ -24,7 +24,7 @@ export default async function AppLayout({
     .select("preferred_language")
     .eq("user_id", user.id)
     .maybeSingle();
-  const initialLanguage = resolveUiLanguage(profile?.preferred_language);
+  const initialLanguage = await getServerLanguage(profile?.preferred_language);
 
   return (
     <div className="city-page-wrap flex flex-col min-h-screen">

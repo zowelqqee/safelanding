@@ -56,12 +56,9 @@ export function LanguageSwitcher({
 
     setStoredUiLanguage(nextLanguage);
     notifyUiLanguageChanged(nextLanguage);
+    router.refresh();
 
-    updateMoveProfile({ preferred_language: nextLanguage })
-      .catch(console.error)
-      .finally(() => {
-        router.refresh();
-      });
+    updateMoveProfile({ preferred_language: nextLanguage }).catch(console.error);
   };
 
   return (
