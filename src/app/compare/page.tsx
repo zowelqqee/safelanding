@@ -20,6 +20,84 @@ import type {
 } from "@/types";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { useUiLanguage } from "@/hooks/useUiLanguage";
+
+const COPY = {
+  en: {
+    badge: "Lifestyle fit vs legal fit",
+    title: "Compare before you commit",
+    subtitle: "Compare countries and cities side by side so you can see what fits, what blocks you, and what deserves a deeper look next.",
+    tabs: { country: "Countries", city: "Cities" },
+    selectCountries: "Select 2 to 4 countries",
+    selectCities: "Select 2 to 4 cities or regions",
+    chooseCountry: "Choose a country",
+    overall: "overall",
+    metrics: {
+      cost: "Cost",
+      housing: "Housing difficulty",
+      language: "Language barrier",
+      career: "Career upside",
+      study: "Study route",
+      remote: "Remote work route",
+      longterm: "Long-term stability",
+      transport: "Transport",
+      english: "English friendliness",
+      expat: "Expat community",
+      family: "Family fit",
+      difficulty: "First 90 days difficulty",
+    },
+    blocker: "Main blocker",
+    realityPreview: "Reality preview",
+    lifestyleFit: "Lifestyle fit",
+    legalFit: "Legal fit",
+    avgRent: "Average rent",
+    monthlyBudget: "Monthly budget",
+    first90: "First 90 days preview",
+    chooseDestination: "Choose this destination",
+    compareCities: "Compare cities",
+    startMove: "Start your move",
+    loading: "Loading comparison",
+    loadingBody: "Preparing your side-by-side view...",
+  },
+  ru: {
+    badge: "Образ жизни и легальный путь",
+    title: "Сравните перед тем, как решить",
+    subtitle: "Сравните страны и города рядом — чтобы видеть, что подходит, что блокирует и на что стоит обратить внимание.",
+    tabs: { country: "Страны", city: "Города" },
+    selectCountries: "Выберите от 2 до 4 стран",
+    selectCities: "Выберите от 2 до 4 городов или регионов",
+    chooseCountry: "Выберите страну",
+    overall: "общий",
+    metrics: {
+      cost: "Расходы",
+      housing: "Сложность с жильём",
+      language: "Языковой барьер",
+      career: "Карьерные возможности",
+      study: "Путь для учёбы",
+      remote: "Путь для удалёнщика",
+      longterm: "Долгосрочная стабильность",
+      transport: "Транспорт",
+      english: "Без знания языка",
+      expat: "Сообщество переехавших",
+      family: "Подходит для семьи",
+      difficulty: "Сложность первых 90 дней",
+    },
+    blocker: "Главный блокер",
+    realityPreview: "Что важно знать",
+    lifestyleFit: "Совпадение по образу жизни",
+    legalFit: "Совпадение по документам",
+    avgRent: "Средняя аренда",
+    monthlyBudget: "Бюджет в месяц",
+    first90: "Первые 90 дней",
+    chooseDestination: "Выбрать это направление",
+    compareCities: "Сравнить города",
+    startMove: "Начать план переезда",
+    loading: "Загружаем сравнение",
+    loadingBody: "Готовим сравнение...",
+  },
+};
+
+type CompareCopy = typeof COPY["en"];
 
 type CompareMode = "country" | "city";
 
@@ -122,9 +200,11 @@ function buildContext(params: URLSearchParams): CountryMatchInput {
 function CompareToggle({
   mode,
   onChange,
+  tabs,
 }: {
   mode: CompareMode;
   onChange: (mode: CompareMode) => void;
+  tabs: { country: string; city: string };
 }) {
   return (
     <div className="inline-flex rounded-full border border-[var(--city-border)] bg-[var(--city-card)] p-1">
@@ -140,7 +220,7 @@ function CompareToggle({
               : "text-[var(--city-muted-fg)] hover:text-stone-900"
           )}
         >
-          {value === "country" ? "Countries" : "Cities"}
+          {value === "country" ? tabs.country : tabs.city}
         </button>
       ))}
     </div>
@@ -214,9 +294,11 @@ function MetricList({
 function CountryCompareCard({
   country,
   fit,
+  copy,
 }: {
   country: CountryProfile;
   fit: ReturnType<typeof matchCountries>[number];
+  copy: CompareCopy;
 }) {
   return (
     <div className="city-card rounded-[22px] p-5">
@@ -227,7 +309,7 @@ function CountryCompareCard({
           <p className="text-sm text-[var(--city-muted-fg)]">{country.region}</p>
         </div>
         <span className="rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-sm font-semibold text-stone-700">
-          {fit.overallFit}% overall
+          {fit.overallFit}% {copy.overall}
         </span>
       </div>
 
@@ -235,15 +317,15 @@ function CountryCompareCard({
 
       <div className="mt-5 grid gap-3 sm:grid-cols-3">
         <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-3 py-3">
-          <p className="city-section-kicker">Lifestyle fit</p>
+          <p className="city-section-kicker">{copy.lifestyleFit}</p>
           <p className="mt-1 text-2xl font-semibold text-stone-900">{fit.lifestyleFit}%</p>
         </div>
         <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-3 py-3">
-          <p className="city-section-kicker">Legal fit</p>
+          <p className="city-section-kicker">{copy.legalFit}</p>
           <p className="mt-1 text-2xl font-semibold text-stone-900">{fit.legalFit}%</p>
         </div>
         <div className="rounded-2xl border border-amber-200 bg-amber-50/90 px-3 py-3">
-          <p className="city-section-kicker text-amber-700">Main blocker</p>
+          <p className="city-section-kicker text-amber-700">{copy.blocker}</p>
           <p className="mt-1 text-sm font-medium leading-snug text-amber-950">{fit.mainBlocker}</p>
         </div>
       </div>
@@ -251,26 +333,26 @@ function CountryCompareCard({
       <div className="mt-5">
         <MetricList
           items={[
-            { label: "Cost", value: <ScoreRail value={country.cost_level} invert /> },
-            { label: "Housing difficulty", value: <ScoreRail value={country.housing_difficulty} invert /> },
-            { label: "Language barrier", value: <ScoreRail value={country.english_friendliness} /> },
-            { label: "Career upside", value: <ScoreRail value={country.career_opportunities} /> },
-            { label: "Study route", value: <ScoreRail value={country.study_fit} /> },
-            { label: "Remote work route", value: <ScoreRail value={country.remote_work_fit} /> },
-            { label: "Long-term stability", value: <ScoreRail value={country.long_term_stability} /> },
+            { label: copy.metrics.cost, value: <ScoreRail value={country.cost_level} invert /> },
+            { label: copy.metrics.housing, value: <ScoreRail value={country.housing_difficulty} invert /> },
+            { label: copy.metrics.language, value: <ScoreRail value={country.english_friendliness} /> },
+            { label: copy.metrics.career, value: <ScoreRail value={country.career_opportunities} /> },
+            { label: copy.metrics.study, value: <ScoreRail value={country.study_fit} /> },
+            { label: copy.metrics.remote, value: <ScoreRail value={country.remote_work_fit} /> },
+            { label: copy.metrics.longterm, value: <ScoreRail value={country.long_term_stability} /> },
           ]}
         />
       </div>
 
       <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
-        <p className="city-section-kicker text-amber-700">Reality preview</p>
+        <p className="city-section-kicker text-amber-700">{copy.realityPreview}</p>
         <p className="mt-1 text-sm text-amber-900">{country.main_legal_blocker}</p>
       </div>
 
       <div className="mt-5 flex gap-2">
         <Link href={`/explore/${country.slug}`} className="flex-1">
           <Button variant="outline" className="h-11 w-full gap-2 rounded-full border-[var(--city-border)]">
-            Choose this destination
+            {copy.chooseDestination}
             <ArrowRight className="h-4 w-4" />
           </Button>
         </Link>
@@ -279,7 +361,7 @@ function CountryCompareCard({
           className="flex-1"
         >
           <Button className="h-11 w-full gap-2 rounded-full">
-            Compare cities
+            {copy.compareCities}
             <MapPin className="h-4 w-4" />
           </Button>
         </Link>
@@ -291,15 +373,14 @@ function CountryCompareCard({
 function CityCompareCard({
   cityId,
   position,
+  copy,
 }: {
   cityId: string;
   position: number;
+  copy: CompareCopy;
 }) {
   const city = getCityById(cityId);
-  const cardRef = useCityCardViewTracking({
-    cityId,
-    position,
-  });
+  const cardRef = useCityCardViewTracking({ cityId, position });
 
   if (!city) return null;
 
@@ -320,42 +401,40 @@ function CityCompareCard({
       <div className="mt-5">
         <MetricList
           items={[
-            { label: "Cost", value: <ScoreRail value={city.cost_level} invert /> },
-            { label: "Housing", value: <ScoreRail value={city.housing_difficulty} invert /> },
-            { label: "Transport", value: <ScoreRail value={city.public_transport} /> },
-            { label: "English friendliness", value: <ScoreRail value={city.english_friendliness} /> },
-            { label: "Expat community", value: <ScoreRail value={city.expat_community} /> },
-            { label: "Career", value: <ScoreRail value={city.career_opportunities} /> },
-            { label: "Remote work", value: <ScoreRail value={city.remote_worker_fit} /> },
-            { label: "Family fit", value: <ScoreRail value={city.family_fit} /> },
-            { label: "First 90 days difficulty", value: <ScoreRail value={city.first_90_days_difficulty} /> },
+            { label: copy.metrics.cost, value: <ScoreRail value={city.cost_level} invert /> },
+            { label: copy.metrics.housing, value: <ScoreRail value={city.housing_difficulty} invert /> },
+            { label: copy.metrics.transport, value: <ScoreRail value={city.public_transport} /> },
+            { label: copy.metrics.english, value: <ScoreRail value={city.english_friendliness} /> },
+            { label: copy.metrics.expat, value: <ScoreRail value={city.expat_community} /> },
+            { label: copy.metrics.career, value: <ScoreRail value={city.career_opportunities} /> },
+            { label: copy.metrics.remote, value: <ScoreRail value={city.remote_worker_fit} /> },
+            { label: copy.metrics.family, value: <ScoreRail value={city.family_fit} /> },
+            { label: copy.metrics.difficulty, value: <ScoreRail value={city.first_90_days_difficulty} /> },
           ]}
         />
       </div>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
         <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-3">
-          <p className="city-section-kicker">Average rent</p>
+          <p className="city-section-kicker">{copy.avgRent}</p>
           <p className="mt-1 text-sm font-medium text-stone-900">{city.avg_rent_range}</p>
         </div>
         <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-3">
-          <p className="city-section-kicker">Monthly budget</p>
+          <p className="city-section-kicker">{copy.monthlyBudget}</p>
           <p className="mt-1 text-sm font-medium text-stone-900">{city.monthly_budget_range}</p>
         </div>
       </div>
 
       <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
-        <p className="city-section-kicker text-amber-700">Main blocker</p>
+        <p className="city-section-kicker text-amber-700">{copy.blocker}</p>
         <p className="mt-1 text-sm text-amber-900">{city.main_lifestyle_blocker}</p>
       </div>
 
       <div className="mt-5">
-        <p className="city-section-kicker mb-2">First 90 days preview</p>
+        <p className="city-section-kicker mb-2">{copy.first90}</p>
         <ul className="space-y-1.5">
           {city.first_90_days_preview.map((item) => (
-            <li key={item} className="text-sm text-[var(--city-muted-fg)]">
-              {item}
-            </li>
+            <li key={item} className="text-sm text-[var(--city-muted-fg)]">{item}</li>
           ))}
         </ul>
       </div>
@@ -363,13 +442,13 @@ function CityCompareCard({
       <div className="mt-5 flex gap-2">
         <Link href={`/explore/${city.countryId}/${city.slug}`} className="flex-1">
           <Button variant="outline" className="h-11 w-full gap-2 rounded-full border-[var(--city-border)]">
-            Choose this destination
+            {copy.chooseDestination}
             <ArrowRight className="h-4 w-4" />
           </Button>
         </Link>
         <Link href="/start" className="flex-1">
           <Button className="h-11 w-full gap-2 rounded-full">
-            Start your move
+            {copy.startMove}
             <Sparkles className="h-4 w-4" />
           </Button>
         </Link>
@@ -383,6 +462,8 @@ function CompareExperience({
 }: {
   searchParams: ReturnType<typeof useSearchParams>;
 }) {
+  const language = useUiLanguage();
+  const copy = COPY[language];
   const initialMode = searchParams.get("type") === "city" ? "city" : "country";
   const [mode, setMode] = useState<CompareMode>(initialMode);
   const [selectedCountryIds, setSelectedCountryIds] = useState<string[]>(
@@ -443,24 +524,23 @@ function CompareExperience({
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-stone-700">
               <Shield className="h-3.5 w-3.5" />
-              Lifestyle fit vs legal fit
+              {copy.badge}
             </div>
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div className="space-y-1">
-                <h1 className="font-serif text-3xl font-medium text-stone-900">Compare before you commit</h1>
+                <h1 className="font-serif text-3xl font-medium text-stone-900">{copy.title}</h1>
                 <p className="max-w-2xl text-sm leading-relaxed text-[var(--city-muted-fg)]">
-                  Compare countries and cities side by side so you can see what fits,
-                  what blocks you, and what deserves a deeper look next.
+                  {copy.subtitle}
                 </p>
               </div>
-              <CompareToggle mode={mode} onChange={setMode} />
+              <CompareToggle mode={mode} onChange={setMode} tabs={copy.tabs} />
             </div>
           </div>
 
           {mode === "country" ? (
             <>
               <ChipSelector
-                label="Select 2 to 4 countries"
+                label={copy.selectCountries}
                 options={COUNTRIES.map((country) => ({
                   id: country.id,
                   title: country.name,
@@ -481,6 +561,7 @@ function CompareExperience({
                       key={country.id}
                       country={country}
                       fit={fit}
+                      copy={copy}
                     />
                   );
                 })}
@@ -490,7 +571,7 @@ function CompareExperience({
             <>
               <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
                 <div className="city-card rounded-[22px] p-5">
-                  <p className="text-sm font-medium text-stone-900">Choose a country</p>
+                  <p className="text-sm font-medium text-stone-900">{copy.chooseCountry}</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {COUNTRIES.map((country) => (
                       <button
@@ -514,7 +595,7 @@ function CompareExperience({
                 </div>
 
                 <ChipSelector
-                  label="Select 2 to 4 cities or regions"
+                  label={copy.selectCities}
                   options={cityOptions.map((city) => ({
                     id: city.id,
                     title: city.name,
@@ -527,7 +608,7 @@ function CompareExperience({
 
               <div className="grid gap-4 lg:grid-cols-2">
                 {selectedCityIds.map((cityId, index) => (
-                  <CityCompareCard key={cityId} cityId={cityId} position={index + 1} />
+                  <CityCompareCard key={cityId} cityId={cityId} position={index + 1} copy={copy} />
                 ))}
               </div>
             </>
@@ -553,15 +634,18 @@ function CompareContent() {
 }
 
 function CompareLoadingState() {
+  const language = useUiLanguage();
+  const copy = COPY[language];
+
   return (
     <div className="city-page-wrap min-h-screen">
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="city-card rounded-[28px] p-6 text-center">
           <p className="text-lg font-semibold tracking-tight text-stone-900">
-            Loading comparison
+            {copy.loading}
           </p>
           <p className="mt-2 text-sm text-[var(--city-muted-fg)]">
-            Preparing your side-by-side view...
+            {copy.loadingBody}
           </p>
         </div>
       </div>

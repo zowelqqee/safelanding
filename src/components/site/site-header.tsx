@@ -99,14 +99,14 @@ const HEADER_COPY = {
     mainNavigation: "Навигация",
     menu: "Меню",
     open: "Открыть",
-    openApp: "Открыть app",
-    openRoadmap: "Открыть роадмап",
+    openApp: "Открыть приложение",
+    openRoadmap: "Открыть план",
     quickAction: "Быстрое действие",
     signIn: "Войти",
     signOut: "Выйти",
     signingOut: "Выходим...",
     startMyMove: "Начать переезд",
-    yourApp: "Ваш app",
+    yourApp: "Моё приложение",
   },
 } satisfies Record<UiLanguage, {
   publicNavItems: NavItem[];

@@ -10,9 +10,39 @@ import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/site/site-header";
 import { signInWithEmail } from "@/lib/auth/authService";
 import { getCurrentMoveProfile } from "@/lib/profile/profileService";
+import { useUiLanguage } from "@/hooks/useUiLanguage";
+import type { UiLanguage } from "@/lib/i18n/onboarding";
+
+const COPY = {
+  en: {
+    kicker: "Soft Landing",
+    title: "Welcome back",
+    subtitle: "Sign in to continue your move planning.",
+    email: "Email",
+    password: "Password",
+    passwordPlaceholder: "Your password",
+    submit: "Sign in",
+    noAccount: "Don't have an account?",
+    createProfile: "Create profile",
+  },
+  ru: {
+    kicker: "Soft Landing",
+    title: "С возвращением",
+    subtitle: "Войдите, чтобы продолжить планирование переезда.",
+    email: "Электронная почта",
+    password: "Пароль",
+    passwordPlaceholder: "Ваш пароль",
+    submit: "Войти",
+    noAccount: "Ещё нет аккаунта?",
+    createProfile: "Создать профиль",
+  },
+} satisfies Record<UiLanguage, Record<string, string>>;
 
 export default function SignInPage() {
   const router = useRouter();
+  const language = useUiLanguage();
+  const copy = COPY[language];
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -52,17 +82,15 @@ export default function SignInPage() {
                 <MapPin className="h-5 w-5 text-stone-700" />
               </div>
               <div>
-                <p className="city-section-kicker mb-1">Soft Landing</p>
-                <h1 className="font-serif text-2xl font-medium tracking-tight text-stone-900">Welcome back</h1>
-                <p className="text-sm text-[var(--city-muted-fg)] mt-1.5">
-                  Sign in to continue your move planning.
-                </p>
+                <p className="city-section-kicker mb-1">{copy.kicker}</p>
+                <h1 className="font-serif text-2xl font-medium tracking-tight text-stone-900">{copy.title}</h1>
+                <p className="text-sm text-[var(--city-muted-fg)] mt-1.5">{copy.subtitle}</p>
               </div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-sm font-medium text-stone-800">Email</Label>
+                <Label htmlFor="email" className="text-sm font-medium text-stone-800">{copy.email}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -76,7 +104,7 @@ export default function SignInPage() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="password" className="text-sm font-medium text-stone-800">Password</Label>
+                <Label htmlFor="password" className="text-sm font-medium text-stone-800">{copy.password}</Label>
                 <Input
                   id="password"
                   type="password"
@@ -84,7 +112,7 @@ export default function SignInPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Your password"
+                  placeholder={copy.passwordPlaceholder}
                   className="border-[var(--city-border)] bg-[var(--city-card)] focus-visible:ring-stone-400"
                 />
               </div>
@@ -100,7 +128,7 @@ export default function SignInPage() {
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <>
-                    Sign in
+                    {copy.submit}
                     <ArrowRight className="h-4 w-4" />
                   </>
                 )}
@@ -108,9 +136,9 @@ export default function SignInPage() {
             </form>
 
             <p className="text-center text-sm text-[var(--city-muted-fg)]">
-              Don&apos;t have an account?{" "}
+              {copy.noAccount}{" "}
               <Link href="/auth/sign-up" className="text-stone-900 hover:underline font-medium">
-                Create profile
+                {copy.createProfile}
               </Link>
             </p>
           </div>

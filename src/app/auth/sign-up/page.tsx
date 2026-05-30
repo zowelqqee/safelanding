@@ -10,9 +10,47 @@ import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/site/site-header";
 import { signUpWithEmail } from "@/lib/auth/authService";
 import { trackEvent } from "@/lib/analytics/trackEvent";
+import { useUiLanguage } from "@/hooks/useUiLanguage";
+import type { UiLanguage } from "@/lib/i18n/onboarding";
+
+const COPY = {
+  en: {
+    kicker: "Soft Landing",
+    title: "Create your profile",
+    subtitle: "Save your relocation progress, shortlist, and legal path.",
+    email: "Email",
+    password: "Password",
+    passwordPlaceholder: "At least 6 characters",
+    confirm: "Confirm password",
+    confirmPlaceholder: "Repeat your password",
+    submit: "Create profile",
+    hasAccount: "Already have an account?",
+    signIn: "Sign in",
+    errorShort: "Password must be at least 6 characters.",
+    errorMatch: "Passwords don't match.",
+  },
+  ru: {
+    kicker: "Soft Landing",
+    title: "Создайте профиль",
+    subtitle: "Сохраните прогресс, список стран и выбранный путь.",
+    email: "Электронная почта",
+    password: "Пароль",
+    passwordPlaceholder: "Минимум 6 символов",
+    confirm: "Повторите пароль",
+    confirmPlaceholder: "Введите пароль ещё раз",
+    submit: "Создать профиль",
+    hasAccount: "Уже есть аккаунт?",
+    signIn: "Войти",
+    errorShort: "Пароль должен содержать минимум 6 символов.",
+    errorMatch: "Пароли не совпадают.",
+  },
+} satisfies Record<UiLanguage, Record<string, string>>;
 
 export default function SignUpPage() {
   const router = useRouter();
+  const language = useUiLanguage();
+  const copy = COPY[language];
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -24,11 +62,11 @@ export default function SignUpPage() {
     setError("");
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+      setError(copy.errorShort);
       return;
     }
     if (password !== confirm) {
-      setError("Passwords don't match.");
+      setError(copy.errorMatch);
       return;
     }
 
@@ -58,17 +96,15 @@ export default function SignUpPage() {
                 <MapPin className="h-5 w-5 text-stone-700" />
               </div>
               <div>
-                <p className="city-section-kicker mb-1">Soft Landing</p>
-                <h1 className="font-serif text-2xl font-medium tracking-tight text-stone-900">Create your profile</h1>
-                <p className="text-sm text-[var(--city-muted-fg)] mt-1.5">
-                  Save your relocation progress, shortlist, and legal path.
-                </p>
+                <p className="city-section-kicker mb-1">{copy.kicker}</p>
+                <h1 className="font-serif text-2xl font-medium tracking-tight text-stone-900">{copy.title}</h1>
+                <p className="text-sm text-[var(--city-muted-fg)] mt-1.5">{copy.subtitle}</p>
               </div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-sm font-medium text-stone-800">Email</Label>
+                <Label htmlFor="email" className="text-sm font-medium text-stone-800">{copy.email}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -82,7 +118,7 @@ export default function SignUpPage() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="password" className="text-sm font-medium text-stone-800">Password</Label>
+                <Label htmlFor="password" className="text-sm font-medium text-stone-800">{copy.password}</Label>
                 <Input
                   id="password"
                   type="password"
@@ -90,13 +126,13 @@ export default function SignUpPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="At least 6 characters"
+                  placeholder={copy.passwordPlaceholder}
                   className="border-[var(--city-border)] bg-[var(--city-card)] focus-visible:ring-stone-400"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="confirm" className="text-sm font-medium text-stone-800">Confirm password</Label>
+                <Label htmlFor="confirm" className="text-sm font-medium text-stone-800">{copy.confirm}</Label>
                 <Input
                   id="confirm"
                   type="password"
@@ -104,7 +140,7 @@ export default function SignUpPage() {
                   required
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
-                  placeholder="Repeat your password"
+                  placeholder={copy.confirmPlaceholder}
                   className="border-[var(--city-border)] bg-[var(--city-card)] focus-visible:ring-stone-400"
                 />
               </div>
@@ -120,7 +156,7 @@ export default function SignUpPage() {
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <>
-                    Create profile
+                    {copy.submit}
                     <ArrowRight className="h-4 w-4" />
                   </>
                 )}
@@ -128,9 +164,9 @@ export default function SignUpPage() {
             </form>
 
             <p className="text-center text-sm text-[var(--city-muted-fg)]">
-              Already have an account?{" "}
+              {copy.hasAccount}{" "}
               <Link href="/auth/sign-in" className="text-stone-900 hover:underline font-medium">
-                Sign in
+                {copy.signIn}
               </Link>
             </p>
           </div>

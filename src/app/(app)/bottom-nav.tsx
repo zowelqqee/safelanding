@@ -4,17 +4,27 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Compass, ClipboardList, Shield, Globe, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useUiLanguage } from "@/hooks/useUiLanguage";
 
-const NAV_ITEMS = [
-  { href: "/app/roadmap", label: "Roadmap", Icon: Compass },
-  { href: "/app/tasks", label: "Tasks", Icon: ClipboardList },
-  { href: "/app/vault", label: "Vault", Icon: Shield },
-  { href: "/app/explore", label: "Explore", Icon: Globe },
-  { href: "/app/profile", label: "Profile", Icon: User },
+const NAV_COPY = {
+  en: ["Plan", "Tasks", "Docs", "Countries", "Profile"],
+  ru: ["Мой план", "Задачи", "Документы", "Страны", "Профиль"],
+} as const;
+
+const NAV_HREFS = [
+  "/app/roadmap",
+  "/app/tasks",
+  "/app/vault",
+  "/app/explore",
+  "/app/profile",
 ] as const;
+
+const NAV_ICONS = [Compass, ClipboardList, Shield, Globe, User] as const;
 
 export function AppBottomNav() {
   const pathname = usePathname();
+  const language = useUiLanguage();
+  const labels = NAV_COPY[language];
 
   return (
     <nav
@@ -22,8 +32,11 @@ export function AppBottomNav() {
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       <div className="flex items-stretch">
-        {NAV_ITEMS.map(({ href, label, Icon }) => {
+        {NAV_HREFS.map((href, i) => {
+          const Icon = NAV_ICONS[i];
+          const label = labels[i];
           const isActive = pathname.startsWith(href);
+
           return (
             <Link
               key={href}
