@@ -5,33 +5,83 @@ import { cn } from "@/lib/utils";
 import type { RoadmapLevel, RoadmapStatus } from "@/types";
 import { RoadmapNode } from "./roadmap-node";
 
-function getLevelStatusCopy(status: RoadmapStatus) {
+type UiLang = "en" | "ru";
+
+const LEVEL_COPY = {
+  en: {
+    statusLabel: {
+      completed: "Completed",
+      active: "In progress",
+      waiting: "Waiting",
+      blocked: "Blocked",
+      locked: "Locked",
+    },
+    activeNow: "Active now",
+    progress: "Progress",
+    footerComplete: (nextTitle: string) => `Complete. Next: ${nextTitle}.`,
+    footerActive: "Complete this step to keep your move progressing.",
+    footerLocked: {
+      "review-risks": "Available once document preparation begins.",
+      "submit-appointment": "Available once your application package is ready.",
+      "prepare-arrival": "Available after your submission plan is in place.",
+      "first-30-days": "Available when arrival planning starts.",
+      default: "Unlocks after the previous stage is complete.",
+    },
+    requestAdvisorReview: "Request advisor review",
+    viewMoveBrief: "View Move Brief",
+  },
+  ru: {
+    statusLabel: {
+      completed: "Завершён",
+      active: "В процессе",
+      waiting: "Ожидание",
+      blocked: "Заблокирован",
+      locked: "Закрыт",
+    },
+    activeNow: "Активный",
+    progress: "Прогресс",
+    footerComplete: (nextTitle: string) => `Завершён. Следующий: ${nextTitle}.`,
+    footerActive: "Выполните этот шаг, чтобы продолжить движение.",
+    footerLocked: {
+      "review-risks": "Открывается после начала подготовки документов.",
+      "submit-appointment": "Открывается, когда пакет документов готов.",
+      "prepare-arrival": "Открывается после планирования подачи.",
+      "first-30-days": "Открывается с началом планирования прилёта.",
+      default: "Открывается после завершения предыдущего этапа.",
+    },
+    requestAdvisorReview: "Консультация советника",
+    viewMoveBrief: "Открыть сводку",
+  },
+} as const;
+
+function getLevelStatusCopy(status: RoadmapStatus, lang: UiLang) {
+  const labels = LEVEL_COPY[lang].statusLabel;
   switch (status) {
-    case "completed": return "Completed";
-    case "active": return "In progress";
-    case "waiting": return "Waiting";
-    case "blocked": return "Blocked";
-    default: return "Locked";
+    case "completed": return labels.completed;
+    case "active":    return labels.active;
+    case "waiting":   return labels.waiting;
+    case "blocked":   return labels.blocked;
+    default:          return labels.locked;
   }
 }
 
 function getLevelStatusClasses(status: RoadmapStatus) {
   switch (status) {
     case "completed": return "border-emerald-200 bg-emerald-50 text-emerald-700";
-    case "active": return "border-amber-200 bg-amber-50 text-amber-800";
-    case "waiting": return "border-stone-200 bg-stone-50 text-stone-600";
-    case "blocked": return "border-rose-200 bg-rose-50 text-rose-700";
-    default: return "border-[var(--city-border)] bg-[var(--city-warm-muted)] text-[var(--city-muted-fg)]";
+    case "active":    return "border-amber-200 bg-amber-50 text-amber-800";
+    case "waiting":   return "border-stone-200 bg-stone-50 text-stone-600";
+    case "blocked":   return "border-rose-200 bg-rose-50 text-rose-700";
+    default:          return "border-[var(--city-border)] bg-[var(--city-warm-muted)] text-[var(--city-muted-fg)]";
   }
 }
 
 function getProgressBarClass(status: RoadmapStatus) {
   switch (status) {
     case "completed": return "bg-emerald-500";
-    case "active": return "bg-amber-500";
-    case "waiting": return "bg-stone-400";
-    case "blocked": return "bg-rose-500";
-    default: return "bg-[var(--city-border)]";
+    case "active":    return "bg-amber-500";
+    case "waiting":   return "bg-stone-400";
+    case "blocked":   return "bg-rose-500";
+    default:          return "bg-[var(--city-border)]";
   }
 }
 
@@ -40,6 +90,7 @@ interface RoadmapLevelCardProps {
   index: number;
   isCurrent: boolean;
   currentLevelTitle: string;
+  language?: UiLang;
 }
 
 export function RoadmapLevelCard({
@@ -47,16 +98,20 @@ export function RoadmapLevelCard({
   index,
   isCurrent,
   currentLevelTitle,
+  language = "en",
 }: RoadmapLevelCardProps) {
+  const c = LEVEL_COPY[language];
   const isLocked = level.status === "locked";
+
+  const lockedText =
+    c.footerLocked[level.id as keyof typeof c.footerLocked] ?? c.footerLocked.default;
+
   const footerCopy =
     level.status === "completed"
-      ? `Complete. Next focus: ${currentLevelTitle}.`
-      : level.id === "prepare-documents" && level.status === "active"
-        ? "Verified document guidance comes after partner-reviewed support is unlocked."
-        : level.status === "active"
-          ? "Complete this step to keep your move progressing."
-          : "Unlocks after your move profile is further along.";
+      ? c.footerComplete(currentLevelTitle)
+      : level.status === "active"
+        ? c.footerActive
+        : lockedText;
 
   return (
     <section className="relative pl-6">
@@ -69,10 +124,10 @@ export function RoadmapLevelCard({
         className={cn(
           "route-dot absolute left-0 top-6 flex h-6 w-6 items-center justify-center rounded-full border text-[11px] font-semibold",
           level.status === "completed" && "border-emerald-300 bg-emerald-50 text-emerald-700",
-          level.status === "active" && "border-amber-300 bg-amber-50 text-amber-700",
-          level.status === "locked" && "border-[var(--city-border)] bg-[var(--city-warm-muted)] text-[var(--city-muted-fg)]",
-          level.status === "waiting" && "border-stone-300 bg-stone-50 text-stone-600",
-          level.status === "blocked" && "border-rose-200 bg-rose-50 text-rose-700"
+          level.status === "active"    && "border-amber-300 bg-amber-50 text-amber-700",
+          level.status === "locked"    && "border-[var(--city-border)] bg-[var(--city-warm-muted)] text-[var(--city-muted-fg)]",
+          level.status === "waiting"   && "border-stone-300 bg-stone-50 text-stone-600",
+          level.status === "blocked"   && "border-rose-200 bg-rose-50 text-rose-700"
         )}
       >
         {index + 1}
@@ -97,7 +152,7 @@ export function RoadmapLevelCard({
                   getLevelStatusClasses(level.status)
                 )}
               >
-                {getLevelStatusCopy(level.status)}
+                {getLevelStatusCopy(level.status, language)}
               </span>
             </div>
             <p className="text-sm leading-relaxed text-[var(--city-muted-fg)]">
@@ -108,7 +163,7 @@ export function RoadmapLevelCard({
           {isCurrent && (
             <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-800">
               <Sparkles className="h-3.5 w-3.5" />
-              Active now
+              {c.activeNow}
             </span>
           )}
         </div>
@@ -116,7 +171,7 @@ export function RoadmapLevelCard({
         {/* Progress bar */}
         <div className="mt-4 space-y-1.5">
           <div className="flex items-center justify-between text-xs text-[var(--city-muted-fg)]">
-            <span>Progress</span>
+            <span>{c.progress}</span>
             <span className="font-medium text-stone-800">{level.progress}%</span>
           </div>
           <div className="h-1.5 overflow-hidden rounded-full bg-[var(--city-warm-muted)]">
@@ -130,32 +185,21 @@ export function RoadmapLevelCard({
         {/* Nodes */}
         <div className="mt-5 space-y-2.5">
           {level.nodes.map((node) => (
-            <RoadmapNode key={node.id} node={node} />
+            <RoadmapNode key={node.id} node={node} language={language} />
           ))}
         </div>
 
-        {/* CTA */}
-        {level.ctaLabel && level.status === "active" && (
-          <div className="mt-4 rounded-2xl border border-amber-200/60 bg-amber-50/50 px-4 py-4">
-            {level.ctaDescription && (
-              <p className="text-sm leading-relaxed text-amber-900">{level.ctaDescription}</p>
-            )}
-            <Button disabled className="mt-3 h-10 w-full rounded-full md:w-auto">
-              {level.ctaLabel}
-            </Button>
-          </div>
-        )}
-
+        {/* Prepare-documents CTA */}
         {level.id === "prepare-documents" && level.status === "active" && (
           <div className="mt-4 flex flex-col gap-2.5 md:flex-row">
             <Link href="/app/partner-review" className="inline-flex">
               <Button className="h-10 w-full rounded-full md:w-auto">
-                Request partner review
+                {c.requestAdvisorReview}
               </Button>
             </Link>
             <Link href="/app/move-brief" className="inline-flex">
               <Button variant="outline" className="h-10 w-full rounded-full md:w-auto border-[var(--city-border)]">
-                View Move Brief
+                {c.viewMoveBrief}
               </Button>
             </Link>
           </div>
@@ -166,9 +210,8 @@ export function RoadmapLevelCard({
           className={cn(
             "mt-4 flex items-center gap-2 rounded-2xl px-4 py-3 text-xs",
             level.status === "completed" && "border border-emerald-200/60 bg-emerald-50/60 text-emerald-800",
-            level.status === "active" && "border border-amber-200/60 bg-amber-50/50 text-amber-900",
-            level.status !== "completed" &&
-              level.status !== "active" &&
+            level.status === "active"    && "border border-amber-200/60 bg-amber-50/50 text-amber-900",
+            level.status !== "completed" && level.status !== "active" &&
               "border border-dashed border-[var(--city-border)] bg-[var(--city-warm-muted)]/50 text-[var(--city-muted-fg)]"
           )}
         >

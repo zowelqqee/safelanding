@@ -44,7 +44,7 @@ const COPY = {
     movePreparation: "Move preparation",
     currentRoadmapStage: "Current roadmap stage",
     viewMoveBrief: "View Move Brief",
-    requestPartnerReview: "Request partner review",
+    requestPartnerReview: "Request advisor review",
     profileState: "Profile state",
     onboardingCompleted: "Onboarding completed",
     activeStep: "Active step",
@@ -57,7 +57,7 @@ const COPY = {
     noProfile:
       "You're signed in, but you haven't created a move profile yet. Start onboarding to generate your roadmap.",
     startMove: "Start your move",
-    footer: "Soft Landing v0.1 · Relocation intelligence",
+    footer: "Soft Landing · Relocation intelligence",
     signOut: "Sign out",
     signingOut: "Signing out...",
   },
@@ -71,15 +71,15 @@ const COPY = {
     moveSummary: "Сводка по переезду",
     city: "Город",
     country: "Страна",
-    legalPath: "Легальный путь",
-    lifestyleFit: "Lifestyle fit",
-    legalFit: "Legal fit",
+    legalPath: "Виза или ВНЖ",
+    lifestyleFit: "По образу жизни",
+    legalFit: "По визе или статусу",
     movePreparation: "Готовность к переезду",
-    currentRoadmapStage: "Текущий этап роадмапа",
-    viewMoveBrief: "Открыть Move Brief",
-    requestPartnerReview: "Запросить partner review",
+    currentRoadmapStage: "Текущий этап плана",
+    viewMoveBrief: "Открыть сводку",
+    requestPartnerReview: "Консультация советника",
     profileState: "Состояние профиля",
-    onboardingCompleted: "Онбординг завершён",
+    onboardingCompleted: "Анкета заполнена",
     activeStep: "Текущий шаг",
     savedCountries: "Сохранённые страны",
     savedCities: "Сохранённые города",
@@ -88,13 +88,33 @@ const COPY = {
     settings: "Настройки",
     language: "Язык",
     noProfile:
-      "Вы вошли в аккаунт, но ещё не создали профиль переезда. Запустите онбординг, чтобы появился роадмап.",
+      "Вы вошли в аккаунт, но ещё не создали профиль переезда. Заполните анкету, чтобы появился план.",
     startMove: "Начать переезд",
-    footer: "Soft Landing v0.1 · Relocation intelligence",
+    footer: "Soft Landing · Помощь с переездом",
     signOut: "Выйти",
     signingOut: "Выходим...",
   },
 } satisfies Record<UiLanguage, Record<string, string>>;
+
+const ACTIVE_STEP_LABELS: Record<string, string> = {
+  welcome: "Getting started",
+  onboarding: "Onboarding",
+  base: "Background",
+  goal: "Move goal",
+  money: "Finances",
+  prefs: "Preferences",
+  fear: "Concerns",
+  region: "Region",
+  optimization: "Optimization",
+  country_shortlist: "Country shortlist",
+  city_shortlist: "City selection",
+  legal_path: "Legal path",
+  move_plan_ready: "Plan ready",
+};
+
+function humaniseActiveStep(step: string): string {
+  return ACTIVE_STEP_LABELS[step] ?? step.replace(/_/g, " ");
+}
 
 function SectionCard({ children }: { children: React.ReactNode }) {
   return <div className="city-card overflow-hidden rounded-[22px]">{children}</div>;
@@ -146,7 +166,7 @@ export default async function ProfilePage() {
     ? getLegalPathById(profile.selected_legal_path_id)?.name ??
       profile.selected_legal_path_id
     : "—";
-  const roadmap = profile ? generateRoadmap(profile) : null;
+  const roadmap = profile ? generateRoadmap(profile, language) : null;
   const countryMatch = profile?.selected_country_id
     ? matchCountries(buildCountryMatchInputFromMoveProfile(profile)).find(
         (match) => match.countryId === profile.selected_country_id
@@ -201,7 +221,8 @@ export default async function ProfilePage() {
               label={copy.movePreparation}
               value={`${roadmap?.readinessPercent ?? 0}% · ${getMovePreparationLabel(
                 roadmap?.readinessPercent ?? 0,
-                Boolean(profile.selected_legal_path_id)
+                Boolean(profile.selected_legal_path_id),
+                language
               )}`}
             />
             <Row
@@ -237,7 +258,7 @@ export default async function ProfilePage() {
               label={copy.onboardingCompleted}
               value={profile.onboarding_completed ? copy.yes : copy.inProgress}
             />
-            <Row icon={Route} label={copy.activeStep} value={profile.active_step} />
+            <Row icon={Route} label={copy.activeStep} value={humaniseActiveStep(profile.active_step)} />
             <Row
               icon={Globe}
               label={copy.savedCountries}

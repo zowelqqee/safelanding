@@ -49,7 +49,7 @@ const COPY = {
     },
     blockers: {
       verifiedGuidance:
-        "Verified document guidance still needs partner review before any checklist can be trusted.",
+        "Document requirements for this path should be reviewed by an immigration advisor before you rely on them.",
       housing:
         "Housing may be difficult{city}, so expect extra search time and backup options.",
       incomeProof:
@@ -94,11 +94,11 @@ const COPY = {
     },
     blockers: {
       verifiedGuidance:
-        "Проверенные рекомендации по документам всё ещё требуют partner review, прежде чем им можно было бы доверять как чеклисту.",
+        "Требования по документам для этого пути стоит проверить с иммиграционным советником до того, как опираться на них.",
       housing:
         "С жильём{city} может быть сложно, поэтому закладывайте больше времени на поиск и запасные варианты.",
       incomeProof:
-        "Подтверждение дохода для этого легального пути стоит внимательно проверить до того, как вы начнёте на него рассчитывать.",
+        "Подтверждение дохода для этого варианта стоит внимательно проверить до того, как вы начнёте на него рассчитывать.",
       admission:
         "Для этого пути всё ещё нужен реальный учебный якорь или подтверждённое зачисление.",
       sponsor:
@@ -108,13 +108,13 @@ const COPY = {
       timeline:
         "Сроки могут быть сжатыми, поэтому порядок шагов и перепроверка здесь особенно важны.",
       complexPath:
-        "Этот легальный путь требует аккуратной проверки, прежде чем превращать его в документный план.",
+        "Этот вариант требует аккуратной проверки, прежде чем превращать его в документный план.",
       promisingPlan:
         "План выглядит рабочим, но практические детали всё ещё нужно внимательно проверить.",
       arrivalFrictionPrefix:
-        "Фрикции после переезда могут оказаться выше, чем кажется на старте:",
+        "Сложностей после переезда может оказаться больше, чем кажется на старте:",
       arrivalFrictionFallback:
-        "Практические сложности после переезда часто оказываются выше, чем кажется по первым ресёрчам.",
+        "Практические сложности после переезда часто оказываются выше, чем кажется по первым материалам и форумам.",
     },
   },
 } satisfies Record<
@@ -291,7 +291,7 @@ export function buildMoveBrief(
 ): MoveBriefData {
   const copy = COPY[language];
   const notSet = getNotSetLabel(language);
-  const roadmap = generateRoadmap(profile);
+  const roadmap = generateRoadmap(profile, language);
   const currentLevel =
     roadmap.levels.find((level) => level.id === roadmap.currentLevelId) ??
     roadmap.levels[0];

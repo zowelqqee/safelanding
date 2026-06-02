@@ -17,9 +17,9 @@ const COPY = {
     savedBody:
       "Thanks, your feedback is already saved. This helps us see where the MVP is truly useful and where it still feels unclear.",
     titleMoveBrief: "Did this make the move feel clearer?",
-    titlePartner: "Does this feel like something you would actually do in real life?",
+    titlePartner: "Would you use this when speaking with an immigration advisor?",
     usefulnessLabel: "How much more useful did this become?",
-    realHelpLabel: "Would you submit this to a real relocation partner?",
+    realHelpLabel: "Would you act on this information for your move?",
     yourAnswer: "Your answer",
     commentLabelMoveBrief: "What felt weak or unclear?",
     commentLabelPartner: "What would stop you from submitting a real request?",
@@ -40,12 +40,12 @@ const COPY = {
     loading: "Загружаем форму отзыва...",
     savedKicker: "Отзыв сохранён",
     savedBody:
-      "Спасибо, отзыв уже сохранён. Это помогает понять, где MVP правда полезен, а где ещё остаётся неясность.",
+      "Спасибо, отзыв уже сохранён. Это помогает понять, где продукт правда полезен, а где ещё остаётся неясность.",
     titleMoveBrief: "Стало понятнее, как может выглядеть переезд?",
     titlePartner:
-      "Это похоже на действие, которое вы бы действительно сделали в реальной жизни?",
+      "Воспользуетесь ли вы этим при разговоре с советником по переезду?",
     usefulnessLabel: "Насколько это стало полезнее?",
-    realHelpLabel: "Оставили бы такую заявку реальному исполнителю?",
+    realHelpLabel: "Вы бы приняли решение на основе этой информации?",
     yourAnswer: "Ваш ответ",
     commentLabelMoveBrief: "Что показалось слабым или непонятным?",
     commentLabelPartner: "Что мешает оставить реальную заявку?",

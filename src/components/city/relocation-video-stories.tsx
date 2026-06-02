@@ -34,7 +34,7 @@ const relocationVideoCopy = {
     watchOnYoutube: "Watch on YouTube",
     openSource: "Open source",
     keyTakeaway: "Key takeaway",
-    emptyMessage: "Relocation videos for this city are still being curated.",
+    emptyMessage: "No relocation videos for this destination yet.",
     title: "Videos from people who already moved",
     description:
       "First-hand experiences from people who went through the move and share what turned out to be harder, more expensive, or better than expected.",
@@ -64,7 +64,7 @@ const relocationVideoCopy = {
     watchOnYoutube: "Смотреть на YouTube",
     openSource: "Открыть источник",
     keyTakeaway: "Главное",
-    emptyMessage: "Видео от переехавших для этого города ещё подбираются.",
+    emptyMessage: "Для этого направления пока нет видео о переезде.",
     title: "Видео от тех, кто уже переехал",
     description:
       "Живой опыт людей, которые прошли переезд и рассказывают, что оказалось сложнее, дороже или лучше, чем ожидали.",

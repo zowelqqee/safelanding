@@ -23,7 +23,7 @@ const ERROR_COPY = {
     save: "We couldn't save your review request. Please try again.",
   },
   ru: {
-    signIn: "Нужно войти, чтобы отправить запрос на partner review.",
+    signIn: "Нужно войти, чтобы отправить запрос на консультацию.",
     save: "Не получилось сохранить запрос. Попробуйте ещё раз.",
   },
 } satisfies Record<UiLanguage, Record<string, string>>;

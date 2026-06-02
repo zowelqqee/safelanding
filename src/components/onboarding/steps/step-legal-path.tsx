@@ -21,7 +21,7 @@ const COPY = {
     remoteIncome: "Remote income needed",
     admission: "Admission needed",
     sponsor: "Sponsor or employer needed",
-    comingSoon: "Full step-by-step journey for this path is coming soon.",
+    comingSoon: "",
     choose: "Choose this legal path",
     differentCity: "← Choose a different city",
     complexity: {
@@ -33,7 +33,7 @@ const COPY = {
     },
   },
   ru: {
-    title: "Выберите легальный путь",
+    title: "Выберите визу или ВНЖ",
     subtitlePrefix: "Эти варианты доступны для",
     subtitleFallback: "выбранного направления",
     subtitleSuffix: "Выберите тот, который лучше подходит вашей ситуации.",
@@ -42,8 +42,8 @@ const COPY = {
     remoteIncome: "Нужен удалённый доход",
     admission: "Нужно зачисление",
     sponsor: "Нужен спонсор или работодатель",
-    comingSoon: "Пошаговый путь для этого сценария скоро появится.",
-    choose: "Выбрать этот путь",
+    comingSoon: "",
+    choose: "Выбрать этот вариант",
     differentCity: "← Выбрать другой город",
     complexity: {
       1: "Простой",
@@ -169,11 +169,6 @@ function PathCard({
         </div>
       )}
 
-      {!path.journeyAvailable && (
-        <div className="text-xs text-[var(--city-muted-fg)] bg-[var(--city-warm-muted)] border border-[var(--city-border)] px-3 py-1.5 rounded-lg">
-          {copy.comingSoon}
-        </div>
-      )}
 
       <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
         {path.legal_disclaimer}

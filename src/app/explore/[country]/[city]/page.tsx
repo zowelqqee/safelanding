@@ -13,6 +13,7 @@ import { getCityRealityReportById } from "@/lib/data/city-reality-reports";
 import { getLegalPathsForCountry } from "@/lib/data/legal-paths";
 import { getRelocationVideoStoriesForCity } from "@/lib/data/relocation-video-stories";
 import { getExistingPublicImageSrc } from "@/lib/server/public-image";
+import { getServerLanguage } from "@/lib/i18n/server";
 import type { CityProfile, CountryProfile, LegalPath } from "@/types";
 
 export async function generateStaticParams() {
@@ -140,9 +141,6 @@ function EditorialImagePlaceholder({ label }: { label: string }) {
       <div className="absolute left-8 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border border-amber-800/30 bg-[#fffdf8]" />
       <div className="absolute right-10 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border border-emerald-800/25 bg-[#fffdf8]" />
       <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/70 bg-white/65 px-4 py-3 backdrop-blur-sm">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-amber-900/70">
-          Curated image pending
-        </p>
         <p className="mt-1 text-sm font-medium text-stone-900">{label}</p>
       </div>
     </div>
@@ -375,6 +373,7 @@ export default async function CityPage({
 
   const compareCityIds = [city.id, ...country.city_ids.filter((id) => id !== city.id)].slice(0, 2);
   const cityCompareHref = `/compare?type=city&country=${country.id}&city=${compareCityIds.join(",")}`;
+  const language = await getServerLanguage();
   const paths = getLegalPathsForCountry(country.id);
   const realityReport = getCityRealityReportById(city.id);
   const relocationVideoStories = getRelocationVideoStoriesForCity(country.id, city.id);
@@ -461,14 +460,8 @@ export default async function CityPage({
             </div>
 
             {/* Right: reality from people who moved */}
-            {realityReport ? (
+            {realityReport && (
               <CityRealityLayer report={realityReport} />
-            ) : (
-              <div className="city-reality-surface min-w-0 overflow-hidden rounded-[28px] p-6">
-                <p className="city-section-kicker text-amber-800">Reality layer</p>
-                <p className="mt-2 break-words font-serif text-2xl font-medium text-stone-900">Reality from people who moved</p>
-                <p className="mt-3 break-words text-sm text-[var(--city-muted-fg)]">Reality signals for this city are being curated.</p>
-              </div>
             )}
           </div>
 
@@ -480,7 +473,7 @@ export default async function CityPage({
               hasRealityReport: Boolean(realityReport),
             }}
           />
-          <RelocationVideoStories stories={relocationVideoStories} />
+          <RelocationVideoStories stories={relocationVideoStories} language={language} />
 
           {/* Legal paths */}
           <section>
@@ -515,10 +508,14 @@ export default async function CityPage({
           </section>
 
           {/* Footer note */}
-          <footer className="border-t border-[var(--city-border)] pt-6 pb-2">
+          <footer className="border-t border-[var(--city-border)] pt-6 pb-2 space-y-2">
             <p className="text-[11px] leading-relaxed text-[var(--city-muted-fg)]">
               Soft Landing — relocation intelligence for independent movers.{" "}
               Content is curated for fit assessment, not as professional legal or financial advice.
+            </p>
+            <p className="text-[11px] leading-relaxed text-[var(--city-muted-fg)]">
+              Fit scores combine structured destination data, legal-path rules, and profile-based weighting.
+              Destination attributes are manually reviewed estimates — verify before making decisions.
             </p>
           </footer>
         </div>

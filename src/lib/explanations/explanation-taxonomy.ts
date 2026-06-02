@@ -216,7 +216,7 @@ export const BLOCKER_COPY = {
   },
   housing_too_competitive: {
     en: "Housing competition is likely the first serious blocker.",
-    ru: "Конкуренция за жилье, вероятно, станет первым серьезным блокером.",
+    ru: "Конкуренция за жилье, вероятно, станет первым серьезным риском.",
   },
   income_source_weak: {
     en: "The income source may be too weak or informal for the next step.",
@@ -228,15 +228,15 @@ export const BLOCKER_COPY = {
   },
   language_gap: {
     en: "Language readiness may be the biggest practical blocker.",
-    ru: "Языковая готовность может быть главным практическим блокером.",
+    ru: "Языковая готовность может быть главным практическим риском.",
   },
   family_constraints: {
     en: "Family needs may constrain the destination more than lifestyle fit does.",
-    ru: "Семейные потребности могут ограничивать выбор сильнее, чем лайфстайл-фит.",
+    ru: "Семейные потребности могут ограничивать выбор сильнее, чем совпадение по образу жизни.",
   },
   study_route_unclear: {
     en: "The study route needs more clarity on admissions, cost, and post-study options.",
-    ru: "Учебному маршруту нужна ясность по поступлению, стоимости и опциям после учебы.",
+    ru: "Учебному маршруту нужна ясность по поступлению, стоимости и вариантам после учебы.",
   },
   safety_concern: {
     en: "Safety or stability concerns should be reviewed before committing.",
@@ -252,7 +252,7 @@ export const BLOCKER_COPY = {
   },
   no_major_blocker: {
     en: "No single blocker stands out yet; the next step is verification.",
-    ru: "Один главный блокер пока не выделяется; следующий шаг — проверка деталей.",
+    ru: "Один главный риск пока не выделяется; следующий шаг — проверка деталей.",
   },
 } satisfies Record<BlockerId, LocalizedCopy>;
 

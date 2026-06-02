@@ -53,12 +53,18 @@ export default async function InternalMetricsPage() {
     eventRows,
     totalFeedbackRows,
     feedbackRows,
+    advisorReviewRows,
   ] = await Promise.all([
     getTableCount(admin, "move_profiles"),
     getTableCount(admin, "app_events"),
     admin.from("app_events").select("event_name").in("event_name", [...EVENT_NAMES]),
     getTableCount(admin, "user_feedback"),
     admin.from("user_feedback").select("usefulness"),
+    admin
+      .from("partner_review_requests")
+      .select("id, email, status, created_at, selected_country_id, selected_city_id, selected_legal_path_id")
+      .order("created_at", { ascending: false })
+      .limit(20),
   ]);
 
   const eventCounts = Object.fromEntries(EVENT_NAMES.map((eventName) => [eventName, 0]));
@@ -91,6 +97,42 @@ export default async function InternalMetricsPage() {
           <MetricCard label="Total move_profiles" value={totalMoveProfiles} />
           <MetricCard label="Total app_events" value={totalAppEvents} />
           <MetricCard label="Total feedback rows" value={totalFeedbackRows} />
+        </section>
+
+        {/* ── Advisor review requests ── */}
+        <section className="city-card overflow-hidden rounded-[24px]">
+          <div className="border-b border-[var(--city-border)] bg-amber-50/60 px-5 py-4 flex items-center justify-between gap-3">
+            <h2 className="text-base font-semibold tracking-tight text-stone-900">
+              Advisor review requests
+            </h2>
+            <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">
+              {advisorReviewRows.data?.length ?? 0} recent
+            </span>
+          </div>
+          {advisorReviewRows.data && advisorReviewRows.data.length > 0 ? (
+            <div className="divide-y divide-[var(--city-border)]">
+              {advisorReviewRows.data.map((row) => (
+                <div key={row.id} className="px-5 py-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-stone-900 truncate">{row.email ?? "—"}</p>
+                    <p className="text-xs text-[var(--city-muted-fg)] mt-0.5">
+                      {row.selected_country_id ?? "—"} · {row.selected_city_id ?? "—"} · {row.selected_legal_path_id ?? "—"}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className="rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-2.5 py-0.5 text-xs font-medium text-stone-700">
+                      {row.status}
+                    </span>
+                    <span className="text-xs text-[var(--city-muted-fg)]">
+                      {new Date(row.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="px-5 py-5 text-sm text-[var(--city-muted-fg)]">No advisor review requests yet.</p>
+          )}
         </section>
 
         <section className="city-card overflow-hidden rounded-[24px]">

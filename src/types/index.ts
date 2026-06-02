@@ -648,6 +648,7 @@ export type Roadmap = {
   currentLevelId: string;
   nextTaskLabel: string;
   levels: RoadmapLevel[];
+  language: "en" | "ru";
 };
 
 // ─── Path scoring inputs ──────────────────────────────────────────────────────

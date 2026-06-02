@@ -73,7 +73,7 @@ const HEADER_COPY = {
       { href: "/start", label: "Начать" },
     ],
     appNavItems: [
-      { href: "/app/roadmap", label: "Роадмап" },
+      { href: "/app/roadmap", label: "План" },
       { href: "/app/tasks", label: "Задачи" },
       { href: "/app/vault", label: "Документы" },
       { href: "/app/explore", label: "Страны" },
@@ -87,7 +87,7 @@ const HEADER_COPY = {
       { href: "/start", label: "Начать планирование" },
     ],
     mobileAppItems: [
-      { href: "/app/roadmap", label: "Роадмап" },
+      { href: "/app/roadmap", label: "План" },
       { href: "/app/tasks", label: "Задачи" },
       { href: "/app/vault", label: "Документы" },
       { href: "/app/explore", label: "Сохраненные страны" },

@@ -238,15 +238,11 @@ export function CityRealityLayer({ report }: { report: CityRealityReport }) {
           <span className="text-[10px] uppercase tracking-[0.14em] text-[var(--city-muted-fg)]">Public signals</span>
         </div>
 
-        {featuredSignals.length > 0 ? (
+        {featuredSignals.length > 0 && (
           <div className="mt-3 grid min-w-0 gap-3 sm:grid-cols-2">
             {featuredSignals.map((item) => (
               <RealitySignalCard key={`${item.sourceUrl}-${item.quote.slice(0, 20)}`} {...item} />
             ))}
-          </div>
-        ) : (
-          <div className="mt-3 rounded-[18px] border border-dashed border-[var(--city-reality-border)] bg-[var(--city-reality-card)]/70 px-4 py-5 text-sm text-[var(--city-muted-fg)]">
-            Public story signals for this city are being curated.
           </div>
         )}
 

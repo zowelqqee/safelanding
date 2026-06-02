@@ -55,24 +55,23 @@ const COPY = {
     overallFit: "Overall fit",
     lifestyleFit: "Lifestyle fit",
     legalFit: "Legal fit",
-    nextStep: "Recommended next step",
+    nextStep: "What's next",
     nextStepText:
-      "The safest next move before any document-level work exists in product.",
-    primaryNextStep: "Primary next step",
-    primaryNextStepTitle: "Request partner-reviewed document guidance",
+      "Your plan is ready. Refine your profile, compare another destination, or request advisor review.",
+    primaryNextStep: "Advisor review",
+    primaryNextStepTitle: "Request advisor review",
     primaryNextStepBody:
-      "Use this brief to prepare a cleaner handoff before document guidance is unlocked.",
-    requestPartnerReview: "Request partner review",
-    compare: "Compare",
+      "Share your Move Brief with a relocation advisor to get guidance on documents and next steps for your chosen path.",
+    requestPartnerReview: "Request advisor review",
+    compare: "Compare destinations",
     reviewRoadmap: "Review roadmap",
     editMoveProfile: "Edit move profile",
-    preparedForPartnerReview: "Prepared for partner review",
+    preparedForPartnerReview: "Ready to share",
     preparedForPartnerReviewText:
-      "A clean summary you can use before the partner-reviewed layer is fully active.",
+      "A structured summary of your relocation plan.",
     partnerReviewBody:
-      "This brief can later be shared with a verified relocation partner or agency so they can understand your situation faster.",
-    noSubmission:
-      "No submission, payment, upload, or external integration is active yet.",
+      "Share this brief with an advisor to give them context on your move plan — destination, legal path, blockers, and fit scores.",
+    noSubmission: "",
     legalDisclaimer:
       "Planning summary only. Before applications or documents, requirements should be verified against current official or partner-reviewed guidance.",
     emptyTitle: "Build your move brief",
@@ -82,14 +81,14 @@ const COPY = {
     startOnboarding: "Start onboarding",
   },
   ru: {
-    backToRoadmap: "Назад к роадмапу",
-    kicker: "Move Brief",
-    title: "Ваш Move Brief",
+    backToRoadmap: "Назад к плану",
+    kicker: "Сводка переезда",
+    title: "Ваша сводка переезда",
     intro:
-      "Короткая сводка по направлению, легальному пути, главным блокерам и следующему шагу.",
+      "Короткая сводка по направлению, визе или ВНЖ, главным рискам и следующему шагу.",
     currentStage: "Текущий этап",
     prepared: "Дата",
-    reference: "Номер brief",
+    reference: "Номер сводки",
     print: "Печать / PDF",
     destination: "Направление",
     moveGoal: "Цель переезда",
@@ -98,47 +97,45 @@ const COPY = {
       "Куда вы планируете ехать и вокруг какого маршрута сейчас строится план.",
     country: "Страна",
     city: "Город",
-    legalPath: "Легальный путь",
+    legalPath: "Виза или ВНЖ",
     goal: "Цель",
     userProfileSummary: "Сводка профиля",
     userProfileSummaryText:
-      "Какие факты сейчас использует ваш роадмап и fit-логика.",
-    mainBlockers: "Главные блокеры",
+      "Какие факты сейчас используются для плана и оценки совпадения.",
+    mainBlockers: "Главные риски",
     mainBlockersText:
       "Что нужно перепроверить, прежде чем план станет пригодным для документов.",
-    blocker: "Блокер",
-    fitSummary: "Сводка по fit",
+    blocker: "Риск",
+    fitSummary: "Оценка совпадения",
     fitSummaryText:
       "Верхнеуровневая оценка на основе текущего профиля и выбранного направления.",
-    overallFit: "Общий fit",
-    lifestyleFit: "Lifestyle fit",
-    legalFit: "Legal fit",
-    nextStep: "Рекомендуемый следующий шаг",
+    overallFit: "Общее совпадение",
+    lifestyleFit: "По образу жизни",
+    legalFit: "По визе или статусу",
+    nextStep: "Что дальше",
     nextStepText:
-      "Самое безопасное следующее действие, пока в продукте нет документного слоя.",
-    primaryNextStep: "Главный следующий шаг",
-    primaryNextStepTitle:
-      "Запросить проверенные рекомендации по документам через partner review",
+      "Ваш план готов. Уточните профиль, сравните другое направление или запросите консультацию советника.",
+    primaryNextStep: "Консультация советника",
+    primaryNextStepTitle: "Запросить консультацию советника",
     primaryNextStepBody:
-      "Используйте brief как аккуратную передачу контекста перед тем, как появится слой с документными рекомендациями.",
-    requestPartnerReview: "Запросить partner review",
-    compare: "Сравнить",
-    reviewRoadmap: "Посмотреть роадмап",
+      "Поделитесь сводкой с советником по переезду, чтобы получить рекомендации по документам и следующим шагам для выбранного варианта.",
+    requestPartnerReview: "Запросить консультацию советника",
+    compare: "Сравнить направления",
+    reviewRoadmap: "Посмотреть план",
     editMoveProfile: "Изменить профиль переезда",
-    preparedForPartnerReview: "Подготовлено для partner review",
+    preparedForPartnerReview: "Готово к передаче",
     preparedForPartnerReviewText:
-      "Чистая сводка, которую можно использовать до полного запуска партнёрского слоя.",
+      "Структурированная сводка вашего плана переезда.",
     partnerReviewBody:
-      "Позже этот brief можно будет передать проверенному relocation-партнёру или агентству, чтобы они быстрее поняли вашу ситуацию.",
-    noSubmission:
-      "Отправка, оплата, загрузка файлов и внешние интеграции пока не активны.",
+      "Поделитесь этой сводкой с советником — он получит контекст по направлению, визе или ВНЖ, рискам и оценке совпадения.",
+    noSubmission: "",
     legalDisclaimer:
       "Это планировочная сводка. Перед подачей и документами требования нужно сверять с актуальными официальными или партнёрски проверенными источниками.",
-    emptyTitle: "Сначала соберите Move Brief",
+    emptyTitle: "Сначала соберите сводку переезда",
     emptyBody:
-      "Сначала завершите выбор направления, легального пути и ключевых шагов роадмапа, а потом здесь появится сводка плана.",
-    viewRoadmap: "Открыть роадмап",
-    startOnboarding: "Начать онбординг",
+      "Сначала завершите выбор направления, визы или ВНЖ и ключевых шагов плана, а потом здесь появится сводка.",
+    viewRoadmap: "Открыть план",
+    startOnboarding: "Начать с анкеты",
   },
 } satisfies Record<UiLanguage, Record<string, string>>;
 
@@ -321,8 +318,8 @@ export default async function MoveBriefPage() {
 
             <Card>
               <CardHeader title={copy.nextStep} subtitle={copy.nextStepText} />
-              <div className="space-y-4 px-5 py-5">
-                <div className="rounded-2xl border border-amber-200/60 bg-amber-50/50 px-4 py-4">
+              <div className="space-y-3 px-5 py-5">
+                <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
                   <p className="city-section-kicker mb-1.5">{copy.primaryNextStep}</p>
                   <p className="text-sm font-medium text-stone-900">
                     {copy.primaryNextStepTitle}
@@ -332,63 +329,28 @@ export default async function MoveBriefPage() {
                   </p>
                 </div>
 
-                <div className="space-y-2">
-                  <Link href="/app/partner-review" className="block">
-                    <Button className="h-10 w-full justify-between gap-2 rounded-full">
-                      {copy.requestPartnerReview}
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Link href="/app/explore" className="block">
-                    <Button
-                      variant="outline"
-                      className="h-11 w-full justify-between gap-2"
-                    >
-                      {copy.compare}
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Link href="/app/roadmap" className="block">
-                    <Button
-                      variant="outline"
-                      className="h-11 w-full justify-between gap-2"
-                    >
-                      {copy.reviewRoadmap}
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Link href="/app/profile" className="block">
-                    <Button
-                      variant="outline"
-                      className="h-11 w-full justify-between gap-2"
-                    >
-                      {copy.editMoveProfile}
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </Card>
-
-            <Card>
-              <CardHeader
-                title={copy.preparedForPartnerReview}
-                subtitle={copy.preparedForPartnerReviewText}
-              />
-              <div id="partner-review" className="space-y-4 px-5 py-5 scroll-mt-24">
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  {copy.partnerReviewBody}
-                </p>
-
-                <div className="rounded-2xl border border-dashed bg-muted/35 px-4 py-4">
-                  <p className="text-sm leading-relaxed text-foreground">
-                    {copy.noSubmission}
-                  </p>
-                </div>
-
                 <Link href="/app/partner-review" className="block">
-                  <Button className="h-11 w-full gap-2">
+                  <Button className="h-10 w-full justify-between gap-2 rounded-full">
                     {copy.requestPartnerReview}
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/app/roadmap" className="block">
+                  <Button variant="outline" className="h-10 w-full justify-between gap-2 rounded-full border-[var(--city-border)]">
+                    {copy.reviewRoadmap}
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/app/explore" className="block">
+                  <Button variant="outline" className="h-10 w-full justify-between gap-2 rounded-full border-[var(--city-border)]">
+                    {copy.compare}
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/app/profile" className="block">
+                  <Button variant="outline" className="h-10 w-full justify-between gap-2 rounded-full border-[var(--city-border)]">
+                    {copy.editMoveProfile}
+                    <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
               </div>

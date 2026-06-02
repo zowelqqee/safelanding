@@ -11,6 +11,11 @@ import { useCityCardViewTracking } from "@/lib/analytics/cityCardView";
 import { commonCopy, type UiLanguage } from "@/lib/i18n/onboarding";
 import type { OnboardingState, CityMatchResult } from "@/types";
 
+const SCORE_LEGEND = {
+  en: "Scores reflect fit for your profile. 80–100 = strong fit · 60–79 = workable · 40–59 = mixed · below 40 = weak fit or major blockers.",
+  ru: "Оценки отражают совпадение с вашим профилем. 80–100 = сильное совпадение · 60–79 = приемлемо · 40–59 = смешанно · ниже 40 = слабое совпадение или серьёзные риски.",
+};
+
 const COPY = {
   en: {
     cities: "Cities",
@@ -38,7 +43,7 @@ const COPY = {
     budget: "Бюджет",
     first90: "Первые 90 дней",
     difficulty: "сложность",
-    mainBlocker: "Главный блокер",
+    mainBlocker: "Главный риск",
     choose: "Выбрать этот город",
     compare: "Сравнить",
     shortlistedCities: "сохранённые города",
@@ -328,6 +333,10 @@ export function StepCityResults({ state, onSelect, onShortlistToggle, onBack, la
           <ArrowRight className="ml-auto h-3.5 w-3.5" />
         </Link>
       )}
+
+      <div className="rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/50 px-3 py-2.5 text-[11px] leading-relaxed text-[var(--city-muted-fg)]">
+        {SCORE_LEGEND[language]}
+      </div>
 
       {results.length === 0 ? (
         <div className="city-card rounded-2xl px-4 py-8 text-center border-dashed">

@@ -9,95 +9,275 @@ import type {
   RoadmapStatus,
 } from "@/types";
 
+type UiLang = "en" | "ru";
+
+// ─── All user-visible strings, keyed by language ──────────────────────────────
+
+const COPY = {
+  en: {
+    levels: {
+      "find-your-place": {
+        title: "Find your place",
+        description: "Turn your onboarding answers into a shortlist, then choose a country and city.",
+      },
+      "choose-legal-path": {
+        title: "Choose legal path",
+        description: "Compare the available routes for your chosen destination and lock in the best fit.",
+      },
+      "build-your-move-profile": {
+        title: "Build your move profile",
+        description: "Fill in the final planning details that turn your selected path into a usable move plan.",
+      },
+      "prepare-documents": {
+        titleActive: "Prepare documents",
+        titleLocked: "Prepare documents",
+        descriptionActive: "Review your Move Brief and request guidance from a relocation advisor for your chosen path.",
+        descriptionLocked: "Unlocks after you complete your move profile.",
+      },
+      "review-risks": {
+        title: "Review risks",
+        description: "Available once document preparation begins.",
+      },
+      "submit-appointment": {
+        title: "Submit / appointment",
+        description: "Available once your application package is ready.",
+      },
+      "prepare-arrival": {
+        title: "Prepare arrival",
+        description: "Available after your submission plan is in place.",
+      },
+      "first-30-days": {
+        title: "First 30 days",
+        description: "Available when arrival planning starts.",
+      },
+    },
+    nodes: {
+      "choose-open-regions":  { title: "Choose open regions" },
+      "set-priorities":       { title: "Set priorities" },
+      "get-country-shortlist":{ title: "Get country shortlist" },
+      "choose-country":       { title: "Choose country" },
+      "choose-city":          { title: "Choose city" },
+      "compare-legal-paths":  { title: "Compare legal paths" },
+      "review-blockers":      { title: "Review blockers" },
+      "select-legal-path":    { title: "Select legal path" },
+      "create-move-plan":     { title: "Create move plan" },
+      "confirm-personal-details": {
+        title: "Confirm personal details",
+        description: "Review the personal details that anchor your move plan.",
+      },
+      "add-timeline": {
+        title: "Add timeline",
+        description: "Set your target move window and how soon you want to act.",
+      },
+      "add-work-study-details": {
+        title: "Add work/study details",
+        description: "Capture the facts that support your chosen legal path.",
+      },
+      "add-budget-reality": {
+        title: "Add budget reality",
+        description: "Turn your plan into a realistic monthly and savings picture.",
+      },
+      "add-family-partner-info": {
+        title: "Add family/partner info",
+        description: "Capture whether anyone is moving with you, even if the answer is just you.",
+      },
+      "request-partner-review": {
+        title: "Request advisor review",
+        description: "Share your Move Brief with a relocation advisor to get document guidance for your path.",
+      },
+      "missing-documents":          { title: "Missing documents" },
+      "expiring-documents":         { title: "Expiring documents" },
+      "weak-proof":                 { title: "Weak proof" },
+      "housing-risk":               { title: "Housing risk" },
+      "legal-uncertainty":          { title: "Legal uncertainty" },
+      "prepare-application-package":{ title: "Prepare application package" },
+      "book-appointment":           { title: "Book appointment" },
+      "submit-application":         { title: "Submit application" },
+      "track-status":               { title: "Track status" },
+      "temporary-housing":          { title: "Temporary housing" },
+      "flights":                    { title: "Flights" },
+      "esim":                       { title: "eSIM" },
+      "banking":                    { title: "Banking" },
+      "transport":                  { title: "Transport" },
+      "first-address":              { title: "First address" },
+      "registration":               { title: "Registration" },
+      "local-documents":            { title: "Local documents" },
+      "insurance-setup":            { title: "Insurance" },
+      "housing-setup":              { title: "Housing" },
+      "community":                  { title: "Community" },
+      "work-study-setup":           { title: "Work/study setup" },
+    },
+    preparation: {
+      planStarted:  "Move plan started",
+      gettingStarted: "Getting started",
+      earlyPlanning:  "Early planning",
+    },
+    title: {
+      cityAndCountry: (city: string, country: string) => `Your move to ${city}, ${country}`,
+      countryOnly:    (country: string) => `Your move to ${country}`,
+      cityOnly:       (city: string)    => `Your move to ${city}`,
+      fallback: "Your relocation roadmap",
+    },
+    subtitle: {
+      withDestination: "Your personal roadmap generated from your move profile.",
+      fallback: "Built from your onboarding answers so you always know the next step.",
+    },
+  },
+
+  ru: {
+    levels: {
+      "find-your-place": {
+        title: "Выбор направления",
+        description: "Ответьте на стартовые вопросы, получите подборку направлений и выберите страну с городом.",
+      },
+      "choose-legal-path": {
+        title: "Виза или ВНЖ",
+        description: "Сравните доступные варианты для выбранного направления и выберите самый подходящий.",
+      },
+      "build-your-move-profile": {
+        title: "Профиль переезда",
+        description: "Заполните последние детали планирования, чтобы превратить выбранный путь в рабочий план.",
+      },
+      "prepare-documents": {
+        titleActive: "Подготовка документов",
+        titleLocked: "Подготовка документов",
+        descriptionActive: "Посмотрите сводку переезда и запросите консультацию советника по выбранному варианту.",
+        descriptionLocked: "Открывается после завершения профиля переезда.",
+      },
+      "review-risks": {
+        title: "Проверка рисков",
+        description: "Открывается после начала подготовки документов.",
+      },
+      "submit-appointment": {
+        title: "Подача и запись",
+        description: "Открывается, когда пакет документов готов.",
+      },
+      "prepare-arrival": {
+        title: "Подготовка к прилёту",
+        description: "Открывается после планирования подачи.",
+      },
+      "first-30-days": {
+        title: "Первые 30 дней",
+        description: "Открывается с началом планирования прилёта.",
+      },
+    },
+    nodes: {
+      "choose-open-regions":  { title: "Выбрать регионы" },
+      "set-priorities":       { title: "Задать приоритеты" },
+      "get-country-shortlist":{ title: "Получить список стран" },
+      "choose-country":       { title: "Выбрать страну" },
+      "choose-city":          { title: "Выбрать город" },
+      "compare-legal-paths":  { title: "Сравнить визы и ВНЖ" },
+      "review-blockers":      { title: "Посмотреть риски" },
+      "select-legal-path":    { title: "Выбрать вариант" },
+      "create-move-plan":     { title: "Собрать план переезда" },
+      "confirm-personal-details": {
+        title: "Личные данные",
+        description: "Проверьте личные данные, которые лежат в основе вашего плана переезда.",
+      },
+      "add-timeline": {
+        title: "Сроки",
+        description: "Задайте целевое окно переезда и насколько скоро вы готовы действовать.",
+      },
+      "add-work-study-details": {
+        title: "Работа / учёба",
+        description: "Укажите факты, которые подтверждают выбранный вариант визы или ВНЖ.",
+      },
+      "add-budget-reality": {
+        title: "Финансы",
+        description: "Превратите план в реалистичную картину ежемесячных расходов и накоплений.",
+      },
+      "add-family-partner-info": {
+        title: "Семья / партнёр",
+        description: "Укажите, кто едет вместе с вами — даже если ответ «только я».",
+      },
+      "request-partner-review": {
+        title: "Консультация советника",
+        description: "Поделитесь сводкой переезда с советником, чтобы получить рекомендации по документам.",
+      },
+      "missing-documents":          { title: "Отсутствующие документы" },
+      "expiring-documents":         { title: "Истекающие документы" },
+      "weak-proof":                 { title: "Слабые подтверждения" },
+      "housing-risk":               { title: "Риск с жильём" },
+      "legal-uncertainty":          { title: "Правовая неопределённость" },
+      "prepare-application-package":{ title: "Пакет документов" },
+      "book-appointment":           { title: "Запись на приём" },
+      "submit-application":         { title: "Подача заявления" },
+      "track-status":               { title: "Отслеживание статуса" },
+      "temporary-housing":          { title: "Временное жильё" },
+      "flights":                    { title: "Перелёты" },
+      "esim":                       { title: "eSIM" },
+      "banking":                    { title: "Банк и платежи" },
+      "transport":                  { title: "Транспорт" },
+      "first-address":              { title: "Первый адрес" },
+      "registration":               { title: "Регистрация" },
+      "local-documents":            { title: "Местные документы" },
+      "insurance-setup":            { title: "Страховка" },
+      "housing-setup":              { title: "Жильё" },
+      "community":                  { title: "Люди и сообщество" },
+      "work-study-setup":           { title: "Работа / учёба" },
+    },
+    preparation: {
+      planStarted:  "План переезда начат",
+      gettingStarted: "Начало",
+      earlyPlanning:  "Ранняя стадия",
+    },
+    title: {
+      cityAndCountry: (city: string, country: string) => `Ваш переезд в ${city}, ${country}`,
+      countryOnly:    (country: string) => `Ваш переезд в ${country}`,
+      cityOnly:       (city: string)    => `Ваш переезд в ${city}`,
+      fallback: "Ваш план переезда",
+    },
+    subtitle: {
+      withDestination: "Ваш персональный план на основе профиля переезда.",
+      fallback: "Построен из ответов анкеты, чтобы вы всегда знали следующий шаг.",
+    },
+  },
+} as const;
+
+// ─── Node seed helpers ────────────────────────────────────────────────────────
+
 type NodeSeed = {
   id: string;
   title: string;
   description?: string;
 };
 
-const FIND_YOUR_PLACE_NODES: NodeSeed[] = [
-  { id: "choose-open-regions", title: "Choose open regions" },
-  { id: "set-priorities", title: "Set priorities" },
-  { id: "get-country-shortlist", title: "Get country shortlist" },
-  { id: "choose-country", title: "Choose country" },
-  { id: "choose-city", title: "Choose city" },
-];
+function getNode(lang: UiLang, id: string): NodeSeed {
+  const node = COPY[lang].nodes[id as keyof typeof COPY.en.nodes] as
+    | { title: string; description?: string }
+    | undefined;
+  return { id, title: node?.title ?? id, description: node?.description };
+}
 
-const CHOOSE_PATH_NODES: NodeSeed[] = [
-  { id: "compare-legal-paths", title: "Compare legal paths" },
-  { id: "review-blockers", title: "Review blockers" },
-  { id: "select-legal-path", title: "Select legal path" },
-  { id: "create-move-plan", title: "Create move plan" },
-];
+function buildNodeSeeds(lang: UiLang, ids: string[]): NodeSeed[] {
+  return ids.map((id) => getNode(lang, id));
+}
 
-const BUILD_PROFILE_NODES: NodeSeed[] = [
-  {
-    id: "confirm-personal-details",
-    title: "Confirm personal details",
-    description: "Review the personal details that anchor your move plan.",
-  },
-  {
-    id: "add-timeline",
-    title: "Add timeline",
-    description: "Set your target move window and how soon you want to act.",
-  },
-  {
-    id: "add-work-study-details",
-    title: "Add work/study details",
-    description: "Capture the facts that support your chosen legal path.",
-  },
-  {
-    id: "add-budget-reality",
-    title: "Add budget reality",
-    description: "Turn your plan into a realistic monthly and savings picture.",
-  },
-  {
-    id: "add-family-partner-info",
-    title: "Add family/partner info",
-    description: "Capture whether anyone is moving with you, even if the answer is just you.",
-  },
+const FIND_YOUR_PLACE_IDS = [
+  "choose-open-regions", "set-priorities", "get-country-shortlist",
+  "choose-country", "choose-city",
 ];
-
-const PREPARE_DOCUMENTS_NODES: NodeSeed[] = [
-  {
-    id: "request-partner-review",
-    title: "Request partner review",
-    description:
-      "Verified document guidance is not unlocked yet. We will add partner-reviewed help later.",
-  },
+const CHOOSE_PATH_IDS = [
+  "compare-legal-paths", "review-blockers", "select-legal-path", "create-move-plan",
 ];
-
-const REVIEW_RISKS_NODES: NodeSeed[] = [
-  { id: "missing-documents", title: "Missing documents" },
-  { id: "expiring-documents", title: "Expiring documents" },
-  { id: "weak-proof", title: "Weak proof" },
-  { id: "housing-risk", title: "Housing risk" },
-  { id: "legal-uncertainty", title: "Legal uncertainty" },
+const BUILD_PROFILE_IDS = [
+  "confirm-personal-details", "add-timeline", "add-work-study-details",
+  "add-budget-reality", "add-family-partner-info",
 ];
-
-const SUBMIT_NODES: NodeSeed[] = [
-  { id: "prepare-application-package", title: "Prepare application package" },
-  { id: "book-appointment", title: "Book appointment" },
-  { id: "submit-application", title: "Submit application" },
-  { id: "track-status", title: "Track status" },
+const PREPARE_DOCUMENTS_IDS = ["request-partner-review"];
+const REVIEW_RISKS_IDS = [
+  "missing-documents", "expiring-documents", "weak-proof", "housing-risk", "legal-uncertainty",
 ];
-
-const ARRIVAL_NODES: NodeSeed[] = [
-  { id: "temporary-housing", title: "Temporary housing" },
-  { id: "flights", title: "Flights" },
-  { id: "esim", title: "eSIM" },
-  { id: "banking", title: "Banking" },
-  { id: "transport", title: "Transport" },
-  { id: "first-address", title: "First address" },
+const SUBMIT_IDS = [
+  "prepare-application-package", "book-appointment", "submit-application", "track-status",
 ];
-
-const FIRST_30_DAYS_NODES: NodeSeed[] = [
-  { id: "registration", title: "Registration" },
-  { id: "local-documents", title: "Local documents" },
-  { id: "insurance-setup", title: "Insurance" },
-  { id: "housing-setup", title: "Housing" },
-  { id: "community", title: "Community" },
-  { id: "work-study-setup", title: "Work/study setup" },
+const ARRIVAL_IDS = [
+  "temporary-housing", "flights", "esim", "banking", "transport", "first-address",
+];
+const FIRST_30_DAYS_IDS = [
+  "registration", "local-documents", "insurance-setup", "housing-setup",
+  "community", "work-study-setup",
 ];
 
 const BUILD_PROFILE_NODE_HREFS: Record<string, string> = {
@@ -107,6 +287,8 @@ const BUILD_PROFILE_NODE_HREFS: Record<string, string> = {
   "add-budget-reality": "/app/roadmap/budget",
   "add-family-partner-info": "/app/roadmap/family",
 };
+
+// ─── Utilities ────────────────────────────────────────────────────────────────
 
 function hasValue(value: string | null) {
   return Boolean(value && value.trim().length > 0);
@@ -156,21 +338,11 @@ function createSequentialNodes(
 
   return seeds.map((seed, index) => {
     if (completedFlags[index]) {
-      return {
-        ...seed,
-        status: "completed",
-        href: hrefMap?.[seed.id],
-      };
+      return { ...seed, status: "completed", href: hrefMap?.[seed.id] };
     }
-
     if (index === firstIncompleteIndex || firstIncompleteIndex === -1) {
-      return {
-        ...seed,
-        status: "active",
-        href: hrefMap?.[seed.id],
-      };
+      return { ...seed, status: "active", href: hrefMap?.[seed.id] };
     }
-
     return { ...seed, status: "waiting" };
   });
 }
@@ -221,14 +393,19 @@ function calculateReadiness(profile: MoveProfile) {
 
 export function getMovePreparationLabel(
   readinessPercent: number,
-  hasSelectedLegalPath = false
+  hasSelectedLegalPath = false,
+  lang: UiLang = "en"
 ) {
-  if (hasSelectedLegalPath) return "Move plan started";
-  if (readinessPercent <= 15) return "Getting started";
-  return "Early planning";
+  const c = COPY[lang].preparation;
+  if (hasSelectedLegalPath) return c.planStarted;
+  if (readinessPercent <= 15) return c.gettingStarted;
+  return c.earlyPlanning;
 }
 
-function buildFindYourPlaceLevel(profile: MoveProfile): RoadmapLevel {
+// ─── Level builders ───────────────────────────────────────────────────────────
+
+function buildFindYourPlaceLevel(profile: MoveProfile, lang: UiLang): RoadmapLevel {
+  const lc = COPY[lang].levels["find-your-place"];
   const regionsDone = hasList(profile.open_regions);
   const prioritiesDone =
     hasValue(profile.move_goal) ||
@@ -240,84 +417,64 @@ function buildFindYourPlaceLevel(profile: MoveProfile): RoadmapLevel {
     hasValue(profile.selected_country_id);
   const countryDone = hasValue(profile.selected_country_id);
   const cityDone = hasValue(profile.selected_city_id);
-  const completedFlags = [
-    regionsDone,
-    prioritiesDone,
-    shortlistDone,
-    countryDone,
-    cityDone,
-  ];
+  const completedFlags = [regionsDone, prioritiesDone, shortlistDone, countryDone, cityDone];
   const completedCount = completedFlags.filter(Boolean).length;
   const status: RoadmapStatus = countryDone && cityDone ? "completed" : "active";
 
   return {
     id: "find-your-place",
-    title: "Find your place",
-    description: "Turn your onboarding answers into a shortlist, then choose a country and city.",
+    title: lc.title,
+    description: lc.description,
     status,
     progress: status === "completed" ? 100 : Math.round((completedCount / completedFlags.length) * 100),
-    nodes: createSequentialNodes(FIND_YOUR_PLACE_NODES, status, completedFlags),
+    nodes: createSequentialNodes(buildNodeSeeds(lang, FIND_YOUR_PLACE_IDS), status, completedFlags),
   };
 }
 
-function buildChooseLegalPathLevel(profile: MoveProfile): RoadmapLevel {
+function buildChooseLegalPathLevel(profile: MoveProfile, lang: UiLang): RoadmapLevel {
+  const lc = COPY[lang].levels["choose-legal-path"];
   const citySelected = hasValue(profile.selected_city_id);
   const pathSelected = hasValue(profile.selected_legal_path_id);
-  const status: RoadmapStatus = pathSelected
-    ? "completed"
-    : citySelected
-      ? "active"
-      : "locked";
+  const status: RoadmapStatus = pathSelected ? "completed" : citySelected ? "active" : "locked";
 
   return {
     id: "choose-legal-path",
-    title: "Choose legal path",
-    description: "Compare the available routes for your chosen destination and lock in the best fit.",
+    title: lc.title,
+    description: lc.description,
     status,
     progress: status === "completed" ? 100 : status === "active" ? 45 : 0,
     nodes: createSequentialNodes(
-      CHOOSE_PATH_NODES,
+      buildNodeSeeds(lang, CHOOSE_PATH_IDS),
       status,
       pathSelected ? [true, true, true, true] : [false, false, false, false]
     ),
   };
 }
 
-function buildMoveProfileLevel(profile: MoveProfile): RoadmapLevel {
+function buildMoveProfileLevel(profile: MoveProfile, lang: UiLang): RoadmapLevel {
+  const lc = COPY[lang].levels["build-your-move-profile"];
   const pathSelected = hasValue(profile.selected_legal_path_id);
-  const personalDone = profile.personal_details_confirmed;
-  const timelineDone = profile.timeline_confirmed;
-  const workStudyDone = profile.work_study_confirmed;
-  const budgetDone = profile.budget_confirmed;
-  const familyDone = profile.family_confirmed;
   const completedFlags = [
-    personalDone,
-    timelineDone,
-    workStudyDone,
-    budgetDone,
-    familyDone,
+    profile.personal_details_confirmed,
+    profile.timeline_confirmed,
+    profile.work_study_confirmed,
+    profile.budget_confirmed,
+    profile.family_confirmed,
   ];
   const completedCount = completedFlags.filter(Boolean).length;
   const isComplete = completedFlags.every(Boolean);
-  const status: RoadmapStatus = !pathSelected
-    ? "locked"
-    : isComplete
-      ? "completed"
-      : "active";
-  const progress = status === "locked"
-    ? 0
-    : status === "completed"
-      ? 100
-      : Math.max(12, completedCount * 20);
+  const status: RoadmapStatus = !pathSelected ? "locked" : isComplete ? "completed" : "active";
+  const progress =
+    status === "locked" ? 0 : status === "completed" ? 100 : Math.max(12, completedCount * 20);
 
   return {
     id: "build-your-move-profile",
-    title: "Build your move profile",
-    description: "Fill in the final planning details that turn your selected path into a usable move plan.",
+    title: lc.title,
+    description: lc.description,
     status,
     progress,
     nodes: createSequentialNodes(
-      BUILD_PROFILE_NODES,
+      buildNodeSeeds(lang, BUILD_PROFILE_IDS),
       status,
       completedFlags,
       BUILD_PROFILE_NODE_HREFS
@@ -325,7 +482,8 @@ function buildMoveProfileLevel(profile: MoveProfile): RoadmapLevel {
   };
 }
 
-function buildPrepareDocumentsLevel(profile: MoveProfile): RoadmapLevel {
+function buildPrepareDocumentsLevel(profile: MoveProfile, lang: UiLang): RoadmapLevel {
+  const lc = COPY[lang].levels["prepare-documents"];
   const buildProfileCompleted =
     profile.personal_details_confirmed &&
     profile.timeline_confirmed &&
@@ -336,81 +494,71 @@ function buildPrepareDocumentsLevel(profile: MoveProfile): RoadmapLevel {
 
   return {
     id: "prepare-documents",
-    title: "Prepare documents",
-    description: buildProfileCompleted
-      ? "Document guidance for this path requires verified local partners. We are not showing document checklists yet."
-      : "Unlocks after you complete your move profile.",
+    title: buildProfileCompleted ? lc.titleActive : lc.titleLocked,
+    description: buildProfileCompleted ? lc.descriptionActive : lc.descriptionLocked,
     status,
     progress: 0,
     nodes: createSequentialNodes(
-      PREPARE_DOCUMENTS_NODES,
+      buildNodeSeeds(lang, PREPARE_DOCUMENTS_IDS),
       status,
-      PREPARE_DOCUMENTS_NODES.map(() => false)
+      PREPARE_DOCUMENTS_IDS.map(() => false)
     ),
   };
 }
 
-function buildRoadmapTitle(profile: MoveProfile) {
+// ─── Roadmap title / subtitle ─────────────────────────────────────────────────
+
+function buildRoadmapTitle(profile: MoveProfile, lang: UiLang) {
+  const t = COPY[lang].title;
   const cityLabel = resolveCityLabel(profile);
   const countryLabel = resolveCountryLabel(profile);
-
-  if (cityLabel && countryLabel) {
-    return `Your move to ${cityLabel}, ${countryLabel}`;
-  }
-
-  if (countryLabel) {
-    return `Your move to ${countryLabel}`;
-  }
-
-  if (cityLabel) {
-    return `Your move to ${cityLabel}`;
-  }
-
-  return "Your relocation roadmap";
+  if (cityLabel && countryLabel) return t.cityAndCountry(cityLabel, countryLabel);
+  if (countryLabel) return t.countryOnly(countryLabel);
+  if (cityLabel) return t.cityOnly(cityLabel);
+  return t.fallback;
 }
 
-function buildRoadmapSubtitle(profile: MoveProfile) {
+function buildRoadmapSubtitle(profile: MoveProfile, lang: UiLang) {
+  const s = COPY[lang].subtitle;
   const pathLabel = resolvePathLabel(profile);
-  if (pathLabel) {
-    return pathLabel;
-  }
-
+  if (pathLabel) return pathLabel;
   if (hasValue(profile.selected_country_id) || hasValue(profile.selected_city_id)) {
-    return "Your personal roadmap generated from your move profile.";
+    return s.withDestination;
   }
-
-  return "Built from your onboarding answers so you always know the next step.";
+  return s.fallback;
 }
 
-export function generateRoadmap(profile: MoveProfile): Roadmap {
+// ─── Public export ────────────────────────────────────────────────────────────
+
+export function generateRoadmap(profile: MoveProfile, lang: UiLang = "en"): Roadmap {
   const levels = [
-    buildFindYourPlaceLevel(profile),
-    buildChooseLegalPathLevel(profile),
-    buildMoveProfileLevel(profile),
-    buildPrepareDocumentsLevel(profile),
+    buildFindYourPlaceLevel(profile, lang),
+    buildChooseLegalPathLevel(profile, lang),
+    buildMoveProfileLevel(profile, lang),
+    buildPrepareDocumentsLevel(profile, lang),
     createLockedLevel(
       "review-risks",
-      "Review risks",
-      "Unlocks after your first document checklist exists.",
-      REVIEW_RISKS_NODES
+      COPY[lang].levels["review-risks"].title,
+      COPY[lang].levels["review-risks"].description,
+      buildNodeSeeds(lang, REVIEW_RISKS_IDS)
     ),
     createLockedLevel(
       "submit-appointment",
-      "Submit / appointment",
-      "Unlocks when your application package is ready.",
-      SUBMIT_NODES
+      COPY[lang].levels["submit-appointment"].title,
+      COPY[lang].levels["submit-appointment"].description,
+      buildNodeSeeds(lang, SUBMIT_IDS)
     ),
     createLockedLevel(
       "prepare-arrival",
-      "Prepare arrival",
-      "Unlocks after your submission plan is ready.",
-      ARRIVAL_NODES
+      COPY[lang].levels["prepare-arrival"].title,
+      COPY[lang].levels["prepare-arrival"].description,
+      buildNodeSeeds(lang, ARRIVAL_IDS)
     ),
     createLockedLevel(
       "first-30-days",
-      "First 30 days",
-      "Unlocks when your arrival plan starts.",
-      FIRST_30_DAYS_NODES
+      COPY[lang].levels["first-30-days"].title,
+      COPY[lang].levels["first-30-days"].description,
+      buildNodeSeeds(lang, FIRST_30_DAYS_IDS)
     ),
   ];
 
@@ -420,11 +568,12 @@ export function generateRoadmap(profile: MoveProfile): Roadmap {
     currentLevel.nodes.find((node) => node.status === "waiting");
 
   return {
-    title: buildRoadmapTitle(profile),
-    subtitle: buildRoadmapSubtitle(profile),
+    title: buildRoadmapTitle(profile, lang),
+    subtitle: buildRoadmapSubtitle(profile, lang),
     readinessPercent: calculateReadiness(profile),
     currentLevelId: currentLevel.id,
     nextTaskLabel: nextTask?.title ?? currentLevel.title,
     levels,
+    language: lang,
   };
 }

@@ -10,6 +10,7 @@ import { COUNTRIES, getCountryBySlug } from "@/lib/data/countries";
 import { getLegalPathsForCountry } from "@/lib/data/legal-paths";
 import { getRelocationVideoStoriesForCountry } from "@/lib/data/relocation-video-stories";
 import { getExistingPublicImageSrc } from "@/lib/server/public-image";
+import { getServerLanguage } from "@/lib/i18n/server";
 
 export async function generateStaticParams() {
   return COUNTRIES.map((country) => ({ country: country.slug }));
@@ -84,9 +85,6 @@ function EditorialImagePlaceholder({ label }: { label: string }) {
       <div className="absolute left-8 top-[54%] h-3 w-3 -translate-y-1/2 rounded-full border border-amber-800/30 bg-[#fffdf8]" />
       <div className="absolute right-8 top-[54%] h-4 w-4 -translate-y-1/2 rounded-full border border-emerald-800/25 bg-[#fffdf8]" />
       <div className="absolute bottom-3 left-3 right-3 rounded-2xl border border-white/70 bg-white/65 px-3 py-2.5 backdrop-blur-sm">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-amber-900/70">
-          Curated image pending
-        </p>
         <p className="mt-1 text-sm font-medium text-stone-900">{label}</p>
       </div>
     </div>
@@ -172,6 +170,7 @@ export default async function CountryPage({
 
   if (!country) notFound();
 
+  const language = await getServerLanguage();
   const cities = getCitiesForCountry(country.id);
   const paths = getLegalPathsForCountry(country.id);
   const relocationVideoStories = getRelocationVideoStoriesForCountry(country.id);
@@ -369,7 +368,7 @@ export default async function CountryPage({
 
           <RelocationVideoStories
             stories={relocationVideoStories}
-            emptyMessage="Видео от переехавших для этой страны ещё подбираются."
+            language={language}
           />
 
           <SectionCard title="Legal paths">
@@ -405,6 +404,16 @@ export default async function CountryPage({
               ))}
             </div>
           </SectionCard>
+
+          <footer className="border-t border-[var(--city-border)] pt-5 pb-2 space-y-1.5">
+            <p className="text-[11px] leading-relaxed text-[var(--city-muted-fg)]">
+              Fit scores combine structured destination data, legal-path rules, and profile-based weighting.
+              They are designed for pre-decision planning, not legal advice.
+            </p>
+            <p className="text-[11px] leading-relaxed text-[var(--city-muted-fg)]">
+              Destination attributes are manually reviewed estimates. Verify current requirements before acting.
+            </p>
+          </footer>
         </div>
       </main>
     </div>

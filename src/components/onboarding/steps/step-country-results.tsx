@@ -9,6 +9,11 @@ import { getCountryById } from "@/lib/data/countries";
 import { commonCopy, type UiLanguage } from "@/lib/i18n/onboarding";
 import type { OnboardingState, CountryMatchResult } from "@/types";
 
+const SCORE_LEGEND = {
+  en: "Scores reflect fit for your profile — not universal country ratings. 80–100 = strong fit · 60–79 = workable · 40–59 = mixed · below 40 = weak fit or major blockers.",
+  ru: "Оценки отражают совпадение с вашим профилем, а не универсальный рейтинг страны. 80–100 = сильное совпадение · 60–79 = приемлемо · 40–59 = смешанно · ниже 40 = слабое совпадение или серьёзные риски.",
+};
+
 const COPY = {
   en: {
     kicker: "Your results",
@@ -41,7 +46,7 @@ const COPY = {
       "Отсортировано по совпадению с вашим профилем. Сохраняйте, сравнивайте и выбирайте направление для проверки.",
     recommendation: "Рекомендуемая отправная точка",
     recommendationText:
-      "Это самое сильное текущее совпадение по легальному пути, качеству жизни и тем компромиссам, которые вы указали.",
+      "Это самое сильное текущее совпадение по визе или ВНЖ, качеству жизни и тем компромиссам, которые вы указали.",
     whyFirst: "Почему это первое",
     tradeoff: "Главный компромисс",
     showing: "Показываем самые сильные совпадения",
@@ -49,8 +54,8 @@ const COPY = {
     shortlistedCountries: "сохранённые страны",
     overall: "Общее",
     lifestyle: "Жизнь",
-    legal: "Легальный путь",
-    mainBlocker: "Главный блокер",
+    legal: "Виза или ВНЖ",
+    mainBlocker: "Главный риск",
     pros: "Плюсы для вас",
     cons: "Что проверить",
     choose: "Выбрать это направление",
@@ -410,6 +415,10 @@ export function StepCountryResults({ state, onSelect, onShortlistToggle, onBack,
           <ArrowRight className="h-3.5 w-3.5 ml-auto" />
         </Link>
       )}
+
+      <div className="rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/50 px-3 py-2.5 text-[11px] leading-relaxed text-[var(--city-muted-fg)]">
+        {SCORE_LEGEND[language]}
+      </div>
 
       <div className="flex flex-col gap-3">
         <div className="city-section-kicker">{copy.showing}</div>

@@ -28,6 +28,7 @@ const COPY = {
     title: "Compare before you commit",
     subtitle: "Compare countries and cities side by side so you can see what fits, what blocks you, and what deserves a deeper look next.",
     tabs: { country: "Countries", city: "Cities" },
+    scoreLegend: "Scores reflect fit for your profile — not universal rankings. 80–100 = strong · 60–79 = workable · 40–59 = mixed · below 40 = major blockers.",
     selectCountries: "Select 2 to 4 countries",
     selectCities: "Select 2 to 4 cities or regions",
     chooseCountry: "Choose a country",
@@ -60,10 +61,11 @@ const COPY = {
     loadingBody: "Preparing your side-by-side view...",
   },
   ru: {
-    badge: "Образ жизни и легальный путь",
+    badge: "Образ жизни и виза/ВНЖ",
     title: "Сравните перед тем, как решить",
-    subtitle: "Сравните страны и города рядом — чтобы видеть, что подходит, что блокирует и на что стоит обратить внимание.",
+    subtitle: "Сравните страны и города рядом — чтобы видеть, что подходит, где есть риски и на что стоит обратить внимание.",
     tabs: { country: "Страны", city: "Города" },
+    scoreLegend: "Оценки отражают совпадение с профилем, а не универсальный рейтинг. 80–100 = сильное · 60–79 = приемлемо · 40–59 = смешанно · ниже 40 = серьёзные риски.",
     selectCountries: "Выберите от 2 до 4 стран",
     selectCities: "Выберите от 2 до 4 городов или регионов",
     chooseCountry: "Выберите страну",
@@ -82,16 +84,16 @@ const COPY = {
       family: "Подходит для семьи",
       difficulty: "Сложность первых 90 дней",
     },
-    blocker: "Главный блокер",
+    blocker: "Главный риск",
     realityPreview: "Что важно знать",
     lifestyleFit: "Совпадение по образу жизни",
-    legalFit: "Совпадение по документам",
+    legalFit: "По визе или статусу",
     avgRent: "Средняя аренда",
     monthlyBudget: "Бюджет в месяц",
     first90: "Первые 90 дней",
     chooseDestination: "Выбрать это направление",
     compareCities: "Сравнить города",
-    startMove: "Начать план переезда",
+    startMove: "Начать с анкеты",
     loading: "Загружаем сравнение",
     loadingBody: "Готовим сравнение...",
   },
@@ -519,7 +521,7 @@ function CompareExperience({
     <div className="city-page-wrap min-h-screen">
       <SiteHeader variant="public" />
 
-      <main className="mx-auto max-w-6xl px-4 py-6">
+      <main className="mx-auto max-w-6xl px-4 py-6 overflow-x-hidden">
         <div className="space-y-6">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-stone-700">
@@ -535,6 +537,10 @@ function CompareExperience({
               </div>
               <CompareToggle mode={mode} onChange={setMode} tabs={copy.tabs} />
             </div>
+          </div>
+
+          <div className="rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/50 px-3 py-2.5 text-[11px] leading-relaxed text-[var(--city-muted-fg)]">
+            {copy.scoreLegend}
           </div>
 
           {mode === "country" ? (

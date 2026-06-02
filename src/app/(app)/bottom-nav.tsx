@@ -2,24 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, ClipboardList, Shield, Globe, User } from "lucide-react";
+import { Compass, ClipboardList, Globe, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUiLanguage } from "@/hooks/useUiLanguage";
 
 const NAV_COPY = {
-  en: ["Plan", "Tasks", "Docs", "Countries", "Profile"],
-  ru: ["Мой план", "Задачи", "Документы", "Страны", "Профиль"],
+  en: ["Plan", "Tasks", "Countries", "Profile"],
+  ru: ["Мой план", "Задачи", "Страны", "Профиль"],
 } as const;
 
 const NAV_HREFS = [
   "/app/roadmap",
   "/app/tasks",
-  "/app/vault",
   "/app/explore",
   "/app/profile",
 ] as const;
 
-const NAV_ICONS = [Compass, ClipboardList, Shield, Globe, User] as const;
+const NAV_ICONS = [Compass, ClipboardList, Globe, User] as const;
 
 export function AppBottomNav() {
   const pathname = usePathname();

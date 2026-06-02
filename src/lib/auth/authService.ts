@@ -79,6 +79,15 @@ export async function updatePassword(password: string) {
   return supabase.auth.updateUser({ password });
 }
 
+export async function signInWithGoogle(redirectPath = "/start") {
+  const supabase = createClient();
+  const redirectTo = getAuthCallbackUrl(redirectPath);
+  return supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: redirectTo ? { redirectTo } : undefined,
+  });
+}
+
 export async function signOut() {
   const supabase = createClient();
   return supabase.auth.signOut();

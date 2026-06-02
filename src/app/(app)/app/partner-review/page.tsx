@@ -21,31 +21,31 @@ const COPY = {
       "Choose your destination, legal path, and roadmap details first, then you can request partner review here.",
     viewRoadmap: "View roadmap",
     backToMoveBrief: "Back to Move Brief",
-    badge: "Partner review",
-    title: "Request partner review",
+    badge: "Advisor review",
+    title: "Request advisor review",
     intro:
-      "We'll use your Move Brief to help a verified relocation partner understand your situation faster.",
+      "Save your Move Brief context so an advisor can understand your situation quickly when you're ready to connect.",
     moveBrief: "Move brief",
     currentStage: "Current stage",
     moveGoal: "Move goal",
     footnote:
-      "This request saves contact context only. No document checklist, file upload, payment, or real partner integration is active yet.",
+      "We'll use your Move Brief details when advisor matching becomes available. This is not a legal submission.",
   },
   ru: {
-    emptyTitle: "Сначала соберите Move Brief",
+    emptyTitle: "Сначала соберите сводку переезда",
     emptyBody:
-      "Сначала выберите направление, легальный путь и ключевые детали роадмапа, а потом здесь можно будет запросить partner review.",
-    viewRoadmap: "Открыть роадмап",
-    backToMoveBrief: "Назад к Move Brief",
-    badge: "Partner review",
-    title: "Запросить partner review",
+      "Сначала выберите направление, визу или ВНЖ и ключевые детали плана, а потом здесь можно будет запросить консультацию.",
+    viewRoadmap: "Открыть план",
+    backToMoveBrief: "Назад к сводке",
+    badge: "Консультация советника",
+    title: "Запросить консультацию советника",
     intro:
-      "Мы используем ваш Move Brief, чтобы проверенный relocation-партнёр быстрее понял вашу ситуацию.",
-    moveBrief: "Move Brief",
+      "Сохраните контекст вашей сводки, чтобы советник быстро понял ситуацию, когда вы будете готовы.",
+    moveBrief: "Сводка переезда",
     currentStage: "Текущий этап",
     moveGoal: "Цель переезда",
     footnote:
-      "Здесь сохраняется только контактный контекст. Чеклист документов, загрузка файлов, оплата и реальные внешние интеграции пока не активны.",
+      "Мы используем детали вашей сводки, когда появится подбор советников. Это не юридическая подача.",
   },
 } satisfies Record<UiLanguage, Record<string, string>>;
 
