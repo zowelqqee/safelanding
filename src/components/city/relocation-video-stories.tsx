@@ -40,7 +40,22 @@ const relocationVideoCopy = {
       "First-hand experiences from people who went through the move and share what turned out to be harder, more expensive, or better than expected.",
     disclaimer:
       "Only personal relocation and lived-experience stories. No tourist guides, city tours, or sightseeing roundups.",
+    layer: "relocation video layer",
     showMore: (count: number) => `Show ${count} more`,
+    personTypeLabels: {
+      remote_worker: "remote worker",
+      student: "student",
+      family: "family",
+      founder: "founder",
+      employee: "employee",
+      freelancer: "freelancer",
+      unknown: "relocation story",
+    } satisfies Record<RelocationVideoPersonType, string>,
+    movement: (from: string | null | undefined, to: string, duration: string | null | undefined) =>
+      [
+        from ? `${from} to ${to}` : to,
+        duration ? `${duration} there` : null,
+      ].filter(Boolean).join(" · "),
   },
   ru: {
     topicLabels: {
@@ -70,7 +85,22 @@ const relocationVideoCopy = {
       "Живой опыт людей, которые прошли переезд и рассказывают, что оказалось сложнее, дороже или лучше, чем ожидали.",
     disclaimer:
       "Только личный relocation/lived-experience. Без туристических гидов, city tours и подборок достопримечательностей.",
+    layer: "видео о переезде",
     showMore: (count: number) => `Показать ещё ${count}`,
+    personTypeLabels: {
+      remote_worker: "удалённый специалист",
+      student: "студент",
+      family: "семья",
+      founder: "основатель",
+      employee: "сотрудник",
+      freelancer: "фрилансер",
+      unknown: "история переезда",
+    } satisfies Record<RelocationVideoPersonType, string>,
+    movement: (from: string | null | undefined, to: string, duration: string | null | undefined) =>
+      [
+        from ? `${from} → ${to}` : to,
+        duration ? `${duration} на месте` : null,
+      ].filter(Boolean).join(" · "),
   },
 } satisfies Record<
   UiLanguage,
@@ -84,7 +114,10 @@ const relocationVideoCopy = {
     title: string;
     description: string;
     disclaimer: string;
+    layer: string;
     showMore: (count: number) => string;
+    personTypeLabels: Record<RelocationVideoPersonType, string>;
+    movement: (from: string | null | undefined, to: string, duration: string | null | undefined) => string;
   }
 >;
 
@@ -104,16 +137,6 @@ const sentimentStyles: Record<
     dotClass: "bg-rose-500",
     textClass: "text-rose-700",
   },
-};
-
-const personTypeLabels: Record<RelocationVideoPersonType, string> = {
-  remote_worker: "remote worker",
-  student: "student",
-  family: "family",
-  founder: "founder",
-  employee: "employee",
-  freelancer: "freelancer",
-  unknown: "relocation story",
 };
 
 function ShowMore({ children, label }: { children: React.ReactNode; label: string }) {
@@ -139,9 +162,8 @@ function VideoStoryCard({
   const sentiment = sentimentStyles[story.sentiment];
   const thumbnailSrc = getExistingPublicImageSrc(story.thumbnailUrl);
   const movementLabel = [
-    personTypeLabels[story.personType],
-    story.movedFrom ? `${story.movedFrom} to ${story.movedTo}` : story.movedTo,
-    story.livedThereFor ? `${story.livedThereFor} there` : null,
+    copy.personTypeLabels[story.personType],
+    copy.movement(story.movedFrom, story.movedTo, story.livedThereFor),
   ].filter(Boolean);
   const linkLabel = story.platform === "youtube" ? copy.watchOnYoutube : copy.openSource;
 
@@ -242,7 +264,7 @@ export function RelocationVideoStories({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 max-w-2xl">
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-amber-800">
-            relocation video layer
+            {copy.layer}
           </p>
           <h2 className="mt-2 font-serif text-2xl font-medium leading-tight tracking-tight text-stone-900 sm:text-3xl">
             {copy.title}

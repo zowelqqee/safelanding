@@ -103,7 +103,7 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="city-page-wrap min-h-screen flex flex-col">
-      <SiteHeader variant="public" action="none" />
+      <SiteHeader variant="public" action="none" initialLanguage={language} />
 
       <main className="flex flex-1 items-center justify-center px-4 py-10">
         <div className="w-full max-w-sm">

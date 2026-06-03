@@ -20,7 +20,7 @@ const LANGUAGE_OPTIONS: { value: UiLanguage; label: string; title: string }[] = 
 
 type LanguageSwitcherProps = {
   initialLanguage?: UiLanguage;
-  display?: "compact" | "full";
+  display?: "compact" | "full" | "mini";
   className?: string;
 };
 
@@ -66,6 +66,7 @@ export function LanguageSwitcher({
       className={cn(
         "flex min-w-0 items-center gap-2",
         display === "full" && "justify-between",
+        display === "mini" && "shrink-0",
         className
       )}
     >
@@ -77,7 +78,10 @@ export function LanguageSwitcher({
       )}
 
       <div
-        className="inline-flex h-9 shrink-0 items-center rounded-full border border-[var(--city-border)] bg-[var(--city-card)] p-1"
+        className={cn(
+          "inline-flex shrink-0 items-center rounded-full border border-[var(--city-border)] bg-[var(--city-card)]",
+          display === "mini" ? "h-8 p-0.5" : "h-9 p-1"
+        )}
         role="group"
         aria-label={label}
       >
@@ -99,7 +103,8 @@ export function LanguageSwitcher({
               aria-pressed={active}
               onClick={() => changeLanguage(option.value)}
               className={cn(
-                "h-7 rounded-full px-2.5 text-[11px] font-semibold transition-colors",
+                "h-7 rounded-full font-semibold transition-colors",
+                display === "mini" ? "px-2 text-[10px]" : "px-2.5 text-[11px]",
                 active
                   ? "bg-stone-900 text-white shadow-sm"
                   : "text-[var(--city-muted-fg)] hover:bg-[var(--city-warm-muted)] hover:text-stone-900",

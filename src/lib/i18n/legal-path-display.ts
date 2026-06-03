@@ -92,6 +92,22 @@ const TEXT_RU: Record<string, string> = {
     "Ваш профиль может быть достаточно сильным для этого варианта",
   "This route usually needs unusually strong evidence, not just a good profile":
     "Обычно здесь нужны очень сильные доказательства, а не просто хороший профиль",
+  "You already work remotely with stable foreign income":
+    "У вас уже есть стабильный зарубежный доход от удалённой работы",
+  "You want a real residence path rather than tourist time":
+    "Вы хотите настоящий путь к резидентству, а не просто туристическое пребывание",
+  "You are ready to study and can pursue admission":
+    "Вы готовы учиться и можете идти к поступлению",
+  "You want Spain as a structured first step into Europe":
+    "Вы хотите использовать Испанию как понятный первый шаг в Европу",
+  "You have savings or passive income support":
+    "У вас есть накопления или пассивный доход",
+  "You want a quieter route than employment-driven migration":
+    "Вы хотите более спокойный путь, чем переезд через работодателя",
+  "You want to scout neighborhoods and city fit first":
+    "Вы хотите сначала присмотреться к районам и понять, подходит ли город",
+  "You are not yet ready to commit to a residency path":
+    "Вы пока не готовы сразу выбирать путь к резидентству",
 };
 
 const SUMMARY_RU: Record<string, string> = {

@@ -277,11 +277,15 @@ export function SiteHeader({
           />
         </div>
 
-        <div className="ml-auto md:hidden">
+        <div className="ml-auto flex items-center gap-2 md:hidden">
+          <LanguageSwitcher initialLanguage={initialLanguage} display="mini" />
           <details className="group relative">
-            <summary className="flex list-none items-center gap-2 rounded-full border border-[var(--city-border)] bg-[var(--city-card)] px-3 py-2 text-sm font-medium text-stone-800 transition-colors hover:bg-[var(--city-warm-muted)]">
+            <summary
+              aria-label={copy.menu}
+              className="flex list-none items-center gap-2 rounded-full border border-[var(--city-border)] bg-[var(--city-card)] px-3 py-2 text-sm font-medium text-stone-800 transition-colors hover:bg-[var(--city-warm-muted)]"
+            >
               <Menu className="h-4 w-4" />
-              {copy.menu}
+              <span className="hidden min-[360px]:inline">{copy.menu}</span>
             </summary>
             <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-[min(24rem,calc(100vw-2rem))] rounded-[24px] border border-[var(--city-border)] bg-[var(--city-bg)] p-4 shadow-[0_18px_60px_rgba(55,44,34,0.14)]">
               <div className="space-y-4">

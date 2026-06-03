@@ -9,6 +9,8 @@ import { useCityCardViewTracking } from "@/lib/analytics/cityCardView";
 import { getCitiesForCountry, getCityById } from "@/lib/data/cities";
 import { COUNTRIES, getCountryById } from "@/lib/data/countries";
 import { matchCountries, type CountryMatchInput } from "@/lib/scoring/country-matcher";
+import { getCityDisplay } from "@/lib/i18n/city-display";
+import { getCountryDisplay } from "@/lib/i18n/country-display";
 import { cn } from "@/lib/utils";
 import type {
   CountryProfile,
@@ -297,25 +299,29 @@ function CountryCompareCard({
   country,
   fit,
   copy,
+  language,
 }: {
   country: CountryProfile;
   fit: ReturnType<typeof matchCountries>[number];
   copy: CompareCopy;
+  language: "en" | "ru";
 }) {
+  const display = getCountryDisplay(country, language);
+
   return (
     <div className="city-card rounded-[22px] p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="text-3xl">{country.emoji}</div>
-          <h2 className="mt-3 text-lg font-semibold text-stone-900">{country.name}</h2>
-          <p className="text-sm text-[var(--city-muted-fg)]">{country.region}</p>
+          <h2 className="mt-3 text-lg font-semibold text-stone-900">{display.name}</h2>
+          <p className="text-sm text-[var(--city-muted-fg)]">{display.region}</p>
         </div>
         <span className="rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-sm font-semibold text-stone-700">
           {fit.overallFit}% {copy.overall}
         </span>
       </div>
 
-      <p className="mt-4 text-sm leading-relaxed text-[var(--city-muted-fg)]">{country.summary}</p>
+      <p className="mt-4 text-sm leading-relaxed text-[var(--city-muted-fg)]">{display.summary}</p>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-3">
         <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-3 py-3">
@@ -348,7 +354,7 @@ function CountryCompareCard({
 
       <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
         <p className="city-section-kicker text-amber-700">{copy.realityPreview}</p>
-        <p className="mt-1 text-sm text-amber-900">{country.main_legal_blocker}</p>
+        <p className="mt-1 text-sm text-amber-900">{display.mainLegalBlocker}</p>
       </div>
 
       <div className="mt-5 flex gap-2">
@@ -376,22 +382,27 @@ function CityCompareCard({
   cityId,
   position,
   copy,
+  language,
 }: {
   cityId: string;
   position: number;
   copy: CompareCopy;
+  language: "en" | "ru";
 }) {
   const city = getCityById(cityId);
   const cardRef = useCityCardViewTracking({ cityId, position });
 
   if (!city) return null;
+  const country = getCountryById(city.countryId);
+  const cityDisplay = getCityDisplay(city, language);
+  const countryDisplay = country ? getCountryDisplay(country, language) : null;
 
   return (
     <div ref={cardRef} className="city-card rounded-[22px] p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-sm text-[var(--city-muted-fg)]">{city.country}</p>
-          <h2 className="text-lg font-semibold text-stone-900">{city.name}</h2>
+          <p className="text-sm text-[var(--city-muted-fg)]">{countryDisplay?.name ?? city.country}</p>
+          <h2 className="text-lg font-semibold text-stone-900">{cityDisplay.name}</h2>
         </div>
         <span className="rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-sm font-semibold text-stone-700">
           {levelLabel(city.first_90_days_difficulty)}
@@ -481,7 +492,10 @@ function CompareExperience({
       return ids.length > 0 ? ids : getCitiesForCountry(searchParams.get("country") ?? "spain").slice(0, 2).map((city) => city.id);
     })()
   );
-  const context = useMemo(() => buildContext(searchParams), [searchParams]);
+  const context = useMemo(
+    () => ({ ...buildContext(searchParams), language }),
+    [language, searchParams]
+  );
 
   const countryMatches = useMemo(() => matchCountries(context), [context]);
   const countryMatchMap = useMemo(
@@ -519,7 +533,7 @@ function CompareExperience({
 
   return (
     <div className="city-page-wrap min-h-screen">
-      <SiteHeader variant="public" />
+      <SiteHeader variant="public" initialLanguage={language} />
 
       <main className="mx-auto max-w-6xl px-4 py-6 overflow-x-hidden">
         <div className="space-y-6">
@@ -549,8 +563,8 @@ function CompareExperience({
                 label={copy.selectCountries}
                 options={COUNTRIES.map((country) => ({
                   id: country.id,
-                  title: country.name,
-                  subtitle: country.region,
+                  title: getCountryDisplay(country, language).name,
+                  subtitle: getCountryDisplay(country, language).region,
                   emoji: country.emoji,
                 }))}
                 selected={selectedCountryIds}
@@ -568,6 +582,7 @@ function CompareExperience({
                       country={country}
                       fit={fit}
                       copy={copy}
+                      language={language}
                     />
                   );
                 })}
@@ -594,7 +609,7 @@ function CompareExperience({
                             : "border-[var(--city-border)] text-stone-700 hover:border-stone-400"
                         )}
                       >
-                        {country.emoji} {country.name}
+                        {country.emoji} {getCountryDisplay(country, language).name}
                       </button>
                     ))}
                   </div>
@@ -604,7 +619,7 @@ function CompareExperience({
                   label={copy.selectCities}
                   options={cityOptions.map((city) => ({
                     id: city.id,
-                    title: city.name,
+                    title: getCityDisplay(city, language).name,
                     subtitle: city.avg_rent_range,
                   }))}
                   selected={selectedCityIds}
@@ -614,7 +629,13 @@ function CompareExperience({
 
               <div className="grid gap-4 lg:grid-cols-2">
                 {selectedCityIds.map((cityId, index) => (
-                  <CityCompareCard key={cityId} cityId={cityId} position={index + 1} copy={copy} />
+                  <CityCompareCard
+                    key={cityId}
+                    cityId={cityId}
+                    position={index + 1}
+                    copy={copy}
+                    language={language}
+                  />
                 ))}
               </div>
             </>

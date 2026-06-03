@@ -14,6 +14,13 @@ import { getLegalPathsForCountry } from "@/lib/data/legal-paths";
 import { getRelocationVideoStoriesForCity } from "@/lib/data/relocation-video-stories";
 import { getExistingPublicImageSrc } from "@/lib/server/public-image";
 import { getServerLanguage } from "@/lib/i18n/server";
+import { getCityDisplay } from "@/lib/i18n/city-display";
+import { getCountryDisplay } from "@/lib/i18n/country-display";
+import {
+  getLegalPathDisplay,
+  translateLegalPathText,
+} from "@/lib/i18n/legal-path-display";
+import type { UiLanguage } from "@/lib/i18n/onboarding";
 import type { CityProfile, CountryProfile, LegalPath } from "@/types";
 
 export async function generateStaticParams() {
@@ -44,7 +51,152 @@ export async function generateMetadata({
 
 type MetricKind = "cost" | "housing" | "transport" | "english" | "remote" | "family";
 
-function scoreLabel(kind: MetricKind, value: number) {
+const CITY_COPY = {
+  en: {
+    cityGuide: "City guide",
+    cityImage: "City image",
+    relocationDossier: "relocation dossier",
+    legalReality: "Legal reality",
+    lifestyleReality: "Lifestyle reality",
+    fitAssessment: "Fit assessment",
+    fitTitle: "Does this fit you?",
+    goodFor: "Good for",
+    hardIf: "Hard if",
+    cityMetrics: "City metrics",
+    atGlance: "At a glance",
+    financialPicture: "Financial picture",
+    realityPreview: "Reality preview",
+    avgRent: "Avg rent",
+    monthlyBudget: "Monthly budget",
+    underestimate: "What people underestimate",
+    first90: "First 90 days",
+    legalFramework: "Legal framework",
+    legalPathsFor: (country: string) => `Legal paths for ${country}`,
+    disclaimer: "Fit assessments only — not legal advice. Requirements vary and must be verified before applying.",
+    showMorePaths: (count: number) => `Show ${count} more path${count > 1 ? "s" : ""}`,
+    compareCities: "Compare cities",
+    compareCountries: "Compare countries",
+    startMove: "Start my move",
+    complexity: "Complexity",
+    goodFitIf: "Good fit if",
+    mainFriction: "Main friction",
+    tags: {
+      coastal: "Coastal",
+      largeCity: "Large city",
+      smallerCity: "Smaller city",
+      remoteFriendly: "Remote-work friendly",
+      englishFriendly: "English-friendly",
+      familyFriendly: "Family-friendly",
+    },
+    metrics: {
+      cost: "Cost of living",
+      housing: "Housing access",
+      transport: "Public transport",
+      english: "English friendliness",
+      remote: "Remote work fit",
+      family: "Family fit",
+    },
+    footerOne: "Soft Landing — relocation intelligence for independent movers. Content is curated for fit assessment, not as professional legal or financial advice.",
+    footerTwo: "Fit scores combine structured destination data, legal-path rules, and profile-based weighting. Destination attributes are manually reviewed estimates — verify before making decisions.",
+  },
+  ru: {
+    cityGuide: "Гид по городу",
+    cityImage: "Фото города",
+    relocationDossier: "сводка переезда",
+    legalReality: "Юридическая реальность",
+    lifestyleReality: "Бытовая реальность",
+    fitAssessment: "Оценка совпадения",
+    fitTitle: "Подходит ли вам этот город?",
+    goodFor: "Хорошо подходит",
+    hardIf: "Будет сложно, если",
+    cityMetrics: "Метрики города",
+    atGlance: "Кратко",
+    financialPicture: "Финансовая картина",
+    realityPreview: "Что важно знать",
+    avgRent: "Средняя аренда",
+    monthlyBudget: "Бюджет в месяц",
+    underestimate: "Что часто недооценивают",
+    first90: "Первые 90 дней",
+    legalFramework: "Виза и статус",
+    legalPathsFor: (country: string) => `Варианты переезда: ${country}`,
+    disclaimer: "Это оценка совпадения, а не юридическая консультация. Требования меняются, их нужно проверить перед подачей.",
+    showMorePaths: (count: number) => `Показать ещё: ${count}`,
+    compareCities: "Сравнить города",
+    compareCountries: "Сравнить страны",
+    startMove: "Начать с анкеты",
+    complexity: "Сложность",
+    goodFitIf: "Хорошо подходит, если",
+    mainFriction: "Главное трение",
+    tags: {
+      coastal: "У моря",
+      largeCity: "Большой город",
+      smallerCity: "Город поменьше",
+      remoteFriendly: "Удобно для удалённой работы",
+      englishFriendly: "Проще без местного языка",
+      familyFriendly: "Подходит для семьи",
+    },
+    metrics: {
+      cost: "Стоимость жизни",
+      housing: "Доступность жилья",
+      transport: "Транспорт",
+      english: "Без местного языка",
+      remote: "Для удалённой работы",
+      family: "Для семьи",
+    },
+    footerOne: "Soft Landing помогает трезво оценить направление и план переезда. Это не юридическая или финансовая консультация.",
+    footerTwo: "Оценки основаны на данных о направлении, вариантах визы или статуса и вашем профиле. Перед решением проверьте актуальные требования.",
+  },
+} satisfies Record<UiLanguage, {
+  cityGuide: string;
+  cityImage: string;
+  relocationDossier: string;
+  legalReality: string;
+  lifestyleReality: string;
+  fitAssessment: string;
+  fitTitle: string;
+  goodFor: string;
+  hardIf: string;
+  cityMetrics: string;
+  atGlance: string;
+  financialPicture: string;
+  realityPreview: string;
+  avgRent: string;
+  monthlyBudget: string;
+  underestimate: string;
+  first90: string;
+  legalFramework: string;
+  legalPathsFor: (country: string) => string;
+  disclaimer: string;
+  showMorePaths: (count: number) => string;
+  compareCities: string;
+  compareCountries: string;
+  startMove: string;
+  complexity: string;
+  goodFitIf: string;
+  mainFriction: string;
+  tags: Record<string, string>;
+  metrics: Record<MetricKind, string>;
+  footerOne: string;
+  footerTwo: string;
+}>;
+
+function scoreLabel(kind: MetricKind, value: number, language: UiLanguage) {
+  if (language === "ru") {
+    switch (kind) {
+      case "cost":
+        return ["Очень низкая", "Низкая", "Средняя", "Высокая", "Очень высокая"][value - 1];
+      case "housing":
+        return ["Легко", "Нормально", "Конкурентно", "Сложно", "Очень сложно"][value - 1];
+      case "transport":
+        return ["Слабый", "Базовый", "Нормальный", "Сильный", "Отличный"][value - 1];
+      case "english":
+        return ["Сложно", "Ограниченно", "Средне", "Хорошо", "Очень легко"][value - 1];
+      case "remote":
+      case "family":
+        return ["Слабо", "Ограниченно", "Средне", "Сильно", "Отлично"][value - 1];
+    }
+  }
+
   switch (kind) {
     case "cost":
       return ["Very low", "Low", "Medium", "High", "Very high"][value - 1];
@@ -69,7 +221,21 @@ function scoreSegmentClass(kind: MetricKind, value: number, index: number): stri
   return value >= 4 ? "score-segment score-segment-positive" : value >= 3 ? "score-segment score-segment-caution" : "score-segment score-segment-hard";
 }
 
-function fitWarningLabel(item: string) {
+function fitWarningLabel(item: string, language: UiLanguage) {
+  if (language === "ru") {
+    const lower = item.toLowerCase();
+    if (lower.includes("housing") || lower.includes("rental") || lower.includes("rent")) return "Нужно быстро найти жильё без сильной конкуренции";
+    if (lower.includes("admin") || lower.includes("bureaucr") || lower.includes("german")) return "Не хочется много бюрократии и местного языка";
+    if (lower.includes("english")) return "Важно, чтобы английского хватало для быта";
+    if (lower.includes("salary market") || lower.includes("career") || lower.includes("opportunit")) return "Нужен более глубокий рынок работы";
+    if (lower.includes("transport") || lower.includes("transit")) return "Нужен удобный транспорт почти из любого района";
+    if (lower.includes("crowd") || lower.includes("touris") || lower.includes("saturated") || lower.includes("chaotic")) return "Хочется более спокойного и предсказуемого ритма";
+    if (lower.includes("car")) return "Нужна жизнь без машины почти везде";
+    if (lower.includes("heat")) return "Плохо переносите сильную жару";
+    if (lower.includes("cooler") || lower.includes("wetter") || lower.includes("weather")) return "Хочется теплее и меньше серой погоды";
+    if (lower.includes("small")) return "Нужно больше масштаба и городской энергии";
+  }
+
   const lower = item.toLowerCase();
   if (lower.includes("housing") || lower.includes("rental") || lower.includes("rent")) return "You need stable housing quickly and with less competition";
   if (lower.includes("admin") || lower.includes("bureaucr") || lower.includes("german")) return "You hate paperwork and local-language bureaucracy";
@@ -108,7 +274,15 @@ function ScoreRail({ value, kind }: { value: number; kind: MetricKind }) {
   );
 }
 
-function BlockerCard({ text, variant }: { text: string; variant: "legal" | "lifestyle" }) {
+function BlockerCard({
+  text,
+  variant,
+  copy,
+}: {
+  text: string;
+  variant: "legal" | "lifestyle";
+  copy: typeof CITY_COPY[UiLanguage];
+}) {
   return (
     <div className={`min-w-0 rounded-2xl px-4 py-4 ${
       variant === "legal"
@@ -118,7 +292,7 @@ function BlockerCard({ text, variant }: { text: string; variant: "legal" | "life
       <p className={`text-[10px] font-semibold uppercase tracking-[0.16em] ${
         variant === "legal" ? "text-rose-700" : "text-amber-700"
       }`}>
-        {variant === "legal" ? "Legal reality" : "Lifestyle reality"}
+        {variant === "legal" ? copy.legalReality : copy.lifestyleReality}
       </p>
       <p className="mt-2 break-words text-sm leading-relaxed text-stone-800">{text}</p>
     </div>
@@ -151,11 +325,18 @@ function CityHeroImagePanel({
   city,
   country,
   imageSrc,
+  copy,
+  language,
 }: {
   city: CityProfile;
   country: CountryProfile;
   imageSrc?: string;
+  copy: typeof CITY_COPY[UiLanguage];
+  language: UiLanguage;
 }) {
+  const cityDisplay = getCityDisplay(city, language);
+  const countryDisplay = getCountryDisplay(country, language);
+
   return (
     <div className="min-w-0 rounded-[24px] border border-[var(--city-border)] bg-[var(--city-warm-muted)]/45 p-2">
       <div className="relative min-h-[190px] overflow-hidden rounded-[20px]">
@@ -163,7 +344,7 @@ function CityHeroImagePanel({
           <>
             <Image
               src={imageSrc}
-              alt={`${city.name}, ${country.name}`}
+              alt={`${cityDisplay.name}, ${countryDisplay.name}`}
               fill
               sizes="(min-width: 1024px) 300px, 100vw"
               className="object-cover"
@@ -172,13 +353,13 @@ function CityHeroImagePanel({
             <div className="absolute inset-0 bg-gradient-to-t from-stone-950/45 via-stone-950/5 to-transparent" />
             <div className="absolute bottom-4 left-4 right-4">
               <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/75">
-                City image
+                {copy.cityImage}
               </p>
-              <p className="mt-1 font-serif text-xl font-medium text-white">{city.name}</p>
+              <p className="mt-1 font-serif text-xl font-medium text-white">{cityDisplay.name}</p>
             </div>
           </>
         ) : (
-          <EditorialImagePlaceholder label={`${city.name} relocation dossier`} />
+          <EditorialImagePlaceholder label={`${cityDisplay.name} ${copy.relocationDossier}`} />
         )}
       </div>
     </div>
@@ -187,16 +368,24 @@ function CityHeroImagePanel({
 
 // ─── Section components ───────────────────────────────────────────────────────
 
-function FitSection({ city }: { city: CityProfile }) {
+function FitSection({
+  city,
+  copy,
+  language,
+}: {
+  city: CityProfile;
+  copy: typeof CITY_COPY[UiLanguage];
+  language: UiLanguage;
+}) {
   return (
     <div className="city-card min-w-0 overflow-hidden rounded-[22px]">
       <div className="border-b border-[var(--city-border)] px-5 py-4">
-        <p className="city-section-kicker">Fit assessment</p>
-        <h2 className="mt-1 text-base font-semibold tracking-tight text-stone-900">Does this fit you?</h2>
+        <p className="city-section-kicker">{copy.fitAssessment}</p>
+        <h2 className="mt-1 text-base font-semibold tracking-tight text-stone-900">{copy.fitTitle}</h2>
       </div>
       <div className="grid grid-cols-1 gap-5 p-5 sm:grid-cols-2">
         <div className="min-w-0">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">Good for</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">{copy.goodFor}</p>
           <ul className="mt-3 space-y-2.5">
             {city.best_for.map((item) => (
               <li key={item} className="flex items-start gap-2.5">
@@ -207,12 +396,12 @@ function FitSection({ city }: { city: CityProfile }) {
           </ul>
         </div>
         <div className="min-w-0">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-700">Hard if</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-700">{copy.hardIf}</p>
           <ul className="mt-3 space-y-2.5">
             {city.watch_out.map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
-                <span className="min-w-0 break-words text-sm leading-snug text-[var(--city-muted-fg)]">{fitWarningLabel(item)}</span>
+                <span className="min-w-0 break-words text-sm leading-snug text-[var(--city-muted-fg)]">{fitWarningLabel(item, language)}</span>
               </li>
             ))}
           </ul>
@@ -222,28 +411,36 @@ function FitSection({ city }: { city: CityProfile }) {
   );
 }
 
-function GlanceSection({ city }: { city: CityProfile }) {
+function GlanceSection({
+  city,
+  copy,
+  language,
+}: {
+  city: CityProfile;
+  copy: typeof CITY_COPY[UiLanguage];
+  language: UiLanguage;
+}) {
   const metrics: { label: string; value: number; kind: MetricKind }[] = [
-    { label: "Cost of living", value: city.cost_level, kind: "cost" },
-    { label: "Housing access", value: city.housing_difficulty, kind: "housing" },
-    { label: "Public transport", value: city.public_transport, kind: "transport" },
-    { label: "English friendliness", value: city.english_friendliness, kind: "english" },
-    { label: "Remote work fit", value: city.remote_worker_fit, kind: "remote" },
-    { label: "Family fit", value: city.family_fit, kind: "family" },
+    { label: copy.metrics.cost, value: city.cost_level, kind: "cost" },
+    { label: copy.metrics.housing, value: city.housing_difficulty, kind: "housing" },
+    { label: copy.metrics.transport, value: city.public_transport, kind: "transport" },
+    { label: copy.metrics.english, value: city.english_friendliness, kind: "english" },
+    { label: copy.metrics.remote, value: city.remote_worker_fit, kind: "remote" },
+    { label: copy.metrics.family, value: city.family_fit, kind: "family" },
   ];
 
   return (
     <div className="city-card min-w-0 overflow-hidden rounded-[22px]">
       <div className="border-b border-[var(--city-border)] px-5 py-4">
-        <p className="city-section-kicker">City metrics</p>
-        <h2 className="mt-1 text-base font-semibold tracking-tight text-stone-900">At a glance</h2>
+        <p className="city-section-kicker">{copy.cityMetrics}</p>
+        <h2 className="mt-1 text-base font-semibold tracking-tight text-stone-900">{copy.atGlance}</h2>
       </div>
       <div className="divide-y divide-[var(--city-border)] px-5">
         {metrics.map(({ label, value, kind }) => (
           <div key={label} className="flex items-center justify-between gap-3 py-3">
             <span className="min-w-0 break-words text-sm text-[var(--city-muted-fg)]">{label}</span>
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-              <span className="text-xs font-semibold text-stone-800">{scoreLabel(kind, value)}</span>
+              <span className="text-xs font-semibold text-stone-800">{scoreLabel(kind, value, language)}</span>
               <ScoreRail value={value} kind={kind} />
             </div>
           </div>
@@ -253,29 +450,35 @@ function GlanceSection({ city }: { city: CityProfile }) {
   );
 }
 
-function RealityPreviewSection({ city }: { city: CityProfile }) {
+function RealityPreviewSection({
+  city,
+  copy,
+}: {
+  city: CityProfile;
+  copy: typeof CITY_COPY[UiLanguage];
+}) {
   return (
     <div className="city-card min-w-0 overflow-hidden rounded-[22px]">
       <div className="border-b border-[var(--city-border)] px-5 py-4">
-        <p className="city-section-kicker">Financial picture</p>
-        <h2 className="mt-1 text-base font-semibold tracking-tight text-stone-900">Reality preview</h2>
+        <p className="city-section-kicker">{copy.financialPicture}</p>
+        <h2 className="mt-1 text-base font-semibold tracking-tight text-stone-900">{copy.realityPreview}</h2>
       </div>
       <div className="p-5">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/50 px-4 py-3">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--city-muted-fg)]">Avg rent</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--city-muted-fg)]">{copy.avgRent}</p>
             <p className="mt-1.5 break-words font-serif text-lg font-medium text-stone-900">{city.avg_rent_range}</p>
           </div>
           <div className="rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/50 px-4 py-3">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--city-muted-fg)]">Monthly budget</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--city-muted-fg)]">{copy.monthlyBudget}</p>
             <p className="mt-1.5 break-words font-serif text-lg font-medium text-stone-900">{city.monthly_budget_range}</p>
           </div>
         </div>
         <div className="mt-3 rounded-xl border border-amber-200/60 bg-amber-50/50 px-4 py-3">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-800">What people underestimate</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-800">{copy.underestimate}</p>
           <p className="mt-1.5 break-words text-sm leading-relaxed text-stone-800">{city.what_people_underestimate}</p>
         </div>
-        <ShowMore label="First 90 days">
+        <ShowMore label={copy.first90}>
           <div className="space-y-2">
             {city.first_90_days_preview.map((item, i) => (
               <div key={item} className="flex items-start gap-3 rounded-xl border border-[var(--city-border)] bg-[var(--city-card)] px-4 py-3">
@@ -290,7 +493,15 @@ function RealityPreviewSection({ city }: { city: CityProfile }) {
   );
 }
 
-function LegalPathCard({ path }: { path: LegalPath }) {
+function LegalPathCard({
+  path,
+  copy,
+  language,
+}: {
+  path: LegalPath;
+  copy: typeof CITY_COPY[UiLanguage];
+  language: UiLanguage;
+}) {
   const scenarioStyles: Record<LegalPath["scenario"], string> = {
     remote: "text-sky-700 bg-sky-50 border-sky-200",
     study: "text-violet-700 bg-violet-50 border-violet-200",
@@ -302,15 +513,16 @@ function LegalPathCard({ path }: { path: LegalPath }) {
     business: "text-orange-700 bg-orange-50 border-orange-200",
   };
   const scenarioLabel: Record<LegalPath["scenario"], string> = {
-    remote: "Remote work",
-    study: "Study",
-    work: "Employment",
-    family: "Family",
-    capital: "Capital",
-    exploration: "Exploration",
-    talent: "Talent",
-    business: "Business",
+    remote: language === "ru" ? "Удалённая работа" : "Remote work",
+    study: language === "ru" ? "Учёба" : "Study",
+    work: language === "ru" ? "Работа" : "Employment",
+    family: language === "ru" ? "Семья" : "Family",
+    capital: language === "ru" ? "Капитал" : "Capital",
+    exploration: language === "ru" ? "Разведка" : "Exploration",
+    talent: language === "ru" ? "Талант" : "Talent",
+    business: language === "ru" ? "Бизнес" : "Business",
   };
+  const display = getLegalPathDisplay(path, language);
 
   return (
     <div className="city-card min-w-0 overflow-hidden rounded-[22px] p-5">
@@ -319,15 +531,15 @@ function LegalPathCard({ path }: { path: LegalPath }) {
           <span className={`inline-block rounded-full border px-2.5 py-1 text-[11px] font-medium ${scenarioStyles[path.scenario]}`}>
             {scenarioLabel[path.scenario]}
           </span>
-          <h3 className="mt-2.5 break-words text-base font-semibold tracking-tight text-stone-900">{path.name}</h3>
+          <h3 className="mt-2.5 break-words text-base font-semibold tracking-tight text-stone-900">{display.name}</h3>
         </div>
         <span className="max-w-[42%] shrink-0 rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1.5 text-right text-[11px] font-medium leading-snug text-[var(--city-muted-fg)] sm:max-w-none">
-          {path.estimated_preparation_time}
+          {display.estimatedPreparationTime}
         </span>
       </div>
 
       <div className="mt-3 flex items-center gap-2.5">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--city-muted-fg)]">Complexity</span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--city-muted-fg)]">{copy.complexity}</span>
         <div className="flex gap-[3px]">
           {Array.from({ length: 5 }).map((_, i) => (
             <span key={i} className={`h-[3px] w-4 rounded-full ${i < path.complexity ? "bg-stone-600" : "bg-[var(--city-border)]"}`} />
@@ -336,9 +548,9 @@ function LegalPathCard({ path }: { path: LegalPath }) {
       </div>
 
       <div className="mt-4 border-t border-[var(--city-border)] pt-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">Good fit if</p>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">{copy.goodFitIf}</p>
         <ul className="mt-2 space-y-2">
-          {path.good_if.slice(0, 2).map((item) => (
+          {display.goodIf.slice(0, 2).map((item) => (
             <li key={item} className="flex items-start gap-2.5">
               <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
               <span className="min-w-0 break-words text-sm leading-snug text-stone-800">{item}</span>
@@ -348,8 +560,8 @@ function LegalPathCard({ path }: { path: LegalPath }) {
       </div>
 
       <div className="mt-4 rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-3">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--city-muted-fg)]">Main friction</p>
-        <p className="mt-1.5 break-words text-sm leading-relaxed text-stone-800">{path.weak_points[0]}</p>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--city-muted-fg)]">{copy.mainFriction}</p>
+        <p className="mt-1.5 break-words text-sm leading-relaxed text-stone-800">{translateLegalPathText(path.weak_points[0], language)}</p>
       </div>
     </div>
   );
@@ -374,22 +586,25 @@ export default async function CityPage({
   const compareCityIds = [city.id, ...country.city_ids.filter((id) => id !== city.id)].slice(0, 2);
   const cityCompareHref = `/compare?type=city&country=${country.id}&city=${compareCityIds.join(",")}`;
   const language = await getServerLanguage();
+  const copy = CITY_COPY[language];
+  const countryDisplay = getCountryDisplay(country, language);
+  const cityDisplay = getCityDisplay(city, language);
   const paths = getLegalPathsForCountry(country.id);
   const realityReport = getCityRealityReportById(city.id);
   const relocationVideoStories = getRelocationVideoStoriesForCity(country.id, city.id);
   const cityHeroImage = getExistingPublicImageSrc(city.heroImage);
 
   const cityTags: string[] = [
-    city.coastal ? "Coastal" : null,
-    city.big_city ? "Large city" : "Smaller city",
-    city.remote_worker_fit >= 4 ? "Remote-work friendly" : null,
-    city.english_friendliness >= 4 ? "English-friendly" : null,
-    city.family_fit >= 4 ? "Family-friendly" : null,
+    city.coastal ? copy.tags.coastal : null,
+    city.big_city ? copy.tags.largeCity : copy.tags.smallerCity,
+    city.remote_worker_fit >= 4 ? copy.tags.remoteFriendly : null,
+    city.english_friendliness >= 4 ? copy.tags.englishFriendly : null,
+    city.family_fit >= 4 ? copy.tags.familyFriendly : null,
   ].filter(Boolean) as string[];
 
   return (
     <div className="city-page-wrap">
-      <SiteHeader variant="public" />
+      <SiteHeader variant="public" initialLanguage={language} />
 
       <main className="mx-auto min-w-0 max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
         <div className="min-w-0 space-y-6">
@@ -399,9 +614,9 @@ export default async function CityPage({
             <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
               {/* Left: identity */}
               <div className="min-w-0 flex-1">
-                <p className="city-section-kicker">{country.name} · City guide</p>
+                <p className="city-section-kicker">{countryDisplay.name} · {copy.cityGuide}</p>
                 <h1 className="mt-3 font-serif text-5xl font-medium leading-[1.05] tracking-[-0.02em] text-stone-900 sm:text-6xl lg:text-7xl">
-                  {city.name}
+                  {cityDisplay.name}
                 </h1>
                 <p className="mt-5 max-w-[52ch] text-[15px] leading-relaxed text-[var(--city-muted-fg)]">
                   {city.summary}
@@ -416,19 +631,19 @@ export default async function CityPage({
                 <div className="mt-7 flex flex-wrap gap-3">
                   <Link href={cityCompareHref}>
                     <Button variant="outline" size="sm" className="rounded-full gap-2 border-[var(--city-border)] bg-transparent text-stone-700 hover:bg-[var(--city-warm-muted)]">
-                      Compare cities
+                      {copy.compareCities}
                       <BarChart3 className="h-3.5 w-3.5" />
                     </Button>
                   </Link>
                   <Link href={`/compare?type=country&c=${country.id}`}>
                     <Button variant="outline" size="sm" className="rounded-full gap-2 border-[var(--city-border)] bg-transparent text-stone-700 hover:bg-[var(--city-warm-muted)]">
-                      Compare countries
+                      {copy.compareCountries}
                       <Shield className="h-3.5 w-3.5" />
                     </Button>
                   </Link>
                   <Link href="/start">
                     <Button size="sm" className="rounded-full gap-2">
-                      Start my move
+                      {copy.startMove}
                       <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
                   </Link>
@@ -437,14 +652,22 @@ export default async function CityPage({
 
               {/* Right: image + blockers */}
               <div className="flex min-w-0 flex-col gap-3 lg:w-[300px] lg:shrink-0">
-                <CityHeroImagePanel city={city} country={country} imageSrc={cityHeroImage} />
+                <CityHeroImagePanel
+                  city={city}
+                  country={country}
+                  imageSrc={cityHeroImage}
+                  copy={copy}
+                  language={language}
+                />
                 <BlockerCard
-                  text={country.main_legal_blocker}
+                  text={countryDisplay.mainLegalBlocker}
                   variant="legal"
+                  copy={copy}
                 />
                 <BlockerCard
                   text={city.main_lifestyle_blocker}
                   variant="lifestyle"
+                  copy={copy}
                 />
               </div>
             </div>
@@ -454,14 +677,14 @@ export default async function CityPage({
           <div className="grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-[2fr_3fr] lg:items-start">
             {/* Left: structured city fit */}
             <div className="flex min-w-0 flex-col gap-5">
-              <FitSection city={city} />
-              <GlanceSection city={city} />
-              <RealityPreviewSection city={city} />
+              <FitSection city={city} copy={copy} language={language} />
+              <GlanceSection city={city} copy={copy} language={language} />
+              <RealityPreviewSection city={city} copy={copy} />
             </div>
 
             {/* Right: reality from people who moved */}
             {realityReport && (
-              <CityRealityLayer report={realityReport} />
+              <CityRealityLayer report={realityReport} language={language} />
             )}
           </div>
 
@@ -479,28 +702,28 @@ export default async function CityPage({
           <section>
             <div className="mb-5 flex items-baseline justify-between gap-4">
               <div>
-                <p className="city-section-kicker">Legal framework</p>
+                <p className="city-section-kicker">{copy.legalFramework}</p>
                 <h2 className="mt-1 break-words font-serif text-2xl font-medium tracking-tight text-stone-900">
-                  Legal paths for {country.name}
+                  {copy.legalPathsFor(countryDisplay.name)}
                 </h2>
               </div>
             </div>
 
             <div className="mb-4 rounded-2xl border border-amber-200/70 bg-amber-50/60 px-4 py-3 text-sm leading-relaxed text-amber-900">
-              Fit assessments only — not legal advice. Requirements vary and must be verified before applying.
+              {copy.disclaimer}
             </div>
 
             <div className="grid min-w-0 gap-4 md:grid-cols-2">
               {paths.slice(0, 2).map((path) => (
-                <LegalPathCard key={path.id} path={path} />
+                <LegalPathCard key={path.id} path={path} copy={copy} language={language} />
               ))}
             </div>
 
             {paths.length > 2 && (
-              <ShowMore label={`Show ${paths.length - 2} more path${paths.length - 2 > 1 ? "s" : ""}`}>
+              <ShowMore label={copy.showMorePaths(paths.length - 2)}>
                 <div className="grid min-w-0 gap-4 md:grid-cols-2">
                   {paths.slice(2).map((path) => (
-                    <LegalPathCard key={path.id} path={path} />
+                    <LegalPathCard key={path.id} path={path} copy={copy} language={language} />
                   ))}
                 </div>
               </ShowMore>
@@ -510,12 +733,10 @@ export default async function CityPage({
           {/* Footer note */}
           <footer className="border-t border-[var(--city-border)] pt-6 pb-2 space-y-2">
             <p className="text-[11px] leading-relaxed text-[var(--city-muted-fg)]">
-              Soft Landing — relocation intelligence for independent movers.{" "}
-              Content is curated for fit assessment, not as professional legal or financial advice.
+              {copy.footerOne}
             </p>
             <p className="text-[11px] leading-relaxed text-[var(--city-muted-fg)]">
-              Fit scores combine structured destination data, legal-path rules, and profile-based weighting.
-              Destination attributes are manually reviewed estimates — verify before making decisions.
+              {copy.footerTwo}
             </p>
           </footer>
         </div>

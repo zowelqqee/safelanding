@@ -7,40 +7,88 @@ import type {
   CityRealitySnapshotSignal,
   CityRealityStorySignal,
 } from "@/types";
+import type { UiLanguage } from "@/lib/i18n/onboarding";
 
 // ─── Topic + sentiment meta ───────────────────────────────────────────────────
 
-function topicMeta(topic: CityRealitySignalTopic) {
+function topicMeta(topic: CityRealitySignalTopic, language: UiLanguage = "en") {
+  const ru = language === "ru";
   switch (topic) {
     case "housing":
-      return { label: "Housing", className: "border-rose-200 bg-rose-50 text-rose-700" };
+      return { label: ru ? "Жильё" : "Housing", className: "border-rose-200 bg-rose-50 text-rose-700" };
     case "language":
-      return { label: "Language", className: "border-sky-200 bg-sky-50 text-sky-700" };
+      return { label: ru ? "Язык" : "Language", className: "border-sky-200 bg-sky-50 text-sky-700" };
     case "bureaucracy":
-      return { label: "Bureaucracy", className: "border-amber-200 bg-amber-50 text-amber-800" };
+      return { label: ru ? "Бюрократия" : "Bureaucracy", className: "border-amber-200 bg-amber-50 text-amber-800" };
     case "money":
-      return { label: "Money", className: "border-orange-200 bg-orange-50 text-orange-700" };
+      return { label: ru ? "Деньги" : "Money", className: "border-orange-200 bg-orange-50 text-orange-700" };
     case "community":
-      return { label: "Community", className: "border-emerald-200 bg-emerald-50 text-emerald-700" };
+      return { label: ru ? "Сообщество" : "Community", className: "border-emerald-200 bg-emerald-50 text-emerald-700" };
     case "first_90_days":
-      return { label: "First 90 days", className: "border-violet-200 bg-violet-50 text-violet-700" };
+      return { label: ru ? "Первые 90 дней" : "First 90 days", className: "border-violet-200 bg-violet-50 text-violet-700" };
     case "regret":
-      return { label: "Regret", className: "border-slate-200 bg-slate-100 text-slate-700" };
+      return { label: ru ? "Сожаления" : "Regret", className: "border-slate-200 bg-slate-100 text-slate-700" };
     case "advice":
-      return { label: "Advice", className: "border-teal-200 bg-teal-50 text-teal-700" };
+      return { label: ru ? "Советы" : "Advice", className: "border-teal-200 bg-teal-50 text-teal-700" };
   }
 }
 
-function sentimentMeta(sentiment: CityRealitySignalSentiment) {
+function sentimentMeta(sentiment: CityRealitySignalSentiment, language: UiLanguage = "en") {
+  const ru = language === "ru";
   switch (sentiment) {
     case "positive":
-      return { label: "Positive", dotClass: "bg-emerald-500", textClass: "text-emerald-700" };
+      return { label: ru ? "Позитивно" : "Positive", dotClass: "bg-emerald-500", textClass: "text-emerald-700" };
     case "mixed":
-      return { label: "Mixed", dotClass: "bg-amber-500", textClass: "text-amber-700" };
+      return { label: ru ? "Смешанно" : "Mixed", dotClass: "bg-amber-500", textClass: "text-amber-700" };
     case "negative":
-      return { label: "Negative", dotClass: "bg-rose-500", textClass: "text-rose-700" };
+      return { label: ru ? "Сложно" : "Negative", dotClass: "bg-rose-500", textClass: "text-rose-700" };
   }
 }
+
+const REALITY_COPY = {
+  en: {
+    layer: "Reality layer",
+    title: "Reality from people who moved",
+    snapshot: "Reality snapshot",
+    whatPeopleSay: "What people say",
+    publicSignals: "Public signals",
+    showMoreSignals: (count: number) => `Show ${count} more signal${count > 1 ? "s" : ""}`,
+    signalCount: (count: number) => `${count} signal${count > 1 ? "s" : ""}`,
+    beforeMove: "Before you move",
+    pattern: {
+      peopleLove: "People love",
+      peopleStruggleWith: "People struggle with",
+      peopleUnderestimate: "People underestimate",
+      first90Days: "First 90 days",
+    },
+  },
+  ru: {
+    layer: "Реальный опыт",
+    title: "Что говорят те, кто уже переехал",
+    snapshot: "Короткая сводка",
+    whatPeopleSay: "Что говорят люди",
+    publicSignals: "Публичные сигналы",
+    showMoreSignals: (count: number) => `Показать ещё: ${count}`,
+    signalCount: (count: number) => `${count} сигнал${count === 1 ? "" : "а"}`,
+    beforeMove: "Перед переездом",
+    pattern: {
+      peopleLove: "Что нравится",
+      peopleStruggleWith: "С чем сложно",
+      peopleUnderestimate: "Что недооценивают",
+      first90Days: "Первые 90 дней",
+    },
+  },
+} satisfies Record<UiLanguage, {
+  layer: string;
+  title: string;
+  snapshot: string;
+  whatPeopleSay: string;
+  publicSignals: string;
+  showMoreSignals: (count: number) => string;
+  signalCount: (count: number) => string;
+  beforeMove: string;
+  pattern: Record<string, string>;
+}>;
 
 function groupSignalsByTopic(signals: CityRealityStorySignal[]) {
   const topicOrder: CityRealitySignalTopic[] = [
@@ -84,10 +132,11 @@ export function RealitySignalCard({
   topic,
   sentiment,
   summary,
-}: CityRealityStorySignal) {
+  language = "en",
+}: CityRealityStorySignal & { language?: UiLanguage }) {
   const sourceDisplayUrl = sourceUrl.replace(/^https?:\/\/(www\.)?/, "");
-  const topicChip = topicMeta(topic);
-  const sentimentChip = sentimentMeta(sentiment);
+  const topicChip = topicMeta(topic, language);
+  const sentimentChip = sentimentMeta(sentiment, language);
 
   return (
     <article className="flex min-w-0 flex-col rounded-[18px] border border-[var(--city-reality-border)] bg-[var(--city-reality-card)] p-4">
@@ -159,15 +208,18 @@ const patternCardMeta = {
 export function PatternSummaryCard({
   variant,
   items,
+  language = "en",
 }: {
   variant: keyof typeof patternCardMeta;
   items: string[];
+  language?: UiLanguage;
 }) {
   const meta = patternCardMeta[variant];
+  const copy = REALITY_COPY[language];
 
   return (
     <div className={`min-w-0 rounded-[18px] border border-[var(--city-reality-border)] bg-[var(--city-reality-card)] border-l-4 ${meta.accentBorder} p-4`}>
-      <p className={`text-[10px] font-semibold uppercase tracking-[0.14em] ${meta.kickerClass}`}>{meta.kicker}</p>
+      <p className={`text-[10px] font-semibold uppercase tracking-[0.14em] ${meta.kickerClass}`}>{copy.pattern[variant] ?? meta.kicker}</p>
       <ul className="mt-3 space-y-2.5">
         {items.map((item) => (
           <li key={item} className="flex items-start gap-2.5">
@@ -180,10 +232,18 @@ export function PatternSummaryCard({
   );
 }
 
-export function AdviceBeforeMoveCard({ items }: { items: string[] }) {
+export function AdviceBeforeMoveCard({
+  items,
+  language = "en",
+}: {
+  items: string[];
+  language?: UiLanguage;
+}) {
+  const copy = REALITY_COPY[language];
+
   return (
     <div className="min-w-0 rounded-[18px] border border-amber-300/60 bg-[#fffbf2] p-5">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-800">Before you move</p>
+      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-800">{copy.beforeMove}</p>
       <ol className="mt-4 space-y-4">
         {items.map((item, i) => (
           <li key={item} className="flex items-start gap-3">
@@ -200,7 +260,14 @@ export function AdviceBeforeMoveCard({ items }: { items: string[] }) {
 
 // ─── Main export ──────────────────────────────────────────────────────────────
 
-export function CityRealityLayer({ report }: { report: CityRealityReport }) {
+export function CityRealityLayer({
+  report,
+  language = "en",
+}: {
+  report: CityRealityReport;
+  language?: UiLanguage;
+}) {
+  const copy = REALITY_COPY[language];
   const featuredSignals = report.storySignals.slice(0, 4);
   const extraSignals = report.storySignals.slice(4);
   const groupedExtra = groupSignalsByTopic(extraSignals);
@@ -210,9 +277,9 @@ export function CityRealityLayer({ report }: { report: CityRealityReport }) {
       {/* Section header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 max-w-xl">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-amber-800">Reality layer</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-amber-800">{copy.layer}</p>
           <h2 className="mt-2 font-serif text-2xl font-medium leading-tight tracking-tight text-stone-900 sm:text-3xl">
-            Reality from people who moved
+            {copy.title}
           </h2>
           <p className="mt-3 break-words text-sm leading-relaxed text-[var(--city-muted-fg)]">{report.summary}</p>
         </div>
@@ -223,7 +290,7 @@ export function CityRealityLayer({ report }: { report: CityRealityReport }) {
 
       {/* Reality snapshot */}
       <div className="mt-6">
-        <p className="city-section-kicker text-amber-900/70">Reality snapshot</p>
+        <p className="city-section-kicker text-amber-900/70">{copy.snapshot}</p>
         <div className="mt-3 grid min-w-0 gap-3 sm:grid-cols-3">
           {report.snapshotSignals.slice(0, 3).map((item) => (
             <RealitySnapshotCard key={item.title} title={item.title} description={item.description} />
@@ -234,34 +301,34 @@ export function CityRealityLayer({ report }: { report: CityRealityReport }) {
       {/* What people say */}
       <div className="mt-6">
         <div className="flex min-w-0 flex-wrap items-baseline justify-between gap-3">
-          <p className="city-section-kicker text-amber-900/70">What people say</p>
-          <span className="text-[10px] uppercase tracking-[0.14em] text-[var(--city-muted-fg)]">Public signals</span>
+          <p className="city-section-kicker text-amber-900/70">{copy.whatPeopleSay}</p>
+          <span className="text-[10px] uppercase tracking-[0.14em] text-[var(--city-muted-fg)]">{copy.publicSignals}</span>
         </div>
 
         {featuredSignals.length > 0 && (
           <div className="mt-3 grid min-w-0 gap-3 sm:grid-cols-2">
             {featuredSignals.map((item) => (
-              <RealitySignalCard key={`${item.sourceUrl}-${item.quote.slice(0, 20)}`} {...item} />
+              <RealitySignalCard key={`${item.sourceUrl}-${item.quote.slice(0, 20)}`} {...item} language={language} />
             ))}
           </div>
         )}
 
         {extraSignals.length > 0 && (
-          <ShowMore label={`Show ${extraSignals.length} more signal${extraSignals.length > 1 ? "s" : ""}`}>
+          <ShowMore label={copy.showMoreSignals(extraSignals.length)}>
             <div className="space-y-5">
               {groupedExtra.map((group) => (
                 <div key={group.topic}>
                   <div className="mb-3 flex min-w-0 flex-wrap items-center gap-2">
-                    <span className={`rounded-full border px-2.5 py-1 text-[11px] font-medium ${topicMeta(group.topic).className}`}>
-                      {topicMeta(group.topic).label}
+                    <span className={`rounded-full border px-2.5 py-1 text-[11px] font-medium ${topicMeta(group.topic, language).className}`}>
+                      {topicMeta(group.topic, language).label}
                     </span>
                     <span className="text-xs text-[var(--city-muted-fg)]">
-                      {group.items.length} signal{group.items.length > 1 ? "s" : ""}
+                      {copy.signalCount(group.items.length)}
                     </span>
                   </div>
                   <div className="grid min-w-0 gap-3 sm:grid-cols-2">
                     {group.items.map((item) => (
-                      <RealitySignalCard key={`${item.sourceUrl}-${item.quote.slice(0, 20)}`} {...item} />
+                    <RealitySignalCard key={`${item.sourceUrl}-${item.quote.slice(0, 20)}`} {...item} language={language} />
                     ))}
                   </div>
                 </div>
@@ -273,19 +340,23 @@ export function CityRealityLayer({ report }: { report: CityRealityReport }) {
 
       {/* Pattern summary + advice */}
       <div className="mt-6">
-        <p className="city-section-kicker text-amber-900/70">Pattern summary</p>
+        <p className="city-section-kicker text-amber-900/70">
+          {language === "ru" ? "Повторяющиеся темы" : "Pattern summary"}
+        </p>
         <div className="mt-3 grid min-w-0 gap-3 sm:grid-cols-2">
-          <PatternSummaryCard variant="peopleLove" items={report.patternSummary.peopleLove} />
-          <PatternSummaryCard variant="peopleStruggleWith" items={report.patternSummary.peopleStruggleWith} />
-          <PatternSummaryCard variant="peopleUnderestimate" items={report.patternSummary.peopleUnderestimate} />
-          <PatternSummaryCard variant="first90Days" items={report.patternSummary.first90Days} />
+          <PatternSummaryCard variant="peopleLove" items={report.patternSummary.peopleLove} language={language} />
+          <PatternSummaryCard variant="peopleStruggleWith" items={report.patternSummary.peopleStruggleWith} language={language} />
+          <PatternSummaryCard variant="peopleUnderestimate" items={report.patternSummary.peopleUnderestimate} language={language} />
+          <PatternSummaryCard variant="first90Days" items={report.patternSummary.first90Days} language={language} />
         </div>
       </div>
 
       {report.adviceBeforeMove.length > 0 && (
         <div className="mt-5">
-          <p className="city-section-kicker mb-3 text-amber-900/70">Advice before you move</p>
-          <AdviceBeforeMoveCard items={report.adviceBeforeMove} />
+          <p className="city-section-kicker mb-3 text-amber-900/70">
+            {language === "ru" ? "Перед переездом" : "Advice before you move"}
+          </p>
+          <AdviceBeforeMoveCard items={report.adviceBeforeMove} language={language} />
         </div>
       )}
     </section>
