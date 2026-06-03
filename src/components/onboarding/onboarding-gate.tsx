@@ -5,13 +5,44 @@ import { useRouter } from "next/navigation";
 import { MapPin, LogIn, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useUiLanguage } from "@/hooks/useUiLanguage";
 import { SiteHeader } from "@/components/site/site-header";
 import { OnboardingFlow } from "./onboarding-flow";
+import type { UiLanguage } from "@/lib/i18n/onboarding";
 
 type GateView = "gate" | "preview";
 
-export function OnboardingGate() {
+const COPY = {
+  en: {
+    loading: "Loading your move profile...",
+    title: "Find where you fit",
+    subtitle:
+      "Answer a few questions. Get a ranked country shortlist, city match, and legal path — tailored to your profile.",
+    start: "Start — no account needed",
+    saveProgress: "or save your progress",
+    createAccount: "Create free account",
+    signIn: "Already have an account? Sign in",
+  },
+  ru: {
+    loading: "Загружаем профиль переезда...",
+    title: "Найдите своё направление",
+    subtitle:
+      "Ответьте на несколько вопросов. Получите подборку стран, подходящий город и варианты визы или ВНЖ под ваш профиль.",
+    start: "Начать без аккаунта",
+    saveProgress: "или сохраните прогресс",
+    createAccount: "Создать бесплатный аккаунт",
+    signIn: "Уже есть аккаунт? Войти",
+  },
+} satisfies Record<UiLanguage, Record<string, string>>;
+
+type OnboardingGateProps = {
+  initialLanguage?: UiLanguage;
+};
+
+export function OnboardingGate({ initialLanguage = "en" }: OnboardingGateProps) {
   const { user, loading } = useAuth();
+  const language = useUiLanguage(initialLanguage);
+  const copy = COPY[language];
   const [view, setView] = useState<GateView>("gate");
   const router = useRouter();
 
@@ -22,7 +53,7 @@ export function OnboardingGate() {
       <div className="flex flex-1 flex-col items-center justify-center gap-3 px-4 text-center">
         <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
         <p className="text-sm text-muted-foreground">
-          Loading your move profile...
+          {copy.loading}
         </p>
       </div>
     );
@@ -39,9 +70,9 @@ export function OnboardingGate() {
               <MapPin className="h-6 w-6 text-stone-600" />
             </div>
             <div className="space-y-1.5">
-              <h1 className="font-serif text-2xl font-medium tracking-tight text-stone-900">Find where you fit</h1>
+              <h1 className="font-serif text-2xl font-medium tracking-tight text-stone-900">{copy.title}</h1>
               <p className="text-sm text-[var(--city-muted-fg)] leading-relaxed max-w-xs mx-auto">
-                Answer a few questions. Get a ranked country shortlist, city match, and legal path — tailored to your profile.
+                {copy.subtitle}
               </p>
             </div>
           </div>
@@ -52,13 +83,13 @@ export function OnboardingGate() {
               className="h-12 gap-2 text-base rounded-full"
               onClick={() => setView("preview")}
             >
-              Start — no account needed
+              {copy.start}
               <ArrowRight className="h-4 w-4" />
             </Button>
 
             <div className="relative flex items-center gap-3 py-1">
               <div className="flex-1 h-px bg-[var(--city-border)]" />
-              <span className="text-xs text-[var(--city-muted-fg)]">or save your progress</span>
+              <span className="text-xs text-[var(--city-muted-fg)]">{copy.saveProgress}</span>
               <div className="flex-1 h-px bg-[var(--city-border)]" />
             </div>
 
@@ -68,7 +99,7 @@ export function OnboardingGate() {
               className="h-10 gap-2 rounded-full border-[var(--city-border)] text-stone-700"
               onClick={() => router.push("/auth/sign-up")}
             >
-              Create free account
+              {copy.createAccount}
             </Button>
 
             <button
@@ -76,7 +107,7 @@ export function OnboardingGate() {
               onClick={() => router.push("/auth/sign-in")}
             >
               <LogIn className="h-3 w-3" />
-              Already have an account? Sign in
+              {copy.signIn}
             </button>
           </div>
         </div>
@@ -86,7 +117,7 @@ export function OnboardingGate() {
 
   return (
     <div className="city-page-wrap min-h-screen flex flex-col">
-      <SiteHeader variant="public" action="none" />
+      <SiteHeader variant="public" action="none" initialLanguage={language} />
       {content}
     </div>
   );

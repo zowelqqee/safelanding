@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { getCountryById } from "@/lib/data/countries";
 import { getCityById } from "@/lib/data/cities";
 import { getLegalPathById } from "@/lib/data/legal-paths";
+import { getCityDisplay } from "@/lib/i18n/city-display";
+import { getCountryDisplay } from "@/lib/i18n/country-display";
+import { getLegalPathDisplay } from "@/lib/i18n/legal-path-display";
 import type { UiLanguage } from "@/lib/i18n/onboarding";
 import type { OnboardingState } from "@/types";
 
@@ -96,8 +99,11 @@ export function StepPlanReady({ state, onConfirm, onBack, language }: Props) {
 
   if (!country || !city || !path) return null;
 
-  const blockers = path.weakPoints.slice(0, 3);
   const copy = COPY[language];
+  const countryDisplay = getCountryDisplay(country, language);
+  const cityDisplay = getCityDisplay(city, language);
+  const pathDisplay = getLegalPathDisplay(path, language);
+  const blockers = pathDisplay.weakPoints.slice(0, 3);
   const nextStep = copy.nextStep[path.scenario] ?? copy.nextStep.fallback;
 
   return (
@@ -119,7 +125,9 @@ export function StepPlanReady({ state, onConfirm, onBack, language }: Props) {
           <span className="text-2xl">{country.emoji}</span>
           <div className="flex-1 min-w-0">
             <div className="city-section-kicker">{copy.destination}</div>
-            <div className="text-sm font-semibold text-stone-900 mt-0.5">{city.name}, {country.name}</div>
+            <div className="text-sm font-semibold text-stone-900 mt-0.5">
+              {cityDisplay.name}, {countryDisplay.name}
+            </div>
           </div>
           <MapPin className="h-4 w-4 text-[var(--city-muted-fg)] shrink-0" />
         </div>
@@ -129,7 +137,7 @@ export function StepPlanReady({ state, onConfirm, onBack, language }: Props) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="city-section-kicker">{copy.legalPath}</div>
-            <div className="text-sm font-semibold text-stone-900 mt-0.5">{path.name}</div>
+            <div className="text-sm font-semibold text-stone-900 mt-0.5">{pathDisplay.name}</div>
           </div>
         </div>
         <div className="flex items-center gap-3 px-4 py-3">
@@ -138,7 +146,9 @@ export function StepPlanReady({ state, onConfirm, onBack, language }: Props) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="city-section-kicker">{copy.preparationTime}</div>
-            <div className="text-sm font-semibold text-stone-900 mt-0.5">{path.estimatedPreparationTime}</div>
+            <div className="text-sm font-semibold text-stone-900 mt-0.5">
+              {pathDisplay.estimatedPreparationTime}
+            </div>
           </div>
         </div>
         </div>

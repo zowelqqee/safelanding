@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/site-header";
 import { COUNTRIES } from "@/lib/data/countries";
 import { getServerLanguage } from "@/lib/i18n/server";
+import { getCountryDisplay } from "@/lib/i18n/country-display";
 import type { UiLanguage } from "@/lib/i18n/onboarding";
 
 const COPY = {
@@ -85,36 +86,40 @@ export default async function ExplorePage() {
         </div>
 
         <div className="grid sm:grid-cols-2 gap-3">
-          {COUNTRIES.map((country) => (
-            <Link key={country.id} href={`/explore/${country.slug}`}>
-              <div className="group city-card rounded-[18px] p-4 hover:border-stone-400 transition-colors cursor-pointer">
-                <div className="flex items-start justify-between mb-2.5">
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-2xl">{country.emoji}</span>
-                    <div>
-                      <h3 className="font-semibold text-sm text-stone-900">{country.name}</h3>
-                      <p className="text-xs text-[var(--city-muted-fg)]">{country.continent}</p>
+          {COUNTRIES.map((country) => {
+            const display = getCountryDisplay(country, language);
+
+            return (
+              <Link key={country.id} href={`/explore/${country.slug}`}>
+                <div className="group city-card rounded-[18px] p-4 hover:border-stone-400 transition-colors cursor-pointer">
+                  <div className="flex items-start justify-between mb-2.5">
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-2xl">{country.emoji}</span>
+                      <div>
+                        <h3 className="font-semibold text-sm text-stone-900">{display.name}</h3>
+                        <p className="text-xs text-[var(--city-muted-fg)]">{display.region}</p>
+                      </div>
                     </div>
+                    <ChevronRight className="h-4 w-4 text-[var(--city-muted-fg)] group-hover:text-stone-700 transition-colors shrink-0 mt-1" />
                   </div>
-                  <ChevronRight className="h-4 w-4 text-[var(--city-muted-fg)] group-hover:text-stone-700 transition-colors shrink-0 mt-1" />
+                  <p className="text-xs text-[var(--city-muted-fg)] leading-relaxed line-clamp-2 mb-2.5">
+                    {display.summary}
+                  </p>
+                  <div className="flex items-center gap-2 text-[11px] text-[var(--city-muted-fg)]">
+                    <span>{country.cityIds.length} {copy.card.cities}</span>
+                    <span>·</span>
+                    <span>{country.availableLegalPathIds.length} {copy.card.paths}</span>
+                    {country.journeyAvailable && (
+                      <>
+                        <span>·</span>
+                        <span className="font-medium text-stone-700">{copy.card.fullJourney}</span>
+                      </>
+                    )}
+                  </div>
                 </div>
-                <p className="text-xs text-[var(--city-muted-fg)] leading-relaxed line-clamp-2 mb-2.5">
-                  {country.summary}
-                </p>
-                <div className="flex items-center gap-2 text-[11px] text-[var(--city-muted-fg)]">
-                  <span>{country.cityIds.length} {copy.card.cities}</span>
-                  <span>·</span>
-                  <span>{country.availableLegalPathIds.length} {copy.card.paths}</span>
-                  {country.journeyAvailable && (
-                    <>
-                      <span>·</span>
-                      <span className="font-medium text-stone-700">{copy.card.fullJourney}</span>
-                    </>
-                  )}
-                </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
 
         <div className="text-center pt-2 pb-4">

@@ -1,0 +1,130 @@
+import type { LegalPath } from "@/types";
+import type { UiLanguage } from "./onboarding";
+
+const PATH_NAME_RU: Record<string, string> = {
+  "spain-digital-nomad": "Виза цифрового кочевника",
+  "spain-student": "Студенческая виза",
+  "spain-non-lucrative": "Виза без права на работу",
+  "spain-exploration": "Туризм / разведка",
+  "portugal-d8": "D8 для удалённой работы",
+  "portugal-student": "Студенческая виза",
+  "portugal-job-seeker": "Виза для поиска работы",
+  "portugal-exploration": "Туризм / разведка",
+  "germany-blue-card": "Голубая карта ЕС",
+  "germany-skilled-worker": "Виза квалифицированного специалиста",
+  "germany-student": "Студенческая виза",
+  "germany-opportunity-card": "Карта возможностей",
+  "canada-express-entry": "Express Entry",
+  "canada-study-permit": "Разрешение на учёбу",
+  "canada-provincial-nominee": "Провинциальная программа",
+};
+
+const TEXT_RU: Record<string, string> = {
+  "Competitive routes reward strong preparation, not generic interest":
+    "Конкурентные программы требуют сильной подготовки, а не общего интереса",
+  "Weak language or credentials can reduce fit quickly":
+    "Слабый язык или неподходящие документы быстро снижают шансы",
+  "Cutoffs and process details must be checked fresh":
+    "Проходные баллы и детали процесса нужно проверять по актуальным правилам",
+  "Income proof quality matters a lot":
+    "Качество подтверждения дохода очень важно",
+  "Requirements vary by filing route and timing":
+    "Требования зависят от способа подачи и момента подачи",
+  "Housing and admin still require patience after approval":
+    "После одобрения всё равно нужны терпение с жильём и документами",
+  "Admission comes before the visa strategy becomes real":
+    "Сначала нужно поступление, только потом визовый план становится реальным",
+  "Not ideal if you are not actually study-ready":
+    "Не лучший вариант, если вы не готовы по-настоящему учиться",
+  "Rules around work and renewal need current verification":
+    "Правила работы и продления нужно проверять по актуальным источникам",
+  "Financial proof is central and must be checked carefully":
+    "Финансовые подтверждения здесь ключевые, их нужно внимательно проверить",
+  "It is a weak fit if you actually need remote-work flexibility":
+    "Слабый вариант, если вам нужна гибкость для удалённой работы",
+  "Not all applicants like the non-working framing":
+    "Не всем подходит формат без права на работу",
+  "Not a long-term settlement answer":
+    "Это не долгосрочный вариант для переезда",
+  "Exploration fit should not be confused with legal-settlement fit":
+    "Разведочную поездку не стоит путать с подходящим вариантом для жизни",
+  "Stay limits and eligibility vary and must be checked":
+    "Сроки пребывания и условия въезда нужно проверять",
+  "You already have remote income outside the destination country":
+    "У вас уже есть удалённый доход за пределами выбранной страны",
+  "This route still depends on clean remote-income proof":
+    "Для этого варианта всё ещё нужно аккуратное подтверждение удалённого дохода",
+  "This route usually depends on remote income from outside the destination country":
+    "Этот вариант обычно зависит от дохода из-за пределов выбранной страны",
+  "You already have a study anchor or admission progress":
+    "У вас уже есть учебная опора или процесс поступления",
+  "Admission is still the missing piece":
+    "Поступление пока остаётся недостающим шагом",
+  "This route is hard to use without a real study plan or admission":
+    "Этот вариант сложно использовать без реального учебного плана или поступления",
+  "You already have an employer or sponsor-style anchor":
+    "У вас уже есть работодатель или похожая опора",
+  "This route usually depends on a real employer or sponsor":
+    "Этот вариант обычно зависит от реального работодателя или спонсора",
+  "Your income profile looks closer to a remote-route case":
+    "Ваш доход больше похож на подходящий случай для удалённого маршрута",
+  "Income thresholds must be verified before relying on this route":
+    "Пороги дохода нужно проверить перед тем, как опираться на этот вариант",
+  "Study is already part of your move plan":
+    "Учёба уже входит в ваш план переезда",
+  "Your profile suggests some professional earning power":
+    "Профиль показывает профессиональный и доходный потенциал",
+  "You want to explore before making a long-term commitment":
+    "Вы хотите сначала разведать направление перед долгосрочным решением",
+  "This is a reasonable first step while your long-term route is still unclear":
+    "Это разумный первый шаг, пока долгосрочный вариант ещё не ясен",
+  "You want to move soon, so a real long-term route may matter more than exploration":
+    "Вы хотите переехать скоро, поэтому долгосрочный вариант может быть важнее разведки",
+  "This is not a long-term settlement route by itself":
+    "Сам по себе это не долгосрочный вариант для жизни",
+  "You are already planning around family or partner movement":
+    "Вы уже планируете переезд с учётом семьи или партнёра",
+  "You may have the financial base this kind of route needs":
+    "У вас может быть финансовая база, нужная для такого варианта",
+  "This route usually works better with real capital or savings behind it":
+    "Этот вариант обычно сильнее, когда за ним есть капитал или накопления",
+  "You may have the kind of standout profile this route expects":
+    "Ваш профиль может быть достаточно сильным для этого варианта",
+  "This route usually needs unusually strong evidence, not just a good profile":
+    "Обычно здесь нужны очень сильные доказательства, а не просто хороший профиль",
+};
+
+const SUMMARY_RU: Record<string, string> = {
+  "canada-express-entry":
+    "Путь для квалифицированных специалистов с сильным профессиональным профилем, языком и хорошей подготовкой.",
+};
+
+const DEFAULT_DISCLAIMER_RU =
+  "Это оценка совпадения, а не юридическая консультация. Требования меняются, пороги и документы нужно проверять перед подачей.";
+
+function formatPreparationTime(value: string, language: UiLanguage) {
+  if (language !== "ru") return value;
+
+  return value
+    .replace(/(\d+)\s+to\s+(\d+)\s+months?/gi, "$1-$2 месяцев")
+    .replace(/(\d+)\s+to\s+(\d+)\s+weeks?/gi, "$1-$2 недели")
+    .replace(/(\d+)\s+to\s+(\d+)\s+days?/gi, "$1-$2 дней");
+}
+
+export function translateLegalPathText(value: string, language: UiLanguage) {
+  if (language !== "ru") return value;
+  return TEXT_RU[value] ?? value;
+}
+
+export function getLegalPathDisplay(path: LegalPath, language: UiLanguage) {
+  return {
+    name: language === "ru" ? PATH_NAME_RU[path.id] ?? path.name : path.name,
+    summary:
+      language === "ru" ? SUMMARY_RU[path.id] ?? translateLegalPathText(path.summary, language) : path.summary,
+    goodIf: path.goodIf.map((item) => translateLegalPathText(item, language)),
+    weakPoints: path.weakPoints.map((item) => translateLegalPathText(item, language)),
+    estimatedPreparationTime: formatPreparationTime(path.estimatedPreparationTime, language),
+    legalDisclaimer:
+      language === "ru" ? DEFAULT_DISCLAIMER_RU : path.legal_disclaimer,
+  };
+}

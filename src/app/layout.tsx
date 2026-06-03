@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { getServerLanguage } from "@/lib/i18n/server";
+import { getIntlLanguageTag } from "@/lib/i18n/ui-language";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,14 +41,16 @@ export const viewport: Viewport = {
   themeColor: "#ffffff",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const language = await getServerLanguage();
+
   return (
     <html
-      lang="en"
+      lang={getIntlLanguageTag(language)}
       className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} h-full`}
     >
       <body className="atlas-shell min-h-full flex flex-col antialiased">

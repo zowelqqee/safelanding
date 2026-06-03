@@ -115,6 +115,8 @@ export function PartnerReviewForm({
     setError(null);
     setSaved(false);
 
+    const isNewRequest = !request;
+
     const result = await savePartnerReviewRequest({
       moveProfileId,
       selectedCountryId,
@@ -135,6 +137,23 @@ export function PartnerReviewForm({
 
     setRequest(result.request);
     setSaved(true);
+
+    if (isNewRequest) {
+      void fetch("/api/notify/advisor-review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          message,
+          countryId: selectedCountryId,
+          cityId: selectedCityId,
+          legalPathId: selectedLegalPathId,
+        }),
+      }).catch((err) =>
+        console.error("[Soft Landing] Advisor review notification error:", err)
+      );
+    }
+
     void trackEvent("partner_review_requested", {
       moveProfileId,
       selectedCountryId,

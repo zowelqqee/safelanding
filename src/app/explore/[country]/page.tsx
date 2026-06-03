@@ -10,7 +10,84 @@ import { COUNTRIES, getCountryBySlug } from "@/lib/data/countries";
 import { getLegalPathsForCountry } from "@/lib/data/legal-paths";
 import { getRelocationVideoStoriesForCountry } from "@/lib/data/relocation-video-stories";
 import { getExistingPublicImageSrc } from "@/lib/server/public-image";
+import { getCountryDisplay } from "@/lib/i18n/country-display";
 import { getServerLanguage } from "@/lib/i18n/server";
+import type { UiLanguage } from "@/lib/i18n/onboarding";
+
+const COPY = {
+  en: {
+    countryDossier: "Country dossier",
+    mainLegalRisk: "Main legal blocker",
+    mainLifestyleRisk: "Main lifestyle blocker",
+    compare: "Compare",
+    compareCities: "Compare cities",
+    startMove: "Start my move",
+    fitTitle: "Does this fit you?",
+    goodFitIf: "Good fit if",
+    watchOutIf: "Watch out if",
+    realityPreview: "Reality preview",
+    lifestyleFactors: "Lifestyle fit factors",
+    legalFactors: "Legal fit factors",
+    underestimate: "What people usually underestimate",
+    atGlance: "At a glance",
+    costLevel: "Cost level",
+    housingDifficulty: "Housing difficulty",
+    englishFriendliness: "English friendliness",
+    careerUpside: "Career upside",
+    studyFit: "Study fit",
+    remoteWorkFit: "Remote work fit",
+    longTermStability: "Long-term stability",
+    first90: "First 90 days preview",
+    compareInside: "Compare cities inside this country",
+    rent: "Rent",
+    budget: "Budget",
+    exploreCity: "Explore city",
+    legalPaths: "Legal paths",
+    disclaimer:
+      "These are fit assessments, not legal advice. Requirements vary and must be verified before applying.",
+    pathGoodFitIf: "Good fit if",
+    footerOne:
+      "Fit scores combine structured destination data, legal-path rules, and profile-based weighting. They are designed for pre-decision planning, not legal advice.",
+    footerTwo:
+      "Destination attributes are manually reviewed estimates. Verify current requirements before acting.",
+  },
+  ru: {
+    countryDossier: "Сводка по стране",
+    mainLegalRisk: "Главный риск по визе или статусу",
+    mainLifestyleRisk: "Главный бытовой риск",
+    compare: "Сравнить",
+    compareCities: "Сравнить города",
+    startMove: "Начать с анкеты",
+    fitTitle: "Подходит ли вам?",
+    goodFitIf: "Хорошо подойдёт, если",
+    watchOutIf: "Стоит учесть, если",
+    realityPreview: "Что важно знать",
+    lifestyleFactors: "Что помогает в быту",
+    legalFactors: "Что важно по визе или ВНЖ",
+    underestimate: "Что часто недооценивают",
+    atGlance: "Коротко",
+    costLevel: "Уровень расходов",
+    housingDifficulty: "Сложность с жильём",
+    englishFriendliness: "Насколько помогает английский",
+    careerUpside: "Карьерные возможности",
+    studyFit: "Подходит для учёбы",
+    remoteWorkFit: "Подходит для удалённой работы",
+    longTermStability: "Долгосрочная стабильность",
+    first90: "Первые 90 дней",
+    compareInside: "Сравнить города внутри страны",
+    rent: "Аренда",
+    budget: "Бюджет",
+    exploreCity: "Открыть город",
+    legalPaths: "Визы и ВНЖ",
+    disclaimer:
+      "Это оценка совпадения, а не юридическая консультация. Требования меняются, их нужно проверять перед подачей.",
+    pathGoodFitIf: "Хорошо подойдёт, если",
+    footerOne:
+      "Оценки совпадения объединяют данные по направлению, правила по визам и вес вашей анкеты. Это инструмент для предварительного выбора, а не юридическая консультация.",
+    footerTwo:
+      "Характеристики направлений — вручную проверенные оценки. Перед действиями сверяйте актуальные требования.",
+  },
+} satisfies Record<UiLanguage, Record<string, string>>;
 
 export async function generateStaticParams() {
   return COUNTRIES.map((country) => ({ country: country.slug }));
@@ -26,9 +103,12 @@ export async function generateMetadata({
 
   if (!country) return {};
 
+  const language = await getServerLanguage();
+  const display = getCountryDisplay(country, language);
+
   return {
-    title: `${country.name} — Soft Landing`,
-    description: country.summary,
+    title: `${display.name} — Soft Landing`,
+    description: display.summary,
   };
 }
 
@@ -94,9 +174,11 @@ function EditorialImagePlaceholder({ label }: { label: string }) {
 function CountryHeroImagePanel({
   countryName,
   imageSrc,
+  label,
 }: {
   countryName: string;
   imageSrc?: string;
+  label: string;
 }) {
   return (
     <div className="w-full rounded-[24px] border border-[var(--city-border)] bg-[var(--city-warm-muted)]/45 p-2">
@@ -114,7 +196,7 @@ function CountryHeroImagePanel({
             <div className="absolute inset-0 bg-gradient-to-t from-stone-950/45 via-stone-950/5 to-transparent" />
             <div className="absolute bottom-4 left-4 right-4">
               <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/75">
-                Country dossier
+                {label}
               </p>
               <p className="mt-1 font-serif text-xl font-medium text-white">{countryName}</p>
             </div>
@@ -130,9 +212,11 @@ function CountryHeroImagePanel({
 function CityThumbnail({
   cityName,
   imageSrc,
+  label,
 }: {
   cityName: string;
   imageSrc?: string;
+  label: string;
 }) {
   return (
     <div className="relative mb-4 h-24 overflow-hidden rounded-2xl border border-[var(--city-border)] bg-[#f7efe0]">
@@ -153,7 +237,7 @@ function CityThumbnail({
       )}
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-950/35 to-transparent px-3 py-2">
         <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/80">
-          City preview
+          {label}
         </p>
       </div>
     </div>
@@ -171,6 +255,8 @@ export default async function CountryPage({
   if (!country) notFound();
 
   const language = await getServerLanguage();
+  const copy = COPY[language];
+  const display = getCountryDisplay(country, language);
   const cities = getCitiesForCountry(country.id);
   const paths = getLegalPathsForCountry(country.id);
   const relocationVideoStories = getRelocationVideoStoriesForCountry(country.id);
@@ -181,7 +267,7 @@ export default async function CountryPage({
 
   return (
     <div className="city-page-wrap min-h-screen">
-      <SiteHeader variant="public" />
+      <SiteHeader variant="public" initialLanguage={language} />
 
       <main className="mx-auto max-w-5xl px-4 py-8">
         <div className="space-y-6">
@@ -189,27 +275,31 @@ export default async function CountryPage({
             <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
               <div className="max-w-2xl">
                 <div className="text-4xl">{country.emoji}</div>
-                <p className="mt-4 city-section-kicker">{country.region}</p>
-                <h1 className="mt-1 font-serif text-3xl font-medium text-stone-900">{country.name}</h1>
+                <p className="mt-4 city-section-kicker">{display.region}</p>
+                <h1 className="mt-1 font-serif text-3xl font-medium text-stone-900">{display.name}</h1>
                 <p className="mt-4 text-base leading-relaxed text-[var(--city-muted-fg)]">
-                  {country.summary}
+                  {display.summary}
                 </p>
               </div>
 
               <div className="flex flex-col gap-3 lg:w-[360px] lg:shrink-0">
-                <CountryHeroImagePanel countryName={country.name} imageSrc={countryHeroImage} />
+                <CountryHeroImagePanel
+                  countryName={display.name}
+                  imageSrc={countryHeroImage}
+                  label={copy.countryDossier}
+                />
 
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                   <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
-                    <p className="city-section-kicker">Main legal blocker</p>
+                    <p className="city-section-kicker">{copy.mainLegalRisk}</p>
                     <p className="mt-2 text-sm font-medium leading-relaxed text-stone-900">
-                      {country.main_legal_blocker}
+                      {display.mainLegalBlocker}
                     </p>
                   </div>
                   <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
-                    <p className="city-section-kicker">Main lifestyle blocker</p>
+                    <p className="city-section-kicker">{copy.mainLifestyleRisk}</p>
                     <p className="mt-2 text-sm font-medium leading-relaxed text-stone-900">
-                      {country.main_lifestyle_blocker}
+                      {display.mainLifestyleBlocker}
                     </p>
                   </div>
                 </div>
@@ -219,31 +309,31 @@ export default async function CountryPage({
             <div className="mt-6 flex flex-wrap gap-2">
               <Link href={`/compare?type=country&c=${country.id}`}>
                 <Button variant="outline" className="gap-2 rounded-full border-[var(--city-border)]">
-                  Compare
+                  {copy.compare}
                   <BarChart3 className="h-4 w-4" />
                 </Button>
               </Link>
               <Link href={cityCompareHref}>
                 <Button variant="outline" className="gap-2 rounded-full border-[var(--city-border)]">
-                  Compare cities
+                  {copy.compareCities}
                   <MapPin className="h-4 w-4" />
                 </Button>
               </Link>
               <Link href="/start">
                 <Button className="gap-2 rounded-full">
-                  Start my move
+                  {copy.startMove}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
             </div>
           </section>
 
-          <SectionCard title="Does this fit you?">
+          <SectionCard title={copy.fitTitle}>
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <p className="text-sm font-semibold text-stone-900 mb-2">Good fit if</p>
+                <p className="text-sm font-semibold text-stone-900 mb-2">{copy.goodFitIf}</p>
                 <ul className="space-y-2">
-                  {country.best_for.map((item) => (
+                  {display.bestFor.map((item) => (
                     <li key={item} className="text-sm text-[var(--city-muted-fg)] flex items-start gap-1.5">
                       <span className="text-[var(--accent-sage)] mt-0.5">·</span>
                       {item}
@@ -252,9 +342,9 @@ export default async function CountryPage({
                 </ul>
               </div>
               <div>
-                <p className="text-sm font-semibold text-stone-900 mb-2">Watch out if</p>
+                <p className="text-sm font-semibold text-stone-900 mb-2">{copy.watchOutIf}</p>
                 <ul className="space-y-2">
-                  {country.watch_out.map((item) => (
+                  {display.watchOut.map((item) => (
                     <li key={item} className="text-sm text-[var(--city-muted-fg)] flex items-start gap-1.5">
                       <span className="text-amber-500 mt-0.5">·</span>
                       {item}
@@ -266,70 +356,70 @@ export default async function CountryPage({
           </SectionCard>
 
           <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-            <SectionCard title="Reality preview">
+            <SectionCard title={copy.realityPreview}>
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm font-semibold text-stone-900 mb-2">Lifestyle fit factors</p>
+                  <p className="text-sm font-semibold text-stone-900 mb-2">{copy.lifestyleFactors}</p>
                   <ul className="space-y-1.5">
-                    {country.lifestyle_fit_factors.map((item) => (
+                    {display.lifestyleFitFactors.map((item) => (
                       <li key={item} className="text-sm text-[var(--city-muted-fg)]">{item}</li>
                     ))}
                   </ul>
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-stone-900 mb-2">Legal fit factors</p>
+                  <p className="text-sm font-semibold text-stone-900 mb-2">{copy.legalFactors}</p>
                   <ul className="space-y-1.5">
-                    {country.legal_fit_factors.map((item) => (
+                    {display.legalFitFactors.map((item) => (
                       <li key={item} className="text-sm text-[var(--city-muted-fg)]">{item}</li>
                     ))}
                   </ul>
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-stone-900 mb-2">What people usually underestimate</p>
+                  <p className="text-sm font-semibold text-stone-900 mb-2">{copy.underestimate}</p>
                   <p className="text-sm leading-relaxed text-[var(--city-muted-fg)]">
-                    {country.what_people_underestimate}
+                    {display.whatPeopleUnderestimate}
                   </p>
                 </div>
               </div>
             </SectionCard>
 
-            <SectionCard title="At a glance">
+            <SectionCard title={copy.atGlance}>
               <div className="space-y-3">
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-[var(--city-muted-fg)]">Cost level</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">{copy.costLevel}</span>
                   <ScoreRail value={country.cost_level} invert />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-[var(--city-muted-fg)]">Housing difficulty</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">{copy.housingDifficulty}</span>
                   <ScoreRail value={country.housing_difficulty} invert />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-[var(--city-muted-fg)]">English friendliness</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">{copy.englishFriendliness}</span>
                   <ScoreRail value={country.english_friendliness} />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-[var(--city-muted-fg)]">Career upside</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">{copy.careerUpside}</span>
                   <ScoreRail value={country.career_opportunities} />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-[var(--city-muted-fg)]">Study fit</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">{copy.studyFit}</span>
                   <ScoreRail value={country.study_fit} />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-[var(--city-muted-fg)]">Remote work fit</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">{copy.remoteWorkFit}</span>
                   <ScoreRail value={country.remote_work_fit} />
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-[var(--city-muted-fg)]">Long-term stability</span>
+                  <span className="text-sm text-[var(--city-muted-fg)]">{copy.longTermStability}</span>
                   <ScoreRail value={country.long_term_stability} />
                 </div>
               </div>
             </SectionCard>
           </div>
 
-          <SectionCard title="First 90 days preview">
+          <SectionCard title={copy.first90}>
             <div className="grid gap-3 md:grid-cols-3">
-              {country.first_90_days_preview.map((item) => (
+              {display.first90DaysPreview.map((item) => (
                 <div key={item} className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-4">
                   <p className="text-sm leading-relaxed text-[var(--city-muted-fg)]">{item}</p>
                 </div>
@@ -337,7 +427,7 @@ export default async function CountryPage({
             </div>
           </SectionCard>
 
-          <SectionCard title="Compare cities inside this country">
+          <SectionCard title={copy.compareInside}>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {cities.map((city) => {
                 const thumbnailImage = getExistingPublicImageSrc(city.thumbnailImage ?? city.heroImage);
@@ -348,17 +438,17 @@ export default async function CountryPage({
                     href={`/explore/${country.slug}/${city.slug}`}
                     className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/40 p-4 transition-colors hover:border-stone-400 hover:bg-[var(--city-warm-muted)]"
                   >
-                    <CityThumbnail cityName={city.name} imageSrc={thumbnailImage} />
+                    <CityThumbnail cityName={city.name} imageSrc={thumbnailImage} label={copy.exploreCity} />
                     <h3 className="text-base font-semibold text-stone-900">{city.name}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-[var(--city-muted-fg)]">
                       {city.summary}
                     </p>
                     <div className="mt-3 space-y-1 text-xs text-[var(--city-muted-fg)]">
-                      <p>Rent: {city.avg_rent_range}</p>
-                      <p>Budget: {city.monthly_budget_range}</p>
+                      <p>{copy.rent}: {city.avg_rent_range}</p>
+                      <p>{copy.budget}: {city.monthly_budget_range}</p>
                     </div>
                     <p className="mt-4 text-sm font-medium text-stone-700">
-                      Explore city →
+                      {copy.exploreCity} →
                     </p>
                   </Link>
                 );
@@ -371,9 +461,9 @@ export default async function CountryPage({
             language={language}
           />
 
-          <SectionCard title="Legal paths">
+          <SectionCard title={copy.legalPaths}>
             <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 mb-4">
-              These are fit assessments, not legal advice. Requirements vary and must be verified before applying.
+              {copy.disclaimer}
             </div>
             <div className="grid gap-4 md:grid-cols-2">
               {paths.map((path) => (
@@ -388,7 +478,7 @@ export default async function CountryPage({
                     </span>
                   </div>
                   <div className="mt-4">
-                    <p className="city-section-kicker mb-2">Good fit if</p>
+                    <p className="city-section-kicker mb-2">{copy.pathGoodFitIf}</p>
                     <ul className="space-y-1">
                       {path.good_if.slice(0, 2).map((item) => (
                         <li key={item} className="text-sm text-[var(--city-muted-fg)]">
@@ -407,11 +497,10 @@ export default async function CountryPage({
 
           <footer className="border-t border-[var(--city-border)] pt-5 pb-2 space-y-1.5">
             <p className="text-[11px] leading-relaxed text-[var(--city-muted-fg)]">
-              Fit scores combine structured destination data, legal-path rules, and profile-based weighting.
-              They are designed for pre-decision planning, not legal advice.
+              {copy.footerOne}
             </p>
             <p className="text-[11px] leading-relaxed text-[var(--city-muted-fg)]">
-              Destination attributes are manually reviewed estimates. Verify current requirements before acting.
+              {copy.footerTwo}
             </p>
           </footer>
         </div>

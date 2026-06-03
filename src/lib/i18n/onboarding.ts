@@ -215,8 +215,8 @@ export const fearCopy = {
   en: {
     title: "What worries you most?",
     subtitle: "We'll make sure to address this throughout your journey.",
-    seeResults: "See my results",
-    skipResults: "Skip & see results",
+    seeResults: "Continue",
+    skipResults: "Skip",
     options: [
       { value: "documents", label: "Documents", description: "Paperwork, apostilles, translations" },
       { value: "money", label: "Money", description: "Will I have enough to get through the process?" },
@@ -231,8 +231,8 @@ export const fearCopy = {
   ru: {
     title: "Что больше всего тревожит?",
     subtitle: "Мы будем учитывать это в рекомендациях и следующих шагах.",
-    seeResults: "Показать результаты",
-    skipResults: "Пропустить и показать результаты",
+    seeResults: "Продолжить",
+    skipResults: "Пропустить",
     options: [
       { value: "documents", label: "Документы", description: "Бумаги, апостили, переводы" },
       { value: "money", label: "Деньги", description: "Хватит ли бюджета пройти весь процесс?" },

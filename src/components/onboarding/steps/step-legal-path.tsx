@@ -7,6 +7,12 @@ import { scorePathsForCountry } from "@/lib/scoring/path-scorer";
 import { getLegalPathById } from "@/lib/data/legal-paths";
 import { getCountryById } from "@/lib/data/countries";
 import { getCityById } from "@/lib/data/cities";
+import { getCityDisplay } from "@/lib/i18n/city-display";
+import { getCountryDisplay } from "@/lib/i18n/country-display";
+import {
+  getLegalPathDisplay,
+  translateLegalPathText,
+} from "@/lib/i18n/legal-path-display";
 import { commonCopy, type UiLanguage } from "@/lib/i18n/onboarding";
 import type { OnboardingState, PathMatchResult } from "@/types";
 
@@ -105,13 +111,14 @@ function PathCard({
   const path = getLegalPathById(result.pathId);
   if (!path) return null;
   const copy = COPY[language];
+  const display = getLegalPathDisplay(path, language);
 
   return (
     <div className="city-card rounded-[18px] p-4 flex flex-col gap-3">
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-sm leading-tight text-stone-900">{path.name}</h3>
-          <p className="text-xs text-[var(--city-muted-fg)] mt-0.5 leading-relaxed">{path.summary}</p>
+          <h3 className="font-semibold text-sm leading-tight text-stone-900">{display.name}</h3>
+          <p className="text-xs text-[var(--city-muted-fg)] mt-0.5 leading-relaxed">{display.summary}</p>
         </div>
         <MatchScore score={result.score} language={language} />
       </div>
@@ -119,7 +126,7 @@ function PathCard({
       <div className="flex items-center gap-3 text-xs text-[var(--city-muted-fg)]">
         <span className="flex items-center gap-1">
           <Clock className="h-3.5 w-3.5" />
-          {path.estimatedPreparationTime}
+          {display.estimatedPreparationTime}
         </span>
         <span className="flex items-center gap-1">
           <Shield className="h-3.5 w-3.5" />
@@ -150,7 +157,7 @@ function PathCard({
           {result.reasons.map((r, i) => (
             <div key={i} className="flex items-start gap-1.5 text-xs">
               <CheckCircle className="h-3.5 w-3.5 text-emerald-600 mt-0.5 shrink-0" />
-              <span className="text-stone-800">{r}</span>
+              <span className="text-stone-800">{translateLegalPathText(r, language)}</span>
             </div>
           ))}
         </div>
@@ -162,16 +169,15 @@ function PathCard({
             {result.weakPoints.map((w, i) => (
               <div key={i} className="flex items-start gap-1.5 text-xs">
                 <AlertTriangle className="h-3.5 w-3.5 text-amber-500 mt-0.5 shrink-0" />
-                <span className="text-amber-900">{w}</span>
+                <span className="text-amber-900">{translateLegalPathText(w, language)}</span>
               </div>
             ))}
           </div>
         </div>
       )}
 
-
       <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
-        {path.legal_disclaimer}
+        {display.legalDisclaimer}
       </div>
 
       <Button size="sm" className="h-10 gap-1.5 rounded-full" onClick={onSelect}>
@@ -186,6 +192,8 @@ export function StepLegalPath({ state, onSelect, onBack, language }: Props) {
   const country = getCountryById(state.selectedCountry);
   const city = getCityById(state.selectedCity);
   const copy = COPY[language];
+  const countryDisplay = country ? getCountryDisplay(country, language) : null;
+  const cityDisplay = city ? getCityDisplay(city, language) : null;
 
   const results = useMemo(
     () =>
@@ -208,12 +216,12 @@ export function StepLegalPath({ state, onSelect, onBack, language }: Props) {
         <div className="flex items-center gap-2 mb-2">
           <Shield className="h-4 w-4 text-stone-600" />
           <span className="city-section-kicker">
-            {country?.emoji} {country?.name}{city ? ` · ${city.name}` : ""}
+            {country?.emoji} {countryDisplay?.name ?? country?.name}{city ? ` · ${cityDisplay?.name ?? city.name}` : ""}
           </span>
         </div>
         <h2 className="font-serif text-2xl font-medium text-stone-900 mb-1">{copy.title}</h2>
         <p className="text-sm text-[var(--city-muted-fg)]">
-          {copy.subtitlePrefix} {country?.name ?? copy.subtitleFallback}. {copy.subtitleSuffix}
+          {copy.subtitlePrefix} {countryDisplay?.name ?? country?.name ?? copy.subtitleFallback}. {copy.subtitleSuffix}
         </p>
       </div>
 
