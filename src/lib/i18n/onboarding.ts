@@ -115,7 +115,7 @@ export const goalCopy = {
     options: [
       { value: "remote_work", label: "Переехать с удалённой работой", description: "Я работаю удалённо и хочу жить за границей", available: true },
       { value: "study", label: "Переехать на учёбу", description: "Университет, магистратура или языковая школа", available: true },
-      { value: "explore_first", label: "Сначала разведать", description: "Хочу приехать, посмотреть на месте и потом решить", available: true },
+      { value: "explore_first", label: "Сначала присмотреться", description: "Хочу приехать, пожить немного и потом решить", available: true },
       { value: "not_sure", label: "Пока не уверен", description: "Помогите понять варианты", available: true },
       { value: "find_job", label: "Найти работу за границей", description: "Ищу трудоустройство в другой стране", available: true },
       { value: "family", label: "Переезд с семьёй или партнёром", description: "Воссоединение семьи или переезд к партнёру", available: false },

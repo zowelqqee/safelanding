@@ -110,7 +110,7 @@ export const REASON_COPY = {
   },
   public_transport_fit: {
     en: "Public transport can reduce your early relocation friction.",
-    ru: "Общественный транспорт может снизить трение в первые месяцы переезда.",
+    ru: "Общественный транспорт может снизить бытовые сложности в первые месяцы переезда.",
   },
   expat_community_fit: {
     en: "An existing international community can make the first months less isolating.",

@@ -5,11 +5,11 @@ const PATH_NAME_RU: Record<string, string> = {
   "spain-digital-nomad": "Виза цифрового кочевника",
   "spain-student": "Студенческая виза",
   "spain-non-lucrative": "Виза без права на работу",
-  "spain-exploration": "Туризм / разведка",
+  "spain-exploration": "Сначала пожить и присмотреться",
   "portugal-d8": "D8 для удалённой работы",
   "portugal-student": "Студенческая виза",
   "portugal-job-seeker": "Виза для поиска работы",
-  "portugal-exploration": "Туризм / разведка",
+  "portugal-exploration": "Сначала пожить и присмотреться",
   "germany-blue-card": "Голубая карта ЕС",
   "germany-skilled-worker": "Виза квалифицированного специалиста",
   "germany-student": "Студенческая виза",
@@ -75,11 +75,11 @@ const TEXT_RU: Record<string, string> = {
   "Your profile suggests some professional earning power":
     "Профиль показывает профессиональный и доходный потенциал",
   "You want to explore before making a long-term commitment":
-    "Вы хотите сначала разведать направление перед долгосрочным решением",
+    "Вы хотите сначала присмотреться к направлению перед долгосрочным решением",
   "This is a reasonable first step while your long-term route is still unclear":
     "Это разумный первый шаг, пока долгосрочный вариант ещё не ясен",
   "You want to move soon, so a real long-term route may matter more than exploration":
-    "Вы хотите переехать скоро, поэтому долгосрочный вариант может быть важнее разведки",
+    "Вы хотите переехать скоро, поэтому долгосрочный вариант может быть важнее ознакомительной поездки",
   "This is not a long-term settlement route by itself":
     "Сам по себе это не долгосрочный вариант для жизни",
   "You are already planning around family or partner movement":
@@ -95,7 +95,7 @@ const TEXT_RU: Record<string, string> = {
   "You already work remotely with stable foreign income":
     "У вас уже есть стабильный зарубежный доход от удалённой работы",
   "You want a real residence path rather than tourist time":
-    "Вы хотите настоящий путь к резидентству, а не просто туристическое пребывание",
+    "Вы хотите реальный путь к ВНЖ, а не просто туристическое пребывание",
   "You are ready to study and can pursue admission":
     "Вы готовы учиться и можете идти к поступлению",
   "You want Spain as a structured first step into Europe":
@@ -107,7 +107,7 @@ const TEXT_RU: Record<string, string> = {
   "You want to scout neighborhoods and city fit first":
     "Вы хотите сначала присмотреться к районам и понять, подходит ли город",
   "You are not yet ready to commit to a residency path":
-    "Вы пока не готовы сразу выбирать путь к резидентству",
+    "Вы пока не готовы сразу выбирать путь к ВНЖ",
 };
 
 const SUMMARY_RU: Record<string, string> = {

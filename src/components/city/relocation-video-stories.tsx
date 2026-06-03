@@ -84,7 +84,7 @@ const relocationVideoCopy = {
     description:
       "Живой опыт людей, которые прошли переезд и рассказывают, что оказалось сложнее, дороже или лучше, чем ожидали.",
     disclaimer:
-      "Только личный relocation/lived-experience. Без туристических гидов, city tours и подборок достопримечательностей.",
+      "Только личные истории переезда и жизни на месте. Без туристических гидов, city tours и подборок достопримечательностей.",
     layer: "видео о переезде",
     showMore: (count: number) => `Показать ещё ${count}`,
     personTypeLabels: {
@@ -99,7 +99,7 @@ const relocationVideoCopy = {
     movement: (from: string | null | undefined, to: string, duration: string | null | undefined) =>
       [
         from ? `${from} → ${to}` : to,
-        duration ? `${duration} на месте` : null,
+        duration ?? null,
       ].filter(Boolean).join(" · "),
   },
 } satisfies Record<

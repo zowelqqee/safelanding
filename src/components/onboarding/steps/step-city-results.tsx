@@ -9,6 +9,8 @@ import { getCityById } from "@/lib/data/cities";
 import { getCountryById } from "@/lib/data/countries";
 import { useCityCardViewTracking } from "@/lib/analytics/cityCardView";
 import { commonCopy, type UiLanguage } from "@/lib/i18n/onboarding";
+import { getCountryDisplay } from "@/lib/i18n/country-display";
+import { getCityDisplay, translateCityText } from "@/lib/i18n/city-display";
 import type { OnboardingState, CityMatchResult } from "@/types";
 
 const SCORE_LEGEND = {
@@ -112,12 +114,17 @@ function CityCard({
   if (!city) return null;
   const copy = COPY[language];
   const common = commonCopy[language];
+  const cityDisplay = getCityDisplay(city, language);
+  const mainBlocker =
+    result.mainBlocker === city.main_lifestyle_blocker
+      ? cityDisplay.mainLifestyleBlocker
+      : translateCityText(result.mainBlocker, language);
 
   return (
     <div ref={cardRef} className="city-card rounded-[18px] p-4 flex flex-col gap-3">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <h3 className="font-semibold text-base leading-tight text-stone-900">{city.name}</h3>
+          <h3 className="font-semibold text-base leading-tight text-stone-900">{cityDisplay.name}</h3>
           <div className="flex items-center gap-2 text-xs text-[var(--city-muted-fg)] mt-0.5">
             {city.housingAvgRent && <span>{copy.rentFrom} {city.housingAvgRent}</span>}
             {city.housingAvgRent && city.monthlyBudgetMin && <span>·</span>}
@@ -138,7 +145,7 @@ function CityCard({
         </div>
       </div>
 
-      <p className="text-xs text-[var(--city-muted-fg)] leading-relaxed">{city.summary}</p>
+      <p className="text-xs text-[var(--city-muted-fg)] leading-relaxed">{cityDisplay.summary}</p>
 
       <div className="grid grid-cols-2 gap-2">
         <div className="rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-3 py-2">
@@ -150,7 +157,7 @@ function CityCard({
         <div className="rounded-xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-3 py-2">
           <div className="city-section-kicker mb-1">{copy.mainBlocker}</div>
           <div className="text-sm font-semibold leading-tight text-stone-900">
-            {result.mainBlocker}
+            {mainBlocker}
           </div>
         </div>
       </div>
@@ -160,20 +167,27 @@ function CityCard({
           {result.reasons.map((r, i) => (
             <div key={i} className="flex items-start gap-1.5 text-xs">
               <CheckCircle className="h-3.5 w-3.5 text-emerald-600 mt-0.5 shrink-0" />
-              <span className="text-stone-800">{r}</span>
+              <span className="text-stone-800">{translateCityText(r, language)}</span>
             </div>
           ))}
         </div>
       )}
 
-      {result.risks.slice(0, 1).map((r, i) => (
-        <div key={i} className="rounded-xl border border-amber-200/60 bg-amber-50/60 px-3 py-2">
-          <div className="flex items-start gap-1.5 text-xs">
-            <AlertTriangle className="h-3.5 w-3.5 text-amber-500 mt-0.5 shrink-0" />
-            <span className="text-amber-900">{r}</span>
+      {result.risks.slice(0, 1).map((r, i) => {
+        const riskIndex = city.watch_out.indexOf(r);
+        const riskText = riskIndex >= 0
+          ? cityDisplay.watchOut[riskIndex] ?? cityDisplay.watchOut[0]
+          : translateCityText(r, language);
+
+        return (
+          <div key={i} className="rounded-xl border border-amber-200/60 bg-amber-50/60 px-3 py-2">
+            <div className="flex items-start gap-1.5 text-xs">
+              <AlertTriangle className="h-3.5 w-3.5 text-amber-500 mt-0.5 shrink-0" />
+              <span className="text-amber-900">{riskText}</span>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       <div className="flex flex-col gap-2 pt-0.5 sm:flex-row">
         <Button size="sm" className="h-10 flex-1 gap-1.5 rounded-full" onClick={onSelect}>
@@ -192,6 +206,7 @@ function CityCard({
 
 export function StepCityResults({ state, onSelect, onShortlistToggle, onBack, language }: Props) {
   const country = getCountryById(state.selectedCountry);
+  const countryDisplay = country ? getCountryDisplay(country, language) : null;
   const copy = COPY[language];
   const predictionRequest = useMemo(
     () => ({
@@ -313,7 +328,7 @@ export function StepCityResults({ state, onSelect, onShortlistToggle, onBack, la
         <div className="flex items-center gap-2 mb-2">
           <MapPin className="h-4 w-4 text-stone-600" />
           <span className="city-section-kicker">
-            {country ? `${country.emoji} ${country.name}` : copy.cities}
+            {country && countryDisplay ? `${country.emoji} ${countryDisplay.name}` : copy.cities}
           </span>
         </div>
         <h2 className="font-serif text-2xl font-medium text-stone-900 mb-1">{copy.title}</h2>

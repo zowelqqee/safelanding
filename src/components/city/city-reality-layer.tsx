@@ -63,13 +63,22 @@ const REALITY_COPY = {
     },
   },
   ru: {
-    layer: "Реальный опыт",
-    title: "Что говорят те, кто уже переехал",
-    snapshot: "Короткая сводка",
-    whatPeopleSay: "Что говорят люди",
-    publicSignals: "Публичные сигналы",
-    showMoreSignals: (count: number) => `Показать ещё: ${count}`,
-    signalCount: (count: number) => `${count} сигнал${count === 1 ? "" : "а"}`,
+    layer: "Как это выглядит на практике",
+    title: "Что пишут переехавшие",
+    snapshot: "Коротко о главном",
+    whatPeopleSay: "Что пишут переехавшие",
+    publicSignals: "Отзывы и обсуждения",
+    showMoreSignals: (count: number) => `Показать ещё ${count}`,
+    signalCount: (count: number) => {
+      const mod10 = count % 10;
+      const mod100 = count % 100;
+      const word = mod10 === 1 && mod100 !== 11
+        ? "отзыв"
+        : mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)
+          ? "отзыва"
+          : "отзывов";
+      return `${count} ${word}`;
+    },
     beforeMove: "Перед переездом",
     pattern: {
       peopleLove: "Что нравится",
