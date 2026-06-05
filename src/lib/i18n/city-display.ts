@@ -149,6 +149,30 @@ const RU_CITY_TRANSLATIONS: Record<string, CityDisplayTranslation> = {
   "saint-petersburg": { name: "Санкт-Петербург" },
   almaty: { name: "Алматы" },
   astana: { name: "Астана" },
+  yerevan: {
+    name: "Ереван",
+    summary:
+      "Практичный центр переезда в Армении: доступная повседневность, русскоязычная среда и растущее тех- и экспат-сообщество, но почти все международные возможности сосредоточены в столице.",
+    bestFor: [
+      "Удалённые специалисты",
+      "Основатели и фрилансеры",
+      "Русскоязычные переезжающие",
+    ],
+    watchOut: [
+      "Самая сильная инфраструктура и сервисы для переехавших сосредоточены в Ереване",
+      "Летняя жара и зимний воздух могут влиять на комфорт",
+      "Долгосрочный карьерный потолок ниже, чем в крупных рынках",
+    ],
+    mainLifestyleBlocker:
+      "Ереван лучше всего работает как основная база; за его пределами международная инфраструктура быстро слабеет.",
+    whatPeopleUnderestimate:
+      "Насколько легче проходит старт, если вам уже важны русскоязычные сервисы, сообщество и гибкое краткосрочное жильё.",
+    first90DaysPreview: [
+      "Начать с центральных или тех-ориентированных районов, прежде чем брать долгую аренду",
+      "Сразу настроить банк, связь, налоги и доступ к коворкингу",
+      "Проверить жару, зимний воздух и повседневный ритм до решения остаться надолго",
+    ],
+  },
 };
 
 const RU_CITY_TEXT: Record<string, string> = {
@@ -200,6 +224,16 @@ const RU_CITY_TEXT: Record<string, string> = {
     "Некоторые профессии сложнее без готовности учить язык",
   "If you resist French or winter, the city may never quite fit.":
     "Если не принимать французский и зиму, город может так и не стать своим.",
+  "Armenia's practical relocation center: affordable daily life, Russian-language ease, and a growing tech and expat scene, with limited city alternatives outside the capital.":
+    "Практичный центр переезда в Армении: доступная повседневность, русскоязычная среда и растущее тех- и экспат-сообщество, но почти все международные возможности сосредоточены в столице.",
+  "The strongest infrastructure and expat services are concentrated in Yerevan":
+    "Самая сильная инфраструктура и сервисы для переехавших сосредоточены в Ереване",
+  "Summer heat and winter air quality can affect daily comfort":
+    "Летняя жара и зимний воздух могут влиять на комфорт",
+  "Long-term career upside is narrower than in larger markets":
+    "Долгосрочный карьерный потолок ниже, чем в крупных рынках",
+  "Yerevan works best as the base; outside it, international infrastructure drops quickly.":
+    "Ереван лучше всего работает как основная база; за его пределами международная инфраструктура быстро слабеет.",
 };
 
 export function translateCityText(value: string, language: UiLanguage) {

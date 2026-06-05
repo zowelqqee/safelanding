@@ -17,6 +17,8 @@ const PATH_NAME_RU: Record<string, string> = {
   "canada-express-entry": "Express Entry",
   "canada-study-permit": "Разрешение на учёбу",
   "canada-provincial-nominee": "Провинциальная программа",
+  "armenia-temp-resident": "Временное резидентство",
+  "armenia-exploration": "Сначала пожить и присмотреться",
 };
 
 const TEXT_RU: Record<string, string> = {
@@ -108,11 +110,39 @@ const TEXT_RU: Record<string, string> = {
     "Вы хотите сначала присмотреться к районам и понять, подходит ли город",
   "You are not yet ready to commit to a residency path":
     "Вы пока не готовы сразу выбирать путь к ВНЖ",
+  "You want Armenia as a practical 1-3 year base rather than a tourist-only stay":
+    "Вы хотите использовать Армению как практичную базу на 1-3 года, а не только как туристическое пребывание",
+  "You can document your work, business, study, family, or other residence basis":
+    "Вы можете подтвердить работу, бизнес, учёбу, семейное основание или другую причину для резидентства",
+  "You value Russian-language ease, lower friction, and a fast regional setup":
+    "Вам важны русскоязычная среда, меньше трения и быстрый старт в регионе",
+  "It is not an automatic residency route for every remote worker":
+    "Это не автоматический путь к резидентству для любого удалённого специалиста",
+  "Your exact basis and document package need current local verification":
+    "Ваше основание и пакет документов нужно проверить по актуальным местным правилам",
+  "Long-term planning is less predictable than in mature EU residence systems":
+    "Долгосрочный план менее предсказуем, чем в более зрелых системах ВНЖ в ЕС",
+  "You want to test Yerevan before choosing a residence route":
+    "Вы хотите сначала проверить Ереван до выбора пути к резидентству",
+  "You need a simple regional base while comparing longer-term destinations":
+    "Вам нужна простая региональная база, пока вы сравниваете долгосрочные направления",
+  "Your passport allows easy entry or visa-free time that you can verify before travel":
+    "Ваш паспорт даёт простой въезд или безвизовое время, которое можно проверить перед поездкой",
+  "Exploration stay is not the same as long-term residence":
+    "Ознакомительное пребывание не заменяет долгосрочное резидентство",
+  "Registration, tax, banking, and stay limits still need checking":
+    "Регистрацию, налоги, банки и лимиты пребывания всё равно нужно проверить",
+  "It can become a holding pattern if you do not choose a longer plan":
+    "Без более долгого плана это может превратиться в временную паузу без ясного следующего шага",
 };
 
 const SUMMARY_RU: Record<string, string> = {
   "canada-express-entry":
     "Путь для квалифицированных специалистов с сильным профессиональным профилем, языком и хорошей подготовкой.",
+  "armenia-temp-resident":
+    "Среднесрочный путь для Армении, если есть реальное основание для резидентства: работа, бизнес, учёба, семья или другой подходящий якорь.",
+  "armenia-exploration":
+    "Простой первый шаг, чтобы проверить Ереван, банки, жильё и повседневность до решения делать Армению долгосрочной базой.",
 };
 
 const DEFAULT_DISCLAIMER_RU =

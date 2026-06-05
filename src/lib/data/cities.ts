@@ -2275,6 +2275,45 @@ const RAW_CITIES: RawCity[] = [
     big_city: true,
     calm_lifestyle: 3,
   },
+  {
+    id: "yerevan",
+    country_id: "armenia",
+    country: "Armenia",
+    name: "Yerevan",
+    slug: "yerevan",
+    summary:
+      "Armenia's practical relocation center: affordable daily life, Russian-language ease, and a growing tech and expat scene, with limited city alternatives outside the capital.",
+    best_for: ["Remote workers", "Founders", "Russian-speaking movers"],
+    watch_out: [
+      "The strongest infrastructure and expat services are concentrated in Yerevan",
+      "Summer heat and winter air quality can affect daily comfort",
+      "Long-term career upside is narrower than in larger markets",
+    ],
+    avg_rent_range: "AMD 250,000-550,000",
+    monthly_budget_range: "AMD 600,000-1,100,000",
+    cost_level: 2,
+    housing_difficulty: 3,
+    english_friendliness: 2,
+    expat_community: 4,
+    career_opportunities: 3,
+    student_fit: 3,
+    remote_worker_fit: 4,
+    family_fit: 3,
+    public_transport: 3,
+    climate_score: 3,
+    first_90_days_preview: [
+      "Start in central or tech-adjacent neighborhoods before committing long term",
+      "Set up banking, SIM, tax, and coworking access early",
+      "Test summer heat, winter air, and local routines before treating it as permanent",
+    ],
+    first_90_days_difficulty: 2,
+    main_lifestyle_blocker: "Yerevan works best as the base; outside it, international infrastructure drops quickly.",
+    what_people_underestimate:
+      "How much easier the landing feels if Russian-language services, community, and short-term housing are already important to you.",
+    coastal: false,
+    big_city: true,
+    calm_lifestyle: 4,
+  },
 ];
 
 function buildFirstNinetyDays(preview: string[]): FirstNinetyDays {

@@ -1401,6 +1401,60 @@ const RAW_PATHS: RawPath[] = [
     legal_disclaimer: DEFAULT_DISCLAIMER,
     journey_available: false,
   },
+  {
+    id: "armenia-temp-resident",
+    country_id: "armenia",
+    name: "Temporary Residence Route",
+    slug: "temporary-residence-route",
+    scenario: "remote",
+    summary:
+      "A medium-term Armenia route for people who can document a real basis for residence, such as work, business, study, family, or another eligible anchor.",
+    good_if: [
+      "You want Armenia as a practical 1-3 year base rather than a tourist-only stay",
+      "You can document your work, business, study, family, or other residence basis",
+      "You value Russian-language ease, lower friction, and a fast regional setup",
+    ],
+    weak_points: [
+      "It is not an automatic residency route for every remote worker",
+      "Your exact basis and document package need current local verification",
+      "Long-term planning is less predictable than in mature EU residence systems",
+    ],
+    complexity: 2,
+    estimated_preparation_time: "1 to 3 months",
+    requires_sponsor: false,
+    requires_admission: false,
+    requires_remote_income: false,
+    requires_local_employer: false,
+    legal_disclaimer: DEFAULT_DISCLAIMER,
+    journey_available: false,
+  },
+  {
+    id: "armenia-exploration",
+    country_id: "armenia",
+    name: "Visa-Free / Exploration Stay",
+    slug: "visa-free-exploration-stay",
+    scenario: "exploration",
+    summary:
+      "A low-friction first step for testing Yerevan, banking, housing, and daily routines before deciding whether Armenia should become a longer base.",
+    good_if: [
+      "You want to test Yerevan before choosing a residence route",
+      "You need a simple regional base while comparing longer-term destinations",
+      "Your passport allows easy entry or visa-free time that you can verify before travel",
+    ],
+    weak_points: [
+      "Exploration stay is not the same as long-term residence",
+      "Registration, tax, banking, and stay limits still need checking",
+      "It can become a holding pattern if you do not choose a longer plan",
+    ],
+    complexity: 1,
+    estimated_preparation_time: "1 to 3 weeks",
+    requires_sponsor: false,
+    requires_admission: false,
+    requires_remote_income: false,
+    requires_local_employer: false,
+    legal_disclaimer: DEFAULT_DISCLAIMER,
+    journey_available: false,
+  },
 ];
 
 function buildPath(path: RawPath): LegalPath {

@@ -113,7 +113,7 @@ function ScoreRail({ value, invert = false }: { value: number; invert?: boolean 
   const display = invert ? 6 - value : value;
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex shrink-0 items-center gap-2">
       <div className="flex gap-1">
         {Array.from({ length: 5 }).map((_, index) => (
           <span
@@ -286,9 +286,9 @@ function MetricList({
   return (
     <div className="space-y-3">
       {items.map((item) => (
-        <div key={item.label} className="flex items-start justify-between gap-4">
-          <span className="text-sm text-[var(--city-muted-fg)]">{item.label}</span>
-          <div className="text-right">{item.value}</div>
+        <div key={item.label} className="flex min-w-0 items-start justify-between gap-3">
+          <span className="min-w-0 text-sm text-[var(--city-muted-fg)]">{item.label}</span>
+          <div className="shrink-0 text-right">{item.value}</div>
         </div>
       ))}
     </div>
@@ -309,14 +309,14 @@ function CountryCompareCard({
   const display = getCountryDisplay(country, language);
 
   return (
-    <div className="city-card rounded-[22px] p-5">
-      <div className="flex items-start justify-between gap-3">
-        <div>
+    <div className="city-card min-w-0 rounded-[22px] p-5">
+      <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
           <div className="text-3xl">{country.emoji}</div>
           <h2 className="mt-3 text-lg font-semibold text-stone-900">{display.name}</h2>
           <p className="text-sm text-[var(--city-muted-fg)]">{display.region}</p>
         </div>
-        <span className="rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-sm font-semibold text-stone-700">
+        <span className="w-fit max-w-full rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-sm font-semibold text-stone-700">
           {fit.overallFit}% {copy.overall}
         </span>
       </div>
@@ -325,15 +325,15 @@ function CountryCompareCard({
 
       <div className="mt-5 grid gap-3 sm:grid-cols-3">
         <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-3 py-3">
-          <p className="city-section-kicker">{copy.lifestyleFit}</p>
+          <p className="city-section-kicker break-words">{copy.lifestyleFit}</p>
           <p className="mt-1 text-2xl font-semibold text-stone-900">{fit.lifestyleFit}%</p>
         </div>
         <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-3 py-3">
-          <p className="city-section-kicker">{copy.legalFit}</p>
+          <p className="city-section-kicker break-words">{copy.legalFit}</p>
           <p className="mt-1 text-2xl font-semibold text-stone-900">{fit.legalFit}%</p>
         </div>
         <div className="rounded-2xl border border-amber-200 bg-amber-50/90 px-3 py-3">
-          <p className="city-section-kicker text-amber-700">{copy.blocker}</p>
+          <p className="city-section-kicker break-words text-amber-700">{copy.blocker}</p>
           <p className="mt-1 text-sm font-medium leading-snug text-amber-950">{fit.mainBlocker}</p>
         </div>
       </div>
@@ -353,24 +353,24 @@ function CountryCompareCard({
       </div>
 
       <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
-        <p className="city-section-kicker text-amber-700">{copy.realityPreview}</p>
+        <p className="city-section-kicker break-words text-amber-700">{copy.realityPreview}</p>
         <p className="mt-1 text-sm text-amber-900">{display.mainLegalBlocker}</p>
       </div>
 
-      <div className="mt-5 flex gap-2">
-        <Link href={`/explore/${country.slug}`} className="flex-1">
-          <Button variant="outline" className="h-11 w-full gap-2 rounded-full border-[var(--city-border)]">
+      <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+        <Link href={`/explore/${country.slug}`} className="w-full sm:flex-1">
+          <Button variant="outline" className="min-h-11 h-auto w-full whitespace-normal rounded-full border-[var(--city-border)] px-4 py-2.5 text-center leading-snug">
             {copy.chooseDestination}
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4 shrink-0" />
           </Button>
         </Link>
         <Link
           href={`/compare?type=city&country=${country.id}&city=${country.city_ids.join(",")}`}
-          className="flex-1"
+          className="w-full sm:flex-1"
         >
-          <Button className="h-11 w-full gap-2 rounded-full">
+          <Button className="min-h-11 h-auto w-full whitespace-normal rounded-full px-4 py-2.5 text-center leading-snug">
             {copy.compareCities}
-            <MapPin className="h-4 w-4" />
+            <MapPin className="h-4 w-4 shrink-0" />
           </Button>
         </Link>
       </div>
@@ -398,13 +398,13 @@ function CityCompareCard({
   const countryDisplay = country ? getCountryDisplay(country, language) : null;
 
   return (
-    <div ref={cardRef} className="city-card rounded-[22px] p-5">
-      <div className="flex items-start justify-between gap-3">
-        <div>
+    <div ref={cardRef} className="city-card min-w-0 rounded-[22px] p-5">
+      <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
           <p className="text-sm text-[var(--city-muted-fg)]">{countryDisplay?.name ?? city.country}</p>
           <h2 className="text-lg font-semibold text-stone-900">{cityDisplay.name}</h2>
         </div>
-        <span className="rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-sm font-semibold text-stone-700">
+        <span className="w-fit max-w-full rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-sm font-semibold text-stone-700">
           {levelLabel(city.first_90_days_difficulty)}
         </span>
       </div>
@@ -429,22 +429,22 @@ function CityCompareCard({
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
         <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-3">
-          <p className="city-section-kicker">{copy.avgRent}</p>
+          <p className="city-section-kicker break-words">{copy.avgRent}</p>
           <p className="mt-1 text-sm font-medium text-stone-900">{city.avg_rent_range}</p>
         </div>
         <div className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/60 px-4 py-3">
-          <p className="city-section-kicker">{copy.monthlyBudget}</p>
+          <p className="city-section-kicker break-words">{copy.monthlyBudget}</p>
           <p className="mt-1 text-sm font-medium text-stone-900">{city.monthly_budget_range}</p>
         </div>
       </div>
 
       <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
-        <p className="city-section-kicker text-amber-700">{copy.blocker}</p>
+        <p className="city-section-kicker break-words text-amber-700">{copy.blocker}</p>
         <p className="mt-1 text-sm text-amber-900">{city.main_lifestyle_blocker}</p>
       </div>
 
       <div className="mt-5">
-        <p className="city-section-kicker mb-2">{copy.first90}</p>
+        <p className="city-section-kicker mb-2 break-words">{copy.first90}</p>
         <ul className="space-y-1.5">
           {city.first_90_days_preview.map((item) => (
             <li key={item} className="text-sm text-[var(--city-muted-fg)]">{item}</li>
@@ -452,17 +452,17 @@ function CityCompareCard({
         </ul>
       </div>
 
-      <div className="mt-5 flex gap-2">
-        <Link href={`/explore/${city.countryId}/${city.slug}`} className="flex-1">
-          <Button variant="outline" className="h-11 w-full gap-2 rounded-full border-[var(--city-border)]">
+      <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+        <Link href={`/explore/${city.countryId}/${city.slug}`} className="w-full sm:flex-1">
+          <Button variant="outline" className="min-h-11 h-auto w-full whitespace-normal rounded-full border-[var(--city-border)] px-4 py-2.5 text-center leading-snug">
             {copy.chooseDestination}
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4 shrink-0" />
           </Button>
         </Link>
-        <Link href="/start" className="flex-1">
-          <Button className="h-11 w-full gap-2 rounded-full">
+        <Link href="/start" className="w-full sm:flex-1">
+          <Button className="min-h-11 h-auto w-full whitespace-normal rounded-full px-4 py-2.5 text-center leading-snug">
             {copy.startMove}
-            <Sparkles className="h-4 w-4" />
+            <Sparkles className="h-4 w-4 shrink-0" />
           </Button>
         </Link>
       </div>
@@ -571,7 +571,7 @@ function CompareExperience({
                 onToggle={toggleCountry}
               />
 
-              <div className="grid gap-4 lg:grid-cols-2">
+              <div className="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-2">
                 {selectedCountries.map((country) => {
                   const fit = countryMatchMap[country.id];
                   if (!fit) return null;
@@ -590,8 +590,8 @@ function CompareExperience({
             </>
           ) : (
             <>
-              <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
-                <div className="city-card rounded-[22px] p-5">
+              <div className="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
+                <div className="city-card min-w-0 rounded-[22px] p-5">
                   <p className="text-sm font-medium text-stone-900">{copy.chooseCountry}</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {COUNTRIES.map((country) => (
@@ -627,7 +627,7 @@ function CompareExperience({
                 />
               </div>
 
-              <div className="grid gap-4 lg:grid-cols-2">
+              <div className="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-2">
                 {selectedCityIds.map((cityId, index) => (
                   <CityCompareCard
                     key={cityId}
