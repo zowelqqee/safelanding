@@ -628,11 +628,13 @@ export function StepCountryResults({ state, onSelect, onShortlistToggle, onBack,
         style={{ height: "clamp(400px, 58svh, 560px)" }}
       >
         <AnimatePresence>
-          {visibleResults
-            .slice(currentIndex, currentIndex + 3)
+          {(() => {
+            const sliced = visibleResults.slice(currentIndex, currentIndex + 3);
+            const count = sliced.length;
+            return sliced
             .reverse()
             .map((result, reverseIdx) => {
-              const stackOffset = 2 - reverseIdx;
+              const stackOffset = (count - 1) - reverseIdx;
               const isTop = stackOffset === 0;
               return (
                 <TinderCard
@@ -647,7 +649,8 @@ export function StepCountryResults({ state, onSelect, onShortlistToggle, onBack,
                   language={language}
                 />
               );
-            })}
+            });
+          })()}
         </AnimatePresence>
       </div>
 
