@@ -101,7 +101,9 @@ function incomeBonus(country: CountryProfile, income: IncomeRange | ""): number 
 function optimizationBonus(country: CountryProfile, opt: MoveOptimization | ""): number {
   switch (opt) {
     case "fastest_legal_path":
-      return (6 - country.bureaucracy_level) * 5 + (6 - country.housing_difficulty) * 2;
+      return (6 - country.bureaucracy_level) * 3 +
+        (6 - country.housing_difficulty) * 2 -
+        country.bureaucracy_level * 4;
     case "best_career":
       return country.career_opportunities * 8;
     case "lowest_cost":
@@ -120,7 +122,7 @@ function optimizationBonus(country: CountryProfile, opt: MoveOptimization | ""):
 function regionPenalty(country: CountryProfile, regions: RegionPreference[]) {
   if (!regions.length || regions.includes("not_sure")) return 0;
   const allowedRegions = regions.flatMap((region) => CONTINENT_BY_REGION[region]);
-  return allowedRegions.includes(country.region) ? 0 : -40;
+  return allowedRegions.includes(country.region) ? 0 : -70;
 }
 
 function language(input: CountryMatchInput): MatchLanguage {
@@ -148,28 +150,111 @@ function hasLimitedSavings(savings?: SavingsRange | "") {
   return savings === "under_3000" || savings === "3000_7000";
 }
 
+function hasMeaningfulSavings(savings?: SavingsRange | "") {
+  return savings === "7000_15000" ||
+    savings === "15000_30000" ||
+    savings === "30000_plus";
+}
+
+function hasStrongCapitalSignal(input: CountryMatchInput) {
+  return input.savingsRange === "15000_30000" ||
+    input.savingsRange === "30000_plus" ||
+    input.monthlyIncome === "5000_plus";
+}
+
+function isBusinessOwner(input: CountryMatchInput) {
+  return input.incomeType === "business_owner";
+}
+
 function hasRegionMatch(country: CountryProfile, regions: RegionPreference[]) {
   if (!regions.length || regions.includes("not_sure")) return false;
   return regions.flatMap((region) => CONTINENT_BY_REGION[region]).includes(country.region);
 }
 
+function hasLegalScenario(country: CountryProfile, scenarios: LegalPathScenario[]) {
+  return country.available_legal_path_ids.some((pathId) => {
+    const path = getLegalPathById(pathId);
+    return path ? scenarios.includes(path.scenario) : false;
+  });
+}
+
+type LegalPathScenario = NonNullable<ReturnType<typeof getLegalPathById>>["scenario"];
+
+function businessOwnerAdjustment(country: CountryProfile, input: CountryMatchInput) {
+  if (!isBusinessOwner(input)) return 0;
+
+  const hasBusinessOrCapitalRoute = hasLegalScenario(country, ["business", "capital"]);
+  let adjustment = hasBusinessOrCapitalRoute ? 14 : -10;
+
+  if (country.career_opportunities >= 4) adjustment += 6;
+  if (country.english_friendliness >= 4) adjustment += 3;
+  if (country.bureaucracy_level >= 4) adjustment -= 7;
+  if (country.housing_difficulty >= 4) adjustment -= 6;
+  if (country.cost_level >= 4) adjustment -= 6;
+
+  if (input.moveGoal === "remote_work" && !hasBusinessOrCapitalRoute) {
+    adjustment -= 8;
+  }
+
+  return adjustment;
+}
+
+function hardPreferencePenalty(country: CountryProfile, input: CountryMatchInput) {
+  let penalty = 0;
+  const preferences = input.lifePreferences;
+
+  if (preferences.includes("warm_climate")) {
+    if (country.climate_score <= 2) penalty -= 24;
+    else if (country.climate_score === 3) penalty -= 10;
+  }
+
+  if (preferences.includes("lower_cost") && country.cost_level >= 4) {
+    penalty -= 22;
+  }
+
+  if (preferences.includes("public_transport") && country.public_transport <= 2) {
+    penalty -= 14;
+  }
+
+  if (preferences.includes("sea_nearby") && !country.coastal) {
+    penalty -= 18;
+  }
+
+  if (input.mainFear === "housing" && country.housing_difficulty >= 4) {
+    penalty -= 12;
+  }
+
+  return penalty;
+}
+
 function buildPathAnswers(input: CountryMatchInput): PathFinderAnswers {
+  const hasRemoteIncomeShape =
+    input.incomeType === "remote_employment" ||
+    input.incomeType === "freelance";
+  const assumesRemoteWork =
+    hasRemoteIncomeShape ||
+    (input.moveGoal === "remote_work" && !isBusinessOwner(input));
+
   return {
     worksRemotely:
       input.pathAnswers?.worksRemotely ??
-      (input.moveGoal === "remote_work" ? true : input.moveGoal === "study" ? false : null),
+      (assumesRemoteWork ? true : input.moveGoal === "study" ? false : null),
     foreignIncome:
       input.pathAnswers?.foreignIncome ??
-      (input.moveGoal === "remote_work" ? true : null),
+      (assumesRemoteWork ? true : null),
     monthlyIncome: input.monthlyIncome,
-    hasSavings: input.pathAnswers?.hasSavings ?? null,
+    hasSavings:
+      input.pathAnswers?.hasSavings ??
+      (input.savingsRange ? hasMeaningfulSavings(input.savingsRange) : null),
     readyToStudy:
       input.pathAnswers?.readyToStudy ?? (input.moveGoal === "study" ? true : null),
     hasAdmission: input.pathAnswers?.hasAdmission ?? null,
     hasJobOffer: input.pathAnswers?.hasJobOffer ?? null,
     hasSchoolAdmission: input.pathAnswers?.hasSchoolAdmission ?? null,
     hasExtraordinaryProfile: input.pathAnswers?.hasExtraordinaryProfile ?? null,
-    hasCapital: input.pathAnswers?.hasCapital ?? null,
+    hasCapital:
+      input.pathAnswers?.hasCapital ??
+      (isBusinessOwner(input) && hasStrongCapitalSignal(input) ? true : null),
     moveSoon: input.pathAnswers?.moveSoon ?? (input.moveGoal === "explore_first" ? false : null),
     movingWithFamily:
       input.pathAnswers?.movingWithFamily ?? (input.moveGoal === "family" ? true : null),
@@ -475,10 +560,23 @@ function buildChallenges(
   if (input.moveGoal === "remote_work" && legalFit < 65) {
     addUnique(
       challenges,
-      lang === "ru"
-        ? "Удаленный доход сам по себе не гарантирует путь: важны формат контрактов, источник дохода и требования консульства."
-        : "Remote income alone does not guarantee a route: contract format, income source, and consular rules matter.",
+      isBusinessOwner(input)
+        ? lang === "ru"
+          ? "Доход от бизнеса нужно проверять отдельно: важны структура владения, источник выручки, налоги и возможность управлять компанией из выбранной страны."
+          : "Business income needs a separate check: ownership structure, revenue source, tax treatment, and management rights all matter."
+        : lang === "ru"
+          ? "Удаленный доход сам по себе не гарантирует путь: важны формат контрактов, источник дохода и требования консульства."
+          : "Remote income alone does not guarantee a route: contract format, income source, and consular rules matter.",
       90
+    );
+  }
+  if (isBusinessOwner(input) && !hasLegalScenario(country, ["business", "capital"])) {
+    addUnique(
+      challenges,
+      lang === "ru"
+        ? "Свой бизнес не равен простой удаленке: проверьте, можно ли реально управлять бизнесом, платить налоги и сохранять статус в этой стране."
+        : "Owning a business is not the same as a simple remote-job case: verify management, tax, and status rules before relying on this country.",
+      91
     );
   }
   if (
@@ -572,6 +670,8 @@ export function matchCountries(input: CountryMatchInput): CountryMatchResult[] {
     rawLifestyleScore += goalBonus(country, input.moveGoal);
     rawLifestyleScore += incomeBonus(country, input.monthlyIncome);
     rawLifestyleScore += optimizationBonus(country, opt);
+    rawLifestyleScore += businessOwnerAdjustment(country, input);
+    rawLifestyleScore += hardPreferencePenalty(country, input);
     rawLifestyleScore += regionPenalty(country, regions);
 
     const lifestyleFit = clamp(

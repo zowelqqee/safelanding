@@ -133,9 +133,10 @@ def warm_model() -> dict[str, Any]:
 
 
 def _sigmoid(value: float) -> float:
-    k = 20
-    a = -0.1
+    k = 22
+    a = 0
     return 1 / (1 + math.exp(-k * (value + a)))
+
 
 
 def _display_match_score(raw_probability: float, rank_index: int) -> float:

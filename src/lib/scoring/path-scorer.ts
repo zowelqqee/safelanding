@@ -117,14 +117,18 @@ export function scorePathsForCountry(
         }
         case "capital":
         case "business": {
-          if (answers.hasCapital || answers.hasSavings) {
-            score += 16;
+          if (answers.hasCapital) {
+            score += 24;
+            reasons.push("You may have the capital or ownership base this kind of route needs");
+          } else if (answers.hasSavings) {
+            score += 14;
             reasons.push("You may have the financial base this kind of route needs");
           } else {
             score -= 12;
             weakPoints.push("This route usually works better with real capital or savings behind it");
           }
-          if (income >= 5000) score += 6;
+          if (answers.hasCapital && answers.hasSavings) score += 4;
+          if (income >= 5000) score += 10;
           break;
         }
         case "talent": {
