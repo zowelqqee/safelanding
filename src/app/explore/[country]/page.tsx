@@ -10,7 +10,9 @@ import { COUNTRIES, getCountryBySlug } from "@/lib/data/countries";
 import { getLegalPathsForCountry } from "@/lib/data/legal-paths";
 import { getRelocationVideoStoriesForCountry } from "@/lib/data/relocation-video-stories";
 import { getExistingPublicImageSrc } from "@/lib/server/public-image";
+import { getCityDisplay } from "@/lib/i18n/city-display";
 import { getCountryDisplay } from "@/lib/i18n/country-display";
+import { getLegalPathDisplay } from "@/lib/i18n/legal-path-display";
 import { getServerLanguage } from "@/lib/i18n/server";
 import type { UiLanguage } from "@/lib/i18n/onboarding";
 
@@ -431,6 +433,7 @@ export default async function CountryPage({
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {cities.map((city) => {
                 const thumbnailImage = getExistingPublicImageSrc(city.thumbnailImage ?? city.heroImage);
+                const cityDisplay = getCityDisplay(city, language);
 
                 return (
                   <Link
@@ -438,10 +441,10 @@ export default async function CountryPage({
                     href={`/explore/${country.slug}/${city.slug}`}
                     className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/40 p-4 transition-colors hover:border-stone-400 hover:bg-[var(--city-warm-muted)]"
                   >
-                    <CityThumbnail cityName={city.name} imageSrc={thumbnailImage} label={copy.exploreCity} />
-                    <h3 className="text-base font-semibold text-stone-900">{city.name}</h3>
+                    <CityThumbnail cityName={cityDisplay.name} imageSrc={thumbnailImage} label={copy.exploreCity} />
+                    <h3 className="text-base font-semibold text-stone-900">{cityDisplay.name}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-[var(--city-muted-fg)]">
-                      {city.summary}
+                      {cityDisplay.summary}
                     </p>
                     <div className="mt-3 space-y-1 text-xs text-[var(--city-muted-fg)]">
                       <p>{copy.rent}: {city.avg_rent_range}</p>
@@ -466,32 +469,36 @@ export default async function CountryPage({
               {copy.disclaimer}
             </div>
             <div className="grid gap-4 md:grid-cols-2">
-              {paths.map((path) => (
-                <div key={path.id} className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/40 p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="text-base font-semibold text-stone-900">{path.name}</h3>
-                      <p className="mt-1 text-sm text-[var(--city-muted-fg)]">{path.summary}</p>
+              {paths.map((path) => {
+                const pathDisplay = getLegalPathDisplay(path, language);
+
+                return (
+                  <div key={path.id} className="rounded-2xl border border-[var(--city-border)] bg-[var(--city-warm-muted)]/40 p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="text-base font-semibold text-stone-900">{pathDisplay.name}</h3>
+                        <p className="mt-1 text-sm text-[var(--city-muted-fg)]">{pathDisplay.summary}</p>
+                      </div>
+                      <span className="rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-xs font-medium text-stone-700 shrink-0">
+                        {pathDisplay.estimatedPreparationTime}
+                      </span>
                     </div>
-                    <span className="rounded-full border border-[var(--city-border)] bg-[var(--city-warm-muted)] px-3 py-1 text-xs font-medium text-stone-700 shrink-0">
-                      {path.estimated_preparation_time}
-                    </span>
+                    <div className="mt-4">
+                      <p className="city-section-kicker mb-2">{copy.pathGoodFitIf}</p>
+                      <ul className="space-y-1">
+                        {pathDisplay.goodIf.slice(0, 2).map((item) => (
+                          <li key={item} className="text-sm text-[var(--city-muted-fg)]">
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
+                      {pathDisplay.legalDisclaimer}
+                    </div>
                   </div>
-                  <div className="mt-4">
-                    <p className="city-section-kicker mb-2">{copy.pathGoodFitIf}</p>
-                    <ul className="space-y-1">
-                      {path.good_if.slice(0, 2).map((item) => (
-                        <li key={item} className="text-sm text-[var(--city-muted-fg)]">
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
-                    {path.legal_disclaimer}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </SectionCard>
 

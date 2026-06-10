@@ -24,6 +24,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { matchCountries } from "@/lib/scoring/country-matcher";
 import { getCountryById } from "@/lib/data/countries";
+import { getCountryDisplay } from "@/lib/i18n/country-display";
 import { commonCopy, type UiLanguage } from "@/lib/i18n/onboarding";
 import type { OnboardingState, CountryMatchResult } from "@/types";
 
@@ -128,15 +129,16 @@ function TinderCard({
   language: UiLanguage;
 }) {
   const country = getCountryById(result.countryId);
-  if (!country) return null;
-
-  const copy = COPY[language];
-  const common = commonCopy[language];
-
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-240, 240], [-16, 16]);
   const saveOpacity = useTransform(x, [20, 100], [0, 1]);
   const skipOpacity = useTransform(x, [-100, -20], [1, 0]);
+
+  if (!country) return null;
+  const countryDisplay = getCountryDisplay(country, language);
+
+  const copy = COPY[language];
+  const common = commonCopy[language];
 
   const handleDragEnd = (
     _: unknown,
@@ -215,9 +217,9 @@ function TinderCard({
               <span className="text-[40px] sm:text-[48px] leading-none">{country.emoji}</span>
               <div>
                 <h2 className="font-serif text-xl sm:text-2xl font-semibold leading-tight text-stone-900">
-                  {country.name}
+                  {countryDisplay.name}
                 </h2>
-                <p className="mt-0.5 text-xs text-[var(--city-muted-fg)]">{country.continent}</p>
+                <p className="mt-0.5 text-xs text-[var(--city-muted-fg)]">{countryDisplay.region}</p>
               </div>
             </div>
             <span className={`mt-1 shrink-0 rounded-full border px-2.5 py-1 text-sm font-bold ${scoreColor}`}>
@@ -247,7 +249,7 @@ function TinderCard({
 
         {/* Summary */}
         <div className="flex-shrink-0 px-5 pb-3">
-          <p className="text-sm leading-relaxed text-[var(--city-muted-fg)]">{country.summary}</p>
+          <p className="text-sm leading-relaxed text-[var(--city-muted-fg)]">{countryDisplay.summary}</p>
         </div>
 
         {/* Pros */}
@@ -292,7 +294,7 @@ function TinderCard({
               className="h-11 flex-1 gap-1.5 rounded-full text-sm font-semibold"
               onClick={(e) => { e.stopPropagation(); onSelect(); }}
             >
-              {copy.choose} {country.name}
+              {copy.choose} {countryDisplay.name}
               <ArrowRight className="h-3.5 w-3.5" />
             </Button>
             <Link
@@ -373,6 +375,7 @@ function DoneScreen({
         {savedResults.map((result) => {
           const country = getCountryById(result.countryId);
           if (!country) return null;
+          const countryDisplay = getCountryDisplay(country, language);
           const scoreColor =
             result.score >= 80
               ? "bg-emerald-100 text-emerald-700 border-emerald-200"
@@ -386,9 +389,9 @@ function DoneScreen({
                   <span className="text-2xl">{country.emoji}</span>
                   <div>
                     <h3 className="font-semibold text-base leading-tight text-stone-900">
-                      {country.name}
+                      {countryDisplay.name}
                     </h3>
-                    <p className="text-xs text-[var(--city-muted-fg)]">{country.continent}</p>
+                    <p className="text-xs text-[var(--city-muted-fg)]">{countryDisplay.region}</p>
                   </div>
                 </div>
                 <span className={`shrink-0 rounded-full border px-2.5 py-1 text-xs font-bold ${scoreColor}`}>
@@ -453,7 +456,6 @@ export function StepCountryResults({ state, onSelect, onShortlistToggle, onBack,
       costTolerance: state.costTolerance,
       studyPriority: state.studyPriority,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       state.citizenship, state.currentCountry, state.residenceCountry, state.language,
       state.moveGoal, state.monthlyIncome, state.savingsRange, state.incomeType,
@@ -482,7 +484,6 @@ export function StepCountryResults({ state, onSelect, onShortlistToggle, onBack,
         costTolerance: predictionRequest.costTolerance,
         studyPriority: predictionRequest.studyPriority,
       }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       predictionRequest.lifePreferences, predictionRequest.language, predictionRequest.citizenship,
       predictionRequest.currentCountry, predictionRequest.residenceCountry, predictionRequest.moveGoal,

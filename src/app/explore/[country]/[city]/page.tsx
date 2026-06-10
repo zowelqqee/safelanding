@@ -180,6 +180,8 @@ const CITY_COPY = {
   footerTwo: string;
 }>;
 
+type CityDisplay = ReturnType<typeof getCityDisplay>;
+
 function scoreLabel(kind: MetricKind, value: number, language: UiLanguage) {
   if (language === "ru") {
     switch (kind) {
@@ -369,11 +371,11 @@ function CityHeroImagePanel({
 // ─── Section components ───────────────────────────────────────────────────────
 
 function FitSection({
-  city,
+  cityDisplay,
   copy,
   language,
 }: {
-  city: CityProfile;
+  cityDisplay: CityDisplay;
   copy: typeof CITY_COPY[UiLanguage];
   language: UiLanguage;
 }) {
@@ -387,7 +389,7 @@ function FitSection({
         <div className="min-w-0">
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">{copy.goodFor}</p>
           <ul className="mt-3 space-y-2.5">
-            {city.best_for.map((item) => (
+            {cityDisplay.bestFor.map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
                 <span className="min-w-0 break-words text-sm leading-snug text-stone-800">{item}</span>
@@ -398,10 +400,10 @@ function FitSection({
         <div className="min-w-0">
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-700">{copy.hardIf}</p>
           <ul className="mt-3 space-y-2.5">
-            {city.watch_out.map((item) => (
+            {cityDisplay.watchOut.map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
-                <span className="min-w-0 break-words text-sm leading-snug text-[var(--city-muted-fg)]">{fitWarningLabel(item, language)}</span>
+                <span className="min-w-0 break-words text-sm leading-snug text-[var(--city-muted-fg)]">{language === "ru" ? item : fitWarningLabel(item, language)}</span>
               </li>
             ))}
           </ul>
@@ -452,9 +454,11 @@ function GlanceSection({
 
 function RealityPreviewSection({
   city,
+  cityDisplay,
   copy,
 }: {
   city: CityProfile;
+  cityDisplay: CityDisplay;
   copy: typeof CITY_COPY[UiLanguage];
 }) {
   return (
@@ -476,11 +480,11 @@ function RealityPreviewSection({
         </div>
         <div className="mt-3 rounded-xl border border-amber-200/60 bg-amber-50/50 px-4 py-3">
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-800">{copy.underestimate}</p>
-          <p className="mt-1.5 break-words text-sm leading-relaxed text-stone-800">{city.what_people_underestimate}</p>
+          <p className="mt-1.5 break-words text-sm leading-relaxed text-stone-800">{cityDisplay.whatPeopleUnderestimate}</p>
         </div>
         <ShowMore label={copy.first90}>
           <div className="space-y-2">
-            {city.first_90_days_preview.map((item, i) => (
+            {cityDisplay.first90DaysPreview.map((item, i) => (
               <div key={item} className="flex items-start gap-3 rounded-xl border border-[var(--city-border)] bg-[var(--city-card)] px-4 py-3">
                 <span className="text-[10px] font-bold text-[var(--city-muted-fg)] mt-0.5">{String(i + 1).padStart(2, "0")}</span>
                 <p className="min-w-0 break-words text-sm leading-relaxed text-stone-800">{item}</p>
@@ -619,7 +623,7 @@ export default async function CityPage({
                   {cityDisplay.name}
                 </h1>
                 <p className="mt-5 max-w-[52ch] text-[15px] leading-relaxed text-[var(--city-muted-fg)]">
-                  {city.summary}
+                  {cityDisplay.summary}
                 </p>
                 {cityTags.length > 0 && (
                   <div className="mt-5 flex flex-wrap gap-2">
@@ -665,7 +669,7 @@ export default async function CityPage({
                   copy={copy}
                 />
                 <BlockerCard
-                  text={city.main_lifestyle_blocker}
+                  text={cityDisplay.mainLifestyleBlocker}
                   variant="lifestyle"
                   copy={copy}
                 />
@@ -677,9 +681,9 @@ export default async function CityPage({
           <div className="grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-[2fr_3fr] lg:items-start">
             {/* Left: structured city fit */}
             <div className="flex min-w-0 flex-col gap-5">
-              <FitSection city={city} copy={copy} language={language} />
+              <FitSection cityDisplay={cityDisplay} copy={copy} language={language} />
               <GlanceSection city={city} copy={copy} language={language} />
-              <RealityPreviewSection city={city} copy={copy} />
+              <RealityPreviewSection city={city} cityDisplay={cityDisplay} copy={copy} />
             </div>
 
             {/* Right: reality from people who moved */}

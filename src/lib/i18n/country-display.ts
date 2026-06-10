@@ -257,8 +257,140 @@ const RU_COUNTRIES: Record<string, CountryDisplayTranslation> = {
   },
 };
 
+const LANGUAGE_RU: Record<string, string> = {
+  Arabic: "арабский",
+  Armenian: "армянский",
+  Chinese: "китайский",
+  Czech: "чешский",
+  Dutch: "нидерландский",
+  English: "английский",
+  French: "французский",
+  German: "немецкий",
+  Indonesian: "индонезийский",
+  Italian: "итальянский",
+  Kazakh: "казахский",
+  Korean: "корейский",
+  Polish: "польский",
+  Portuguese: "португальский",
+  Russian: "русский",
+  Spanish: "испанский",
+  Thai: "тайский",
+};
+
+function formatRuList(items: string[]) {
+  const translated = items.map((item) => LANGUAGE_RU[item] ?? item);
+  if (translated.length <= 1) return translated[0] ?? "";
+  if (translated.length === 2) return `${translated[0]} и ${translated[1]}`;
+  return `${translated.slice(0, -1).join(", ")} и ${translated[translated.length - 1]}`;
+}
+
+function formatRouteCount(count: number) {
+  if (count % 10 === 1 && count % 100 !== 11) return `${count} маршрут`;
+  if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) {
+    return `${count} маршрута`;
+  }
+  return `${count} маршрутов`;
+}
+
+function buildFallbackBestFor(country: CountryProfile) {
+  const items: string[] = [];
+
+  if (country.remote_work_fit >= 4) {
+    items.push(`Удалённые специалисты с доходом в ${country.currency} или другой стабильной валюте`);
+  }
+  if (country.career_opportunities >= 4) {
+    items.push("Профессионалы, у которых есть работодатель, оффер или понятная карьерная ниша");
+  }
+  if (country.study_fit >= 4) {
+    items.push("Студенты, готовые строить переезд вокруг поступления и финансового плана");
+  }
+  if (country.family_fit >= 4) {
+    items.push("Семьи, которым важны медицина, школы, безопасность и предсказуемый быт");
+  }
+  if (country.calm_lifestyle >= 4) {
+    items.push("Люди, которым нужен более спокойный ритм, а не максимальная карьерная гонка");
+  }
+
+  return (items.length > 0 ? items : [
+    "Переезжающие с чёткой причиной выбрать именно эту страну, а не абстрактную идею о переезде",
+    "Люди, готовые заранее проверить статус, жильё, бюджет и первые административные шаги",
+  ]).slice(0, 3);
+}
+
+function buildFallbackWatchOut(country: CountryProfile) {
+  const items: string[] = [];
+
+  if (country.housing_difficulty >= 4) {
+    items.push("Жильё может стать главным ограничением: хорошие варианты требуют документов, депозита и быстрой реакции");
+  }
+  if (country.cost_level >= 4) {
+    items.push(`Бюджет стоит считать в ${country.currency} с отдельным запасом на первый месяц, депозит и страховку`);
+  }
+  if (country.english_friendliness <= 3) {
+    items.push(`Без ${formatRuList(country.languages)} сложнее решать аренду, медицину и госуслуги`);
+  }
+  if (country.bureaucracy_level >= 4) {
+    items.push("Административные шаги лучше вести как проект: записи, переводы, страховка, адрес и банковская база");
+  }
+  if (country.schengen_area) {
+    items.push("Шенгенская логика помогает с поездками по Европе, но не заменяет долгосрочный статус");
+  }
+
+  return (items.length > 0 ? items : [
+    country.main_lifestyle_blocker,
+    country.main_legal_blocker,
+  ]).slice(0, 3);
+}
+
+function buildFallbackLifestyleFactors(country: CountryProfile) {
+  const languageText = formatRuList(country.languages);
+  const items = [
+    `Основной язык: ${languageText}; валюта: ${country.currency}`,
+    country.coastal
+      ? "Есть прибрежный сценарий, но цена и качество жизни сильно зависят от конкретного города"
+      : "Качество жизни сильнее зависит от города, района и транспорта, чем от страны в среднем",
+    country.public_transport >= 4
+      ? "В крупных городах можно строить жизнь вокруг общественного транспорта"
+      : "Транспортный сценарий нужно проверять заранее: в части городов машина или такси становятся важной статьёй расходов",
+  ];
+
+  if (country.climate_score >= 4) {
+    items.push("Климат может быть большим плюсом, но сезонность всё равно стоит проверить до долгой аренды");
+  } else if (country.climate_score <= 2) {
+    items.push("Климат и тёмный/холодный сезон могут стать настоящей частью адаптации");
+  }
+
+  return items.slice(0, 3);
+}
+
+function buildFallbackLegalFactors(country: CountryProfile) {
+  const routeText = formatRouteCount(country.available_legal_path_ids.length);
+  const items = [
+    `В базе доступно ${routeText}: перед выбором нужно понять, что является вашим якорем — работа, учёба, доход, капитал или разведочная поездка`,
+    country.schengen_area
+      ? "Для Шенгена особенно важно не путать короткое пребывание с правом жить и работать долгосрочно"
+      : "Правила въезда и продления зависят от гражданства, основания и текущей практики конкретных ведомств",
+    country.main_legal_blocker,
+  ];
+
+  return items.slice(0, 3);
+}
+
+function buildFallbackFirst90Days(country: CountryProfile) {
+  const steps = [
+    "Сначала проверить 2-3 города или района через временное жильё, а не сразу подписывать долгую аренду",
+    `Собрать базовый setup: SIM, банк, страховка, адрес, переводы документов и понятный бюджет в ${country.currency}`,
+    country.schengen_area
+      ? "Отдельно сверить визовый/резидентский маршрут, потому что туристическая логика не решает жизнь в Шенгене"
+      : "Проверить регистрацию, продление пребывания, налоговую и банковскую практику под ваш паспорт и источник дохода",
+  ];
+
+  return steps;
+}
+
 export function getCountryDisplay(country: CountryProfile, language: UiLanguage) {
   const translation = language === "ru" ? RU_COUNTRIES[country.id] : null;
+  const useRuFallback = language === "ru";
 
   return {
     name: translation?.name ?? country.name,
@@ -271,12 +403,12 @@ export function getCountryDisplay(country: CountryProfile, language: UiLanguage)
     mainLifestyleBlocker: translation?.mainLifestyleBlocker ?? country.main_lifestyle_blocker,
     whatPeopleUnderestimate:
       translation?.whatPeopleUnderestimate ?? country.what_people_underestimate,
-    bestFor: translation?.bestFor ?? country.best_for,
-    watchOut: translation?.watchOut ?? country.watch_out,
+    bestFor: translation?.bestFor ?? (useRuFallback ? buildFallbackBestFor(country) : country.best_for),
+    watchOut: translation?.watchOut ?? (useRuFallback ? buildFallbackWatchOut(country) : country.watch_out),
     lifestyleFitFactors:
-      translation?.lifestyleFitFactors ?? country.lifestyle_fit_factors,
-    legalFitFactors: translation?.legalFitFactors ?? country.legal_fit_factors,
+      translation?.lifestyleFitFactors ?? (useRuFallback ? buildFallbackLifestyleFactors(country) : country.lifestyle_fit_factors),
+    legalFitFactors: translation?.legalFitFactors ?? (useRuFallback ? buildFallbackLegalFactors(country) : country.legal_fit_factors),
     first90DaysPreview:
-      translation?.first90DaysPreview ?? country.first_90_days_preview,
+      translation?.first90DaysPreview ?? (useRuFallback ? buildFallbackFirst90Days(country) : country.first_90_days_preview),
   };
 }

@@ -138,6 +138,10 @@ function TinderCityCard({
 }) {
   const city = getCityById(result.cityId);
   const cardRef = useCityCardViewTracking({ cityId: result.cityId, position });
+  const x = useMotionValue(0);
+  const rotate = useTransform(x, [-240, 240], [-16, 16]);
+  const saveOpacity = useTransform(x, [20, 100], [0, 1]);
+  const skipOpacity = useTransform(x, [-100, -20], [1, 0]);
 
   if (!city) return null;
 
@@ -148,11 +152,6 @@ function TinderCityCard({
     result.mainBlocker === city.main_lifestyle_blocker
       ? cityDisplay.mainLifestyleBlocker
       : translateCityText(result.mainBlocker, language);
-
-  const x = useMotionValue(0);
-  const rotate = useTransform(x, [-240, 240], [-16, 16]);
-  const saveOpacity = useTransform(x, [20, 100], [0, 1]);
-  const skipOpacity = useTransform(x, [-100, -20], [1, 0]);
 
   const handleDragEnd = (
     _: unknown,
